@@ -109,3 +109,103 @@
     form.querySelectorAll('input, textarea').forEach(el => el.value = '');
     success.scrollIntoView({ behavior:'smooth', block:'nearest' });
   });
+
+  // Quick action popups (Request a Quote / Inquiries) -> WhatsApp handoff
+  (function(){
+    const WHATSAPP_NUMBER = '201152932977'; // Mijdaf Arabia WhatsApp (country code + number, no leading 0/plus)
+    let lastFocused = null;
+
+    // Lighter, glassy look once the hero (dark video) is scrolled past, so page content stays prominent
+    const quickActions = document.getElementById('quickActions');
+    const heroSection = document.querySelector('.hero');
+    if (quickActions && heroSection) {
+      const heroObs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          quickActions.classList.toggle('past-hero', !entry.isIntersecting);
+        });
+      }, { threshold: 0, rootMargin: '0px 0px -15% 0px' });
+      heroObs.observe(heroSection);
+    }
+
+    function openModal(overlay){
+      lastFocused = document.activeElement;
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      const firstField = overlay.querySelector('input, textarea, select');
+      if (firstField) setTimeout(() => firstField.focus(), 300);
+    }
+
+    function closeModal(overlay){
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+      if (lastFocused) lastFocused.focus();
+    }
+
+    function openWhatsApp(message){
+      const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+      window.open(url, '_blank');
+    }
+
+    function setupModal({ openBtnId, overlayId, formId, successId, buildMessage }){
+      const openBtn = document.getElementById(openBtnId);
+      const overlay = document.getElementById(overlayId);
+      const modalForm = document.getElementById(formId);
+      const successEl = document.getElementById(successId);
+      if (!openBtn || !overlay || !modalForm) return;
+
+      openBtn.addEventListener('click', () => openModal(overlay));
+
+      overlay.querySelectorAll('[data-close-modal]').forEach(btn => {
+        btn.addEventListener('click', () => closeModal(overlay));
+      });
+
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) closeModal(overlay);
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && overlay.classList.contains('open')) closeModal(overlay);
+      });
+
+      modalForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (successEl) successEl.classList.add('show');
+
+        const message = buildMessage(modalForm);
+        openWhatsApp(message);
+
+        modalForm.querySelectorAll('input, textarea').forEach(el => el.value = '');
+        setTimeout(() => closeModal(overlay), 1400);
+        setTimeout(() => { if (successEl) successEl.classList.remove('show'); }, 1800);
+      });
+    }
+
+    setupModal({
+      openBtnId: 'openRequestModal',
+      overlayId: 'requestModalOverlay',
+      formId: 'quickRequestForm',
+      successId: 'requestFormSuccess',
+      buildMessage: (form) => {
+        const name = form.querySelector('#qrName').value.trim();
+        const company = form.querySelector('#qrCompany').value.trim();
+        const phone = form.querySelector('#qrPhone').value.trim();
+        const service = form.querySelector('#qrService').value;
+        let msg = `طلب جديد من موقع مجداف العربية:\n\n*الاسم:* ${name}`;
+        if (company) msg += `\n*الشركة:* ${company}`;
+        msg += `\n*رقم الجوال:* ${phone}\n*الخدمة المطلوبة:* ${service}`;
+        return msg;
+      }
+    });
+
+    setupModal({
+      openBtnId: 'openInquiryModal',
+      overlayId: 'inquiryModalOverlay',
+      formId: 'quickInquiryForm',
+      successId: 'inquiryFormSuccess',
+      buildMessage: (form) => {
+        const message = form.querySelector('#qiMessage').value.trim();
+        const phone = form.querySelector('#qiPhone').value.trim();
+        return `استفسار جديد من موقع مجداف العربية:\n\n*الاستفسار:* ${message}\n*رقم التواصل:* ${phone}`;
+      }
+    });
+  })();
