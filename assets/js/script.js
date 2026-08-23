@@ -272,58 +272,62 @@
   }, { threshold: 0.25 });
   serviceItems.forEach(el => serviceObs.observe(el));
 
-  // Services cards: click-to-open detail (accordion, one open at a time)
+  // Click-to-open detail cards (services grid + about capability cards)
+  // Each group behaves as its own accordion — one open card per group.
   (function(){
-    const cards = document.querySelectorAll('[data-service-card]');
-    if(!cards.length) return;
+    const initExpandGroup = (cards) => {
+      if(!cards.length) return;
 
-    const currentLang = () => (document.documentElement.getAttribute('lang') === 'en' ? 'en' : 'ar');
+      const currentLang = () => (document.documentElement.getAttribute('lang') === 'en' ? 'en' : 'ar');
 
-    const syncHint = (card) => {
-      const hint = card.querySelector('.hint-text');
-      if(!hint) return;
-      const lang = currentLang();
-      const open = card.classList.contains('is-open');
-      hint.textContent = open
-        ? hint.getAttribute(`data-${lang}-close`)
-        : hint.getAttribute(`data-${lang}-open`);
-    };
+      const syncHint = (card) => {
+        const hint = card.querySelector('.hint-text');
+        if(!hint) return;
+        const lang = currentLang();
+        const open = card.classList.contains('is-open');
+        hint.textContent = open
+          ? hint.getAttribute(`data-${lang}-close`)
+          : hint.getAttribute(`data-${lang}-open`);
+      };
 
-    const closeCard = (card) => {
-      card.classList.remove('is-open');
-      card.setAttribute('aria-expanded', 'false');
-      syncHint(card);
-    };
+      const closeCard = (card) => {
+        card.classList.remove('is-open');
+        card.setAttribute('aria-expanded', 'false');
+        syncHint(card);
+      };
 
-    const openCard = (card) => {
-      card.classList.add('is-open');
-      card.setAttribute('aria-expanded', 'true');
-      syncHint(card);
-    };
+      const openCard = (card) => {
+        card.classList.add('is-open');
+        card.setAttribute('aria-expanded', 'true');
+        syncHint(card);
+      };
 
-    const toggleCard = (card) => {
-      const willOpen = !card.classList.contains('is-open');
-      cards.forEach(other => { if(other !== card) closeCard(other); });
-      if(willOpen) openCard(card); else closeCard(card);
-    };
+      const toggleCard = (card) => {
+        const willOpen = !card.classList.contains('is-open');
+        cards.forEach(other => { if(other !== card) closeCard(other); });
+        if(willOpen) openCard(card); else closeCard(card);
+      };
 
-    cards.forEach(card => {
-      syncHint(card);
-      card.addEventListener('click', () => toggleCard(card));
-      card.addEventListener('keydown', (e) => {
-        if(e.key === 'Enter' || e.key === ' '){
-          e.preventDefault();
-          toggleCard(card);
-        }
+      cards.forEach(card => {
+        syncHint(card);
+        card.addEventListener('click', () => toggleCard(card));
+        card.addEventListener('keydown', (e) => {
+          if(e.key === 'Enter' || e.key === ' '){
+            e.preventDefault();
+            toggleCard(card);
+          }
+        });
       });
-    });
 
-    // Keep hint wording correct whenever the site language is switched.
-    document.querySelectorAll('.lang-toggle').forEach(btn => {
-      btn.addEventListener('click', () => {
-        setTimeout(() => cards.forEach(syncHint), 0);
+      document.querySelectorAll('.lang-toggle').forEach(btn => {
+        btn.addEventListener('click', () => {
+          setTimeout(() => cards.forEach(syncHint), 0);
+        });
       });
-    });
+    };
+
+    initExpandGroup(Array.from(document.querySelectorAll('[data-service-card]')));
+    initExpandGroup(Array.from(document.querySelectorAll('[data-spec-card]')));
   })();
 
   // Language toggle (Arabic <-> English)
