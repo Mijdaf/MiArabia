@@ -46,6 +46,44 @@
   }, { threshold: 0.15 });
   revealEls.forEach(el => revealObs.observe(el));
 
+  // Why-us cards: staggered 3D reveal + icon line-draw + number count-up
+  const whyItems = document.querySelectorAll('.why-reveal');
+  const whyObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(!entry.isIntersecting) return;
+      const el = entry.target;
+      el.classList.add('in');
+
+      // icon draws itself in like a blueprint line
+      const path = el.querySelector('.why-icon svg path');
+      if(path){
+        const len = path.getTotalLength();
+        path.style.strokeDasharray = len;
+        path.style.strokeDashoffset = len;
+        requestAnimationFrame(() => { path.style.strokeDashoffset = '0'; });
+      }
+
+      // big background number counts up
+      const numEl = el.querySelector('.why-bignum');
+      if(numEl){
+        const target = parseInt(numEl.textContent, 10) || 0;
+        const duration = 750;
+        const delay = (parseInt(el.style.getPropertyValue('--i')) || 0) * 140;
+        const startTime = performance.now() + delay;
+        const tick = (now) => {
+          const p = Math.min(Math.max((now - startTime) / duration, 0), 1);
+          const eased = 1 - Math.pow(1 - p, 3);
+          numEl.textContent = String(Math.round(eased * target)).padStart(2, '0');
+          if(p < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      }
+
+      whyObs.unobserve(el);
+    });
+  }, { threshold: 0.35 });
+  whyItems.forEach(el => whyObs.observe(el));
+
   // Language toggle (Arabic <-> English)
   (function(){
     const htmlEl = document.documentElement;
