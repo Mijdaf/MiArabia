@@ -97,17 +97,6 @@
     overflow-x:hidden;
   }
 
-  /* ---------- ambient 3D background (pipe-rack lattice) ---------- */
-  #bg3d{
-    position:fixed;
-    inset:0;
-    width:100%;
-    height:100%;
-    z-index:-1;
-    display:block;
-    pointer-events:none;
-  }
-
   a{color:inherit;text-decoration:none;}
   ul{list-style:none;}
   img,svg{display:block;max-width:100%;}
@@ -526,7 +515,8 @@
 
   /* ---------- section shell ---------- */
   section{padding:110px 0; background:var(--surface-2);}
-  #services{background:transparent;}
+  #services{background:color-mix(in srgb, var(--surface-2) 82%, transparent);}
+  html[data-theme="dark"] #services{background:color-mix(in srgb, var(--surface-2) 40%, transparent);}
 
   /* floating dot-particle background */
   .dot-field{position:relative; overflow:hidden;}
@@ -949,7 +939,7 @@
   .service-back-hint{margin-top:auto; padding-top:14px;}
 
   /* ---------- why us ---------- */
-  .why{background:transparent;color:var(--heading);position:relative;overflow:hidden;}
+  .why{background:var(--surface-2);color:var(--heading);position:relative;overflow:hidden;}
   html[data-theme="dark"] .why{background:var(--navy-deep);color:var(--white);}
   .why::before{
     content:"";
