@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
 <script>
   // Always start in light mode by default. If the visitor has explicitly
   // toggled dark mode before, honor that saved choice; otherwise ignore
@@ -22,6 +23,8 @@
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
+
+<canvas id="bg3d" aria-hidden="true"></canvas>
 
 <header id="siteHeader">
   <div class="wrap">
@@ -626,5 +629,6 @@
 </div>
 
 <script src="assets/js/script.js"></script>
+<script type="module" src="assets/js/bg3d.js"></script>
 </body>
 </html>

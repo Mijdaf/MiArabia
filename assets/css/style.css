@@ -24,6 +24,7 @@
     font-weight:900; font-style:normal; font-display:swap;
   }
   :root{
+    color-scheme:light;
     --navy:#0000aa;
     --navy-deep:#000032;
     --black:#000000;
@@ -60,6 +61,7 @@
   }
 
   html[data-theme="dark"]{
+    color-scheme:dark;
     --page-bg:#000032;      /* existing --navy-deep */
     --surface:#04044a;      /* existing shade used in the "why us" cards */
     --surface-2:#020230;    /* existing shade used in the "why us" cards */
@@ -93,6 +95,17 @@
     line-height:1.55;
     -webkit-font-smoothing:antialiased;
     overflow-x:hidden;
+  }
+
+  /* ---------- ambient 3D background (pipe-rack lattice) ---------- */
+  #bg3d{
+    position:fixed;
+    inset:0;
+    width:100vw;
+    height:100vh;
+    z-index:-1;
+    display:block;
+    pointer-events:none;
   }
 
   a{color:inherit;text-decoration:none;}
@@ -286,8 +299,8 @@
     gap:4px;
   }
   .nav-toggle span{
-    width:16px;height:2px;background:var(--navy-deep);
-    transition:transform .25s var(--ease), opacity .25s var(--ease);
+    width:16px;height:2px;background:var(--heading);
+    transition:transform .25s var(--ease), opacity .25s var(--ease), background .25s var(--ease);
   }
   .nav-toggle.open span:nth-child(1){transform:translateY(6px) rotate(45deg);}
   .nav-toggle.open span:nth-child(2){opacity:0;}
@@ -488,7 +501,7 @@
   .reveal.in{opacity:1; transform:translateY(0) rotateX(0) translateZ(0);}
 
   /* ---------- about ---------- */
-  .about{background:var(--surface-2);}
+  .about{background:color-mix(in srgb, var(--surface-2) 82%, transparent);}
   .about .wrap{
     display:flex;
     flex-direction:column;
@@ -520,7 +533,8 @@
     align-items:center;
     gap:10px;
     flex-direction:row-reverse;
-    padding:8px 20px 8px 8px;
+    padding-block:8px;
+    padding-inline:22px 8px;
     border-radius:999px;
     border:1px solid var(--border);
     background:var(--surface);
@@ -539,7 +553,7 @@
     transition:background .35s ease, color .35s ease;
   }
   .spec-pill-icon svg{width:16px; height:16px;}
-  .spec-pill-label{font-size:15px; font-weight:700; white-space:nowrap;}
+  .spec-pill-label{font-size:16.5px; font-weight:700; white-space:nowrap;}
   .spec-pill:hover{border-color:rgba(253,87,43,0.4); color:var(--heading);}
   .spec-pill:hover .spec-pill-icon{background:rgba(253,87,43,0.18);}
   .spec-pill:focus-visible{outline:2px solid var(--orange); outline-offset:2px;}
@@ -747,7 +761,7 @@
   .service-back-hint{margin-top:auto; padding-top:14px;}
 
   /* ---------- why us ---------- */
-  .why{background:var(--navy-deep);color:var(--white);position:relative;overflow:hidden;}
+  .why{background:color-mix(in srgb, var(--navy-deep) 80%, transparent);color:var(--white);position:relative;overflow:hidden;}
   .why::before{
     content:"";
     position:absolute; inset:0;
@@ -847,7 +861,7 @@
   .why-item p{color:#a9b6e4; font-size:16.5px; line-height:1.7;}
 
   /* ---------- contact ---------- */
-  .contact{background:var(--surface-2);}
+  .contact{background:color-mix(in srgb, var(--surface-2) 82%, transparent);}
   .contact .wrap{
     display:grid;
     grid-template-columns:0.85fr 1.15fr;
@@ -1170,7 +1184,7 @@
 
   /* ---------- footer ---------- */
   footer{
-    background:var(--black);
+    background:color-mix(in srgb, var(--black) 82%, transparent);
     color:#b7bcd6;
     padding:56px 0 26px;
   }
@@ -1270,10 +1284,10 @@
       padding:4px 4px 6px;
     }
     .spec-pills::-webkit-scrollbar{display:none;}
-    .spec-pill{padding:7px 16px 7px 7px; scroll-snap-align:start; flex-shrink:0;}
+    .spec-pill{padding-block:7px; padding-inline:18px 7px; scroll-snap-align:start; flex-shrink:0;}
     .spec-pill-icon{width:28px; height:28px;}
     .spec-pill-icon svg{width:14px; height:14px;}
-    .spec-pill-label{font-size:14px;}
+    .spec-pill-label{font-size:15.5px;}
     .spec-viewport{border-radius:18px; padding:26px 22px;}
     .spec-view-head{gap:12px;}
     .spec-view-icon{width:44px; height:44px;}
