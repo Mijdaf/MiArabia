@@ -87,7 +87,7 @@ import * as THREE from './vendor/three.module.min.js';
   }
   lineGeo.setAttribute('position', new THREE.BufferAttribute(lineVerts, 3));
 
-  const lineMat = new THREE.LineBasicMaterial({ color: 0x164dcc, transparent: true, opacity: 0.32 });
+  const lineMat = new THREE.LineBasicMaterial({ color: 0x164dcc, transparent: true, opacity: 0.24 });
   const structure = new THREE.LineSegments(lineGeo, lineMat);
   rig.add(structure);
 
@@ -103,7 +103,7 @@ import * as THREE from './vendor/three.module.min.js';
   const accentGeo = new THREE.BufferGeometry();
   accentGeo.setAttribute('position', new THREE.Float32BufferAttribute(accentPos, 3));
   const accentMat = new THREE.PointsMaterial({
-    color: 0xfd572b, size: isSmall ? 5.5 : 6.5, sizeAttenuation: true,
+    color: 0xfd572b, size: isSmall ? 3.2 : 4, sizeAttenuation: false,
     transparent: true, opacity: 0.8, depthWrite: false
   });
   const accents = new THREE.Points(accentGeo, accentMat);
@@ -119,7 +119,7 @@ import * as THREE from './vendor/three.module.min.js';
   }
   const dustGeo = new THREE.BufferGeometry();
   dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPos, 3));
-  const dustMat = new THREE.PointsMaterial({ color: 0x164dcc, size: 2.6, sizeAttenuation: true, transparent: true, opacity: 0.22, depthWrite: false });
+  const dustMat = new THREE.PointsMaterial({ color: 0x164dcc, size: 1.6, sizeAttenuation: false, transparent: true, opacity: 0.22, depthWrite: false });
   const dust = new THREE.Points(dustGeo, dustMat);
   rig.add(dust);
 
@@ -130,10 +130,10 @@ import * as THREE from './vendor/three.module.min.js';
   function applyTheme() {
     const dark = document.documentElement.getAttribute('data-theme') === 'dark';
     lineMat.color.set(dark ? 0x5a8bff : 0x164dcc);
-    lineMat.opacity = dark ? 0.42 : 0.30;
-    accentMat.opacity = dark ? 0.9 : 0.75;
+    lineMat.opacity = dark ? 0.32 : 0.22;
+    accentMat.opacity = dark ? 0.85 : 0.7;
     dustMat.color.set(dark ? 0x7fa0ff : 0x164dcc);
-    dustMat.opacity = dark ? 0.28 : 0.18;
+    dustMat.opacity = dark ? 0.24 : 0.15;
   }
   applyTheme();
   new MutationObserver(applyTheme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
