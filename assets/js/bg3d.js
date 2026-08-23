@@ -87,7 +87,7 @@ import * as THREE from './vendor/three.module.min.js';
   }
   lineGeo.setAttribute('position', new THREE.BufferAttribute(lineVerts, 3));
 
-  const lineMat = new THREE.LineBasicMaterial({ color: 0x164dcc, transparent: true, opacity: 0.24 });
+  const lineMat = new THREE.LineBasicMaterial({ color: 0x164dcc, transparent: true, opacity: 0.4 });
   const structure = new THREE.LineSegments(lineGeo, lineMat);
   rig.add(structure);
 
@@ -130,10 +130,10 @@ import * as THREE from './vendor/three.module.min.js';
   function applyTheme() {
     const dark = document.documentElement.getAttribute('data-theme') === 'dark';
     lineMat.color.set(dark ? 0x5a8bff : 0x164dcc);
-    lineMat.opacity = dark ? 0.32 : 0.22;
-    accentMat.opacity = dark ? 0.85 : 0.7;
+    lineMat.opacity = dark ? 0.5 : 0.4;
+    accentMat.opacity = dark ? 0.95 : 0.85;
     dustMat.color.set(dark ? 0x7fa0ff : 0x164dcc);
-    dustMat.opacity = dark ? 0.24 : 0.15;
+    dustMat.opacity = dark ? 0.36 : 0.3;
   }
   applyTheme();
   new MutationObserver(applyTheme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
@@ -174,7 +174,7 @@ import * as THREE from './vendor/three.module.min.js';
       rig.rotation.y += (targetYaw - rig.rotation.y) * 0.02 + 0.0006;
       rig.rotation.x += (targetPitch - rig.rotation.x) * 0.02;
       rig.position.y = Math.sin(t * 0.18) * 0.12;
-      accentMat.opacity = (document.documentElement.getAttribute('data-theme') === 'dark' ? 0.85 : 0.65) + Math.sin(t * 0.9) * 0.18;
+      accentMat.opacity = (document.documentElement.getAttribute('data-theme') === 'dark' ? 0.95 : 0.8) + Math.sin(t * 0.9) * 0.15;
     }
 
     renderer.render(scene, camera);

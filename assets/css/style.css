@@ -306,6 +306,34 @@
   .nav-toggle.open span:nth-child(2){opacity:0;}
   .nav-toggle.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
 
+  /* Explicit close (X) button inside the mobile drawer itself */
+  .nav-close{
+    display:none;
+    align-items:center;
+    justify-content:center;
+    width:38px;height:38px;
+    border-radius:10px;
+    border:1px solid rgba(255,255,255,0.18);
+    color:var(--white);
+    background:rgba(255,255,255,0.06);
+    transition:background .25s ease, transform .2s ease;
+  }
+  .nav-close svg{width:18px;height:18px;}
+  .nav-close:hover{background:rgba(255,255,255,0.14); transform:rotate(90deg);}
+
+  /* Dim overlay behind the mobile drawer */
+  .nav-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(6,9,26,0.55);
+    backdrop-filter:blur(2px);
+    -webkit-backdrop-filter:blur(2px);
+    z-index:98;
+    opacity:0;
+    transition:opacity .3s ease;
+  }
+  .nav-overlay.open{opacity:1;}
+
   /* ---------- hero ---------- */
   .hero{
     position:relative;
@@ -541,8 +569,23 @@
     cursor:pointer;
     font-family:var(--font-body);
     color:var(--text-soft);
-    transition:color .3s ease, background .35s ease, border-color .35s ease, box-shadow .35s ease, transform .2s ease;
+    overflow:hidden;
+    transition:color .3s ease, background .35s ease, border-color .35s ease, box-shadow .35s ease, transform .2s ease, opacity .5s cubic-bezier(.16,.84,.44,1);
   }
+  /* Entrance: pills pop in one after another once the panel scrolls into view */
+  .spec-panel.reveal .spec-pill{
+    opacity:0;
+    transform:translateY(14px) scale(.9);
+  }
+  .spec-panel.reveal.in .spec-pill{
+    opacity:1;
+    transform:translateY(0) scale(1);
+    transition:opacity .55s cubic-bezier(.16,.84,.44,1), transform .55s cubic-bezier(.16,.84,.44,1), color .3s ease, background .35s ease, border-color .35s ease, box-shadow .35s ease;
+  }
+  .spec-panel.reveal.in .spec-pill:nth-of-type(1){transition-delay:.05s;}
+  .spec-panel.reveal.in .spec-pill:nth-of-type(2){transition-delay:.16s;}
+  .spec-panel.reveal.in .spec-pill:nth-of-type(3){transition-delay:.27s;}
+  .spec-panel.reveal.in .spec-pill:nth-of-type(4){transition-delay:.38s;}
   .spec-pill-icon{
     width:32px; height:32px;
     border-radius:50%;
@@ -559,12 +602,53 @@
   .spec-pill:focus-visible{outline:2px solid var(--orange); outline-offset:2px;}
   .spec-pill.is-active{
     background:linear-gradient(135deg, var(--orange), #ff7a48);
+    background-size:220% 220%;
     border-color:transparent;
     color:var(--white);
     box-shadow:0 14px 28px -14px rgba(253,87,43,0.6);
     transform:translateY(-1px);
+    animation:pillGlow 2.8s ease-in-out infinite, pillGradient 4.5s ease infinite;
   }
-  .spec-pill.is-active .spec-pill-icon{background:rgba(255,255,255,0.22); color:var(--white);}
+  .spec-pill.is-active .spec-pill-icon{
+    background:rgba(255,255,255,0.22);
+    color:var(--white);
+    animation:pillIconPop .5s cubic-bezier(.34,1.56,.64,1);
+  }
+  /* Soft light sweep across the active pill */
+  .spec-pill.is-active::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(115deg, transparent 20%, rgba(255,255,255,0.35) 42%, transparent 64%);
+    background-size:220% 100%;
+    background-position:150% 0;
+    animation:pillSheen 3.2s ease-in-out .3s infinite;
+    pointer-events:none;
+  }
+  @media (prefers-reduced-motion: reduce){
+    .spec-pill.is-active{animation:none;}
+    .spec-pill.is-active .spec-pill-icon{animation:none;}
+    .spec-pill.is-active::after{animation:none; display:none;}
+    .spec-panel.reveal .spec-pill,
+    .spec-panel.reveal.in .spec-pill{opacity:1; transform:none; transition:none;}
+  }
+  @keyframes pillGlow{
+    0%,100%{box-shadow:0 14px 28px -14px rgba(253,87,43,0.6);}
+    50%{box-shadow:0 18px 34px -10px rgba(253,87,43,0.85);}
+  }
+  @keyframes pillGradient{
+    0%,100%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+  }
+  @keyframes pillIconPop{
+    0%{transform:scale(.55) rotate(-18deg); opacity:.5;}
+    60%{transform:scale(1.18) rotate(6deg); opacity:1;}
+    100%{transform:scale(1) rotate(0);}
+  }
+  @keyframes pillSheen{
+    0%{background-position:150% 0;}
+    55%,100%{background-position:-50% 0;}
+  }
 
   .spec-viewport{
     display:grid;
@@ -1251,21 +1335,38 @@
       position:fixed;
       top:0; right:0;
       height:100vh;
+      height:100dvh;
       width:min(320px, 82vw);
       background:var(--navy-deep);
       flex-direction:column;
-      align-items:flex-start;
-      justify-content:center;
-      gap:26px;
-      padding:40px;
+      align-items:stretch;
+      justify-content:flex-start;
+      gap:2px;
+      padding:22px 24px 40px;
       transform:translateX(100%);
       transition:transform .35s var(--ease);
       z-index:99;
+      overflow-y:auto;
+      box-shadow:-24px 0 60px -20px rgba(0,0,0,0.5);
     }
     nav.primary.open{transform:translateX(0);}
-    nav.primary a{color:var(--white); font-size:20px;}
-    .nav-icon{color:#8b95c9;}
-    .nav-icon svg{width:21px; height:21px;}
+    .nav-close{display:flex; align-self:flex-end; margin-bottom:26px; flex-shrink:0;}
+    nav.primary a{
+      color:var(--white);
+      font-size:18px;
+      flex-direction:row-reverse;
+      justify-content:flex-end;
+      gap:14px;
+      padding:16px 6px;
+      border-bottom:1px solid rgba(255,255,255,0.1);
+      border-radius:0;
+    }
+    nav.primary a:first-of-type{border-top:1px solid rgba(255,255,255,0.1);}
+    nav.primary a::after{display:none;}
+    nav.primary a:hover,
+    nav.primary a.active{color:var(--orange);}
+    .nav-icon{color:#8b95c9; flex-shrink:0;}
+    .nav-icon svg{width:20px; height:20px;}
     .nav-toggle{display:flex;}
     .header-actions .btn-primary{display:none;}
     .header-actions{gap:10px;}
@@ -1303,7 +1404,14 @@
     .footer-bottom{flex-direction:column; align-items:flex-start; gap:8px;}
     section{padding:76px 0;}
     .hero{padding-top:130px; min-height:560px;}
-    .hero-bg{object-position:center center; animation:none;}
+    .hero-bg{
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      object-position:center center;
+      animation:none;
+    }
     .hero-eyebrow{white-space:normal; width:auto; max-width:100%;}
     .hero-actions{flex-wrap:nowrap; gap:10px;}
     .hero-actions .btn{

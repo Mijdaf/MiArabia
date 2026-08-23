@@ -41,17 +41,32 @@
 
   // Mobile nav
   const navToggle = document.getElementById('navToggle');
+  const navClose = document.getElementById('navClose');
+  const navOverlay = document.getElementById('navOverlay');
   const primaryNav = document.getElementById('primaryNav');
-  navToggle.addEventListener('click', () => {
-    const open = primaryNav.classList.toggle('open');
+
+  const setNavOpen = (open) => {
+    primaryNav.classList.toggle('open', open);
     navToggle.classList.toggle('open', open);
     navToggle.setAttribute('aria-expanded', open);
+    if(open){
+      navOverlay.hidden = false;
+      requestAnimationFrame(() => navOverlay.classList.add('open'));
+      document.body.style.overflow = 'hidden';
+    } else {
+      navOverlay.classList.remove('open');
+      document.body.style.overflow = '';
+      window.setTimeout(() => { if(!primaryNav.classList.contains('open')) navOverlay.hidden = true; }, 350);
+    }
+  };
+
+  navToggle.addEventListener('click', () => setNavOpen(!primaryNav.classList.contains('open')));
+  navClose.addEventListener('click', () => setNavOpen(false));
+  navOverlay.addEventListener('click', () => setNavOpen(false));
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape' && primaryNav.classList.contains('open')) setNavOpen(false);
   });
-  primaryNav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-    primaryNav.classList.remove('open');
-    navToggle.classList.remove('open');
-    navToggle.setAttribute('aria-expanded', false);
-  }));
+  primaryNav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setNavOpen(false)));
 
   // Active nav link on scroll
   const sections = ['about','services','why','contact'].map(id => document.getElementById(id));
