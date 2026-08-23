@@ -1191,6 +1191,7 @@
     flex-direction:column;
     align-items:flex-end;
     gap:12px;
+    perspective:900px;
   }
   .qa-item{
     display:flex; align-items:center;
@@ -1207,6 +1208,8 @@
     font-weight:800;
     color:var(--text);
     transition:transform .35s cubic-bezier(.16,.84,.44,1), opacity .3s ease, box-shadow .25s ease, background .25s ease;
+    transform-style:preserve-3d;
+    will-change:transform;
     /* Collapsed by default: hidden below the FAB, non-interactive */
     opacity:0;
     transform:translateY(14px) scale(.9);
@@ -1248,17 +1251,22 @@
   .qa-request:hover{ background:#e04a24; }
   .qa-inquiry:hover{ background:#1140ad; }
 
-  /* Always-on attention pulse: each pill breathes in its own brand
-     color so both options are noticeable without needing a click. */
-  .qa-request{ animation:qaPulseOrange 2.6s ease-in-out infinite, qaShake 4.5s ease-in-out infinite; }
-  .qa-inquiry{ animation:qaPulseBlue 2.6s ease-in-out .5s infinite, qaShake 4.5s ease-in-out .3s infinite; }
-  @keyframes qaShake{
-    0%, 88%, 100%{ transform:translateX(0) rotate(0); }
-    90%{ transform:translateX(-4px) rotate(-2deg); }
-    92%{ transform:translateX(4px) rotate(2deg); }
-    94%{ transform:translateX(-3px) rotate(-1.5deg); }
-    96%{ transform:translateX(3px) rotate(1.5deg); }
-    98%{ transform:translateX(-1px) rotate(0); }
+  /* Always-on attention motion: each pill breathes in its own brand
+     color and gives a punchy 3D wobble so both options stay noticeable
+     without needing a click. */
+  .qa-request{ animation:qaPulseOrange 2.6s ease-in-out infinite, qaShake3D 3.6s ease-in-out infinite; }
+  .qa-inquiry{ animation:qaPulseBlue 2.6s ease-in-out .5s infinite, qaShake3D 3.6s ease-in-out .7s infinite; }
+  @keyframes qaShake3D{
+    0%, 62%, 100%{ transform:translateX(0) translateY(0) rotate(0) rotateX(0) rotateY(0) scale(1); }
+    64%{  transform:translateX(-10px) translateY(-3px) rotate(-8deg)  rotateX(8deg)  rotateY(-28deg) scale(1.07); }
+    66%{  transform:translateX(10px)  translateY(2px)  rotate(8deg)   rotateX(-8deg) rotateY(28deg)  scale(1.07); }
+    68%{  transform:translateX(-8px)  translateY(-2px) rotate(-6deg)  rotateX(6deg)  rotateY(-22deg) scale(1.05); }
+    70%{  transform:translateX(8px)   translateY(1px)  rotate(6deg)   rotateX(-6deg) rotateY(22deg)  scale(1.05); }
+    72%{  transform:translateX(-6px) rotate(-4deg) rotateX(4deg)  rotateY(-14deg) scale(1.03); }
+    74%{  transform:translateX(6px)  rotate(4deg)  rotateX(-4deg) rotateY(14deg)  scale(1.03); }
+    76%{  transform:translateX(-3px) rotate(-2deg) rotateY(-7deg) scale(1.01); }
+    78%{  transform:translateX(3px)  rotate(2deg)  rotateY(7deg)  scale(1.01); }
+    80%{  transform:translateX(-1px) rotate(-0.5deg) rotateY(-2deg); }
   }
   .qa-request:hover, .qa-inquiry:hover{ animation-play-state:paused; }
   @keyframes qaPulseOrange{

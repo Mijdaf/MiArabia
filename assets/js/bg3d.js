@@ -9,7 +9,19 @@
 
 import * as THREE from './vendor/three.module.min.js';
 
-(function () {
+/* Defer the whole scene build to idle time. Building it (geometry, materials,
+   the O(n²) link pass) plus the first render — which is also when the GPU
+   actually compiles shaders — is real synchronous work. Done at page-load
+   time it can land in the same stretch of main-thread activity as other
+   startup work and delay it. requestIdleCallback waits until the browser
+   genuinely has nothing more pressing queued, so this scene never competes
+   with page interactions like scrolling into the "why" section itself. */
+function whenIdle(fn) {
+  if ('requestIdleCallback' in window) requestIdleCallback(fn, { timeout: 1500 });
+  else setTimeout(fn, 200);
+}
+
+whenIdle(function () {
   const canvas = document.getElementById('whyCanvas');
   const section = document.getElementById('why');
   if (!canvas || !section || !window.WebGLRenderingContext) return;
@@ -21,9 +33,35 @@ import * as THREE from './vendor/three.module.min.js';
   /* ---------- renderer / scene / camera ---------- */
   let renderer;
   try {
-    renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: 'low-power' });
+    renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: false, powerPreference: 'low-power' });
   } catch (e) { return; }
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isSmall ? 1.4 : 2));
+
+  /* Bail out early on software-rendered GPUs (common on machines with no real
+     graphics driver / weak integrated chips + old drivers). A software
+     rasterizer can take 100ms+ per frame, which doesn't just look choppy —
+     it hogs the main thread long enough to delay scroll-driven work like the
+     IntersectionObserver that reveals the "why" rows, making them appear to
+     never show up at all. On this hardware tier we skip the scene build
+     entirely (not just the render loop) — building ~16 meshes, sprites and
+     an O(n²) link pass is itself real synchronous cost, and there's no point
+     paying it for a scene we've already decided not to keep animated. We
+     just clear the canvas and leave the section's plain background showing. */
+  let isSoftwareRenderer = false;
+  try {
+    const gl = renderer.getContext();
+    const dbg = gl.getExtension('WEBGL_debug_renderer_info');
+    const rendererStr = dbg ? String(gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL)) : '';
+    isSoftwareRenderer = /swiftshader|llvmpipe|software|basic render|microsoft basic/i.test(rendererStr);
+  } catch (e) { /* if we can't tell, assume it's fine and let the benchmark below catch it */ }
+
+  if (isSoftwareRenderer) {
+    renderer.setClearColor(0x000000, 0);
+    renderer.clear();
+    return;
+  }
+
+  let pixelRatioCap = isSmall ? 1 : 1.5;
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, pixelRatioCap));
   renderer.setClearColor(0x000000, 0);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
 
@@ -37,15 +75,12 @@ import * as THREE from './vendor/three.module.min.js';
   const rig = new THREE.Group();
   scene.add(rig);
 
-  /* ---------- lighting: soft studio setup for faceted shading ---------- */
-  const hemi = new THREE.HemisphereLight(0xdfe8ff, 0x0a0d1f, 0.9);
+  /* ---------- lighting: minimal two-light setup for faceted shading ---------- */
+  const hemi = new THREE.HemisphereLight(0xdfe8ff, 0x0a0d1f, 0.95);
   scene.add(hemi);
-  const key = new THREE.DirectionalLight(0xffffff, 1.05);
+  const key = new THREE.DirectionalLight(0xffffff, 1.1);
   key.position.set(4, 5, 6);
   scene.add(key);
-  const rim = new THREE.DirectionalLight(0xfd572b, 0.55);
-  rim.position.set(-5, -2, -4);
-  scene.add(rim);
 
   /* ---------- palette ---------- */
   const BLUE = new THREE.Color(0x2f63e0);
@@ -71,7 +106,7 @@ import * as THREE from './vendor/three.module.min.js';
   const glowTex = makeGlowTexture();
 
   /* ---------- build the node field ---------- */
-  const NODE_COUNT = isSmall ? 15 : 26;
+  const NODE_COUNT = isSmall ? 10 : 16;
   const RADIUS_X = isSmall ? 4.6 : 7.6;
   const RADIUS_Y = isSmall ? 5.4 : 3.1;
   const RADIUS_Z = 2.6;
@@ -88,11 +123,9 @@ import * as THREE from './vendor/three.module.min.js';
 
     const color = isAccent ? ORANGE.clone() : (isPrimary ? BLUE.clone() : BLUE_LIGHT.clone().lerp(BLUE, Math.random()));
 
-    const mat = new THREE.MeshStandardMaterial({
+    const mat = new THREE.MeshLambertMaterial({
       color,
       flatShading: true,
-      metalness: 0.25,
-      roughness: 0.45,
       transparent: true,
       opacity: 0.92
     });
@@ -161,7 +194,7 @@ import * as THREE from './vendor/three.module.min.js';
   rig.add(links);
 
   /* ---------- faint dust for depth ---------- */
-  const dustCount = isSmall ? 40 : 90;
+  const dustCount = isSmall ? 30 : 60;
   const dustPos = new Float32Array(dustCount * 3);
   for (let i = 0; i < dustCount; i++) {
     dustPos[i * 3] = (Math.random() - 0.5) * RADIUS_X * 2.4;
@@ -228,16 +261,64 @@ import * as THREE from './vendor/three.module.min.js';
   const clock = new THREE.Clock();
   let running = true;
   let rafId = null;
+  let lastRenderTime = 0;
+  const FRAME_INTERVAL = 1000 / 30; // decorative scene: 30fps is plenty, saves battery/CPU
+
+  /* ---------- adaptive quality: if this device is struggling, quietly
+     simplify the scene — or stop animating altogether — instead of letting
+     it choke the page. Two tiers.
+
+     We decide the STARTING tier with a synchronous preflight render before
+     the animation loop ever begins (see below), rather than only reacting
+     after several janky frames have already played out. A slow machine
+     doesn't just render slowly once it's running — a single renderer.render()
+     call can itself block the main thread long enough to delay unrelated
+     things like scroll-driven IntersectionObservers elsewhere on the page
+     (e.g. the "why" row reveal). Catching that on frame zero, before the
+     section is even scrolled to, avoids that knock-on delay entirely. ---- */
+  let quality = 0; // 0 = full, 1 = reduced, 2 = static-only
+  let benchFrames = 0, benchTotal = 0, worstFrame = 0;
+  const BENCH_SAMPLE = 6;
+
+  {
+    const preflightStart = performance.now();
+    renderer.render(scene, camera);
+    const preflightCost = performance.now() - preflightStart;
+    if (preflightCost > 60) downgradeToStatic();
+    else if (preflightCost > 22) downgradeToReduced();
+  }
+
+  function downgradeToReduced() {
+    if (quality >= 1) return;
+    quality = 1;
+    for (const n of nodes) n.glow.visible = false;
+    dust.visible = false;
+    if (renderer.getPixelRatio() > 1) renderer.setPixelRatio(1);
+  }
+
+  function downgradeToStatic() {
+    quality = 2;
+    running = false;
+    if (rafId !== null) { cancelAnimationFrame(rafId); rafId = null; }
+    renderer.render(scene, camera); // leave one clean still frame on screen
+  }
 
   function ensureLoop() {
+    if (quality === 2) return; // static tier never (re)starts the loop
     if (rafId === null && running && inView && !reduceMotion) {
       rafId = requestAnimationFrame(frame);
     }
   }
 
-  function frame() {
+  function frame(now) {
     rafId = null;
     if (!running || !inView) return;
+
+    const elapsed = now - lastRenderTime;
+    if (elapsed < FRAME_INTERVAL) { ensureLoop(); return; }
+    const frameStart = performance.now();
+    lastRenderTime = now - (elapsed % FRAME_INTERVAL);
+
     const t = clock.getElapsedTime();
 
     if (!reduceMotion) {
@@ -248,14 +329,35 @@ import * as THREE from './vendor/three.module.min.js';
       for (const n of nodes) {
         n.mesh.position.y = n.basePos.y + Math.sin(t * n.bobSpeed + n.phase) * n.bobAmp;
         n.mesh.position.x = n.basePos.x + Math.cos(t * n.bobSpeed * 0.7 + n.phase) * n.bobAmp * 0.5;
-        n.glow.position.copy(n.mesh.position);
         n.mesh.rotateOnAxis(n.spinAxis, n.spinSpeed * 0.01);
-        n.glow.material.opacity = n.baseGlowOpacity + Math.sin(t * 0.8 + n.phase) * n.baseGlowOpacity * 0.35;
+        if (n.glow.visible) {
+          n.glow.position.copy(n.mesh.position);
+          n.glow.material.opacity = n.baseGlowOpacity + Math.sin(t * 0.8 + n.phase) * n.baseGlowOpacity * 0.35;
+        }
       }
     }
 
     renderer.render(scene, camera);
-    if (!reduceMotion) ensureLoop();
+    const cost = performance.now() - frameStart;
+
+    if (quality < 2 && !isSmall && !reduceMotion) {
+      benchFrames++;
+      benchTotal += cost;
+      if (cost > worstFrame) worstFrame = cost;
+
+      // Any single very slow frame (main thread blocked ~4+ dropped frames'
+      // worth) is reason enough to act now rather than waiting for an average.
+      if (cost > 60) {
+        quality === 0 ? downgradeToReduced() : downgradeToStatic();
+      } else if (benchFrames >= BENCH_SAMPLE) {
+        const avg = benchTotal / benchFrames;
+        if (quality === 0 && avg > 18) downgradeToReduced();
+        else if (quality === 1 && avg > 18) downgradeToStatic();
+        benchFrames = 0; benchTotal = 0; worstFrame = 0;
+      }
+    }
+
+    if (quality < 2 && !reduceMotion) ensureLoop();
   }
 
   document.addEventListener('visibilitychange', () => {
@@ -263,9 +365,12 @@ import * as THREE from './vendor/three.module.min.js';
     ensureLoop();
   });
 
-  if (reduceMotion) {
+  if (quality === 2) {
+    // downgradeToStatic() (called above, from the preflight benchmark)
+    // already left a still frame on screen.
+  } else if (reduceMotion) {
     renderer.render(scene, camera); // single static frame
   } else {
     ensureLoop();
   }
-})();
+});
