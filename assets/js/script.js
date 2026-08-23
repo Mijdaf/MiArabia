@@ -322,6 +322,8 @@
     const views = Array.from(panel.querySelectorAll('.spec-view'));
     if(!tabs.length || !views.length) return;
 
+    const TRANSITION_MS = 380;
+
     const activate = (index) => {
       tabs.forEach((tab, i) => {
         const active = i === index;
@@ -330,11 +332,34 @@
         tab.tabIndex = active ? 0 : -1;
         if(active) tab.scrollIntoView({ behavior:'smooth', inline:'nearest', block:'nearest' });
       });
+
+      const nextView = views[index];
+
       views.forEach((view, i) => {
-        const active = i === index;
-        view.classList.toggle('is-active', active);
-        if(active) view.removeAttribute('hidden'); else view.setAttribute('hidden', '');
+        if(view === nextView) return;
+        if(view.classList.contains('is-active')){
+          // Let the outgoing panel crossfade out instead of vanishing instantly.
+          view.classList.remove('is-active');
+          view.classList.add('is-leaving');
+          window.clearTimeout(view._specLeaveTimer);
+          view._specLeaveTimer = window.setTimeout(() => {
+            view.classList.remove('is-leaving');
+            view.setAttribute('hidden', '');
+          }, TRANSITION_MS);
+        } else {
+          view.classList.remove('is-active', 'is-leaving');
+          view.setAttribute('hidden', '');
+        }
       });
+
+      window.clearTimeout(nextView._specLeaveTimer);
+      nextView.classList.remove('is-leaving');
+      nextView.removeAttribute('hidden');
+      // Force reflow so re-selecting the same tab (or a fast re-entry)
+      // restarts the entrance + stagger animations rather than no-op-ing.
+      nextView.classList.remove('is-active');
+      void nextView.offsetWidth;
+      nextView.classList.add('is-active');
     };
 
     tabs.forEach((tab, i) => {

@@ -601,6 +601,8 @@
   .spec-pill-label{font-size:16.5px; font-weight:700; white-space:nowrap;}
   .spec-pill:hover{border-color:rgba(253,87,43,0.4); color:var(--heading);}
   .spec-pill:hover .spec-pill-icon{background:rgba(253,87,43,0.18);}
+  .spec-pill:active{transform:scale(.95);}
+  .spec-pill.is-active:active{transform:translateY(-1px) scale(.97);}
   .spec-pill:focus-visible{outline:2px solid var(--orange); outline-offset:2px;}
   .spec-pill.is-active{
     background:linear-gradient(135deg, var(--orange), #ff7a48);
@@ -665,15 +667,30 @@
     display:flex;
     flex-direction:column;
     opacity:0;
-    transform:translateY(10px);
-    transition:opacity .4s cubic-bezier(.16,.84,.44,1), transform .45s cubic-bezier(.16,.84,.44,1);
+    transform:translateY(16px) scale(.98);
+    transition:opacity .45s cubic-bezier(.16,.84,.44,1), transform .5s cubic-bezier(.16,.84,.44,1);
     pointer-events:none;
+    will-change:opacity, transform;
   }
   .spec-view.is-active{
     opacity:1;
-    transform:translateY(0);
+    transform:translateY(0) scale(1);
     pointer-events:auto;
     position:relative;
+  }
+  /* Outgoing view: fades/slides away instead of vanishing instantly,
+     so it briefly crossfades with the incoming one (JS adds/removes
+     this class and delays the hidden attribute to match). */
+  .spec-view.is-leaving{
+    opacity:0;
+    transform:translateY(-14px) scale(.97);
+    transition:opacity .32s ease, transform .38s cubic-bezier(.55,0,1,.45);
+    pointer-events:none;
+    position:relative;
+  }
+  @media (prefers-reduced-motion: reduce){
+    .spec-view{transition:opacity .01s linear; transform:none;}
+    .spec-view.is-leaving{transition:none;}
   }
   .spec-view-head{
     display:flex;
@@ -690,6 +707,28 @@
     background:rgba(253,87,43,0.1);
     color:var(--orange);
     flex-shrink:0;
+  }
+  .spec-view.is-active .spec-view-icon{
+    animation:specIconPop .55s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  @keyframes specIconPop{
+    0%{transform:scale(.4) rotate(-16deg); opacity:0;}
+    60%{transform:scale(1.14) rotate(5deg); opacity:1;}
+    100%{transform:scale(1) rotate(0);}
+  }
+  .spec-view.is-active h4,
+  .spec-view.is-active > p{
+    animation:specFadeUp .5s cubic-bezier(.16,.84,.44,1) both;
+  }
+  .spec-view.is-active > p{animation-delay:.06s;}
+  @keyframes specFadeUp{
+    0%{opacity:0; transform:translateY(10px);}
+    100%{opacity:1; transform:translateY(0);}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .spec-view.is-active .spec-view-icon,
+    .spec-view.is-active h4,
+    .spec-view.is-active > p{animation:none;}
   }
   .spec-view-icon svg{width:25px; height:25px;}
   .spec-tag{
@@ -711,6 +750,21 @@
     font-size:15.5px;
     color:var(--text-soft);
     line-height:1.7;
+    opacity:0;
+    transform:translateY(8px);
+  }
+  .spec-view.is-active .spec-view-list li{
+    animation:specFadeUp .5s cubic-bezier(.16,.84,.44,1) both;
+    animation-delay:calc(.12s + (var(--li-i, 0) * 70ms));
+  }
+  .spec-view-list li:nth-child(1){--li-i:0;}
+  .spec-view-list li:nth-child(2){--li-i:1;}
+  .spec-view-list li:nth-child(3){--li-i:2;}
+  .spec-view-list li:nth-child(4){--li-i:3;}
+  .spec-view-list li:nth-child(5){--li-i:4;}
+  @media (prefers-reduced-motion: reduce){
+    .spec-view-list li{opacity:1; transform:none;}
+    .spec-view.is-active .spec-view-list li{animation:none;}
   }
   .spec-view-list li::before{
     content:"";
@@ -847,18 +901,21 @@
   .service-back-hint{margin-top:auto; padding-top:14px;}
 
   /* ---------- why us ---------- */
-  .why{background:color-mix(in srgb, var(--navy-deep) 80%, transparent);color:var(--white);position:relative;overflow:hidden;}
-  html[data-theme="dark"] .why{background:color-mix(in srgb, var(--navy-deep) 45%, transparent);}
+  .why{background:transparent;color:var(--heading);position:relative;overflow:hidden;}
+  html[data-theme="dark"] .why{background:var(--navy-deep);color:var(--white);}
   .why::before{
     content:"";
     position:absolute; inset:0;
-    background-image:linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-image:linear-gradient(rgba(10,13,31,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(10,13,31,0.04) 1px, transparent 1px);
     background-size:52px 52px;
     pointer-events:none;
   }
+  html[data-theme="dark"] .why::before{
+    background-image:linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+  }
   .why .wrap{position:relative; perspective:1400px;}
-  .why .section-head h2{color:var(--white);}
-  .why .section-head p{color:#aebbe9;}
+  .why .section-head h2{color:var(--heading);}
+  .why .section-head p{color:var(--text-soft);}
   .why-grid{
     display:grid;
     grid-template-columns:repeat(4,1fr);
@@ -1025,6 +1082,14 @@
     flex-direction:column;
     align-items:flex-end;
     gap:14px;
+    animation:qaDropIn .8s cubic-bezier(.16,.84,.44,1) both;
+  }
+  @keyframes qaDropIn{
+    0%{ opacity:0; transform:translateY(-130px); }
+    100%{ opacity:1; transform:translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .quick-actions{ animation:none; }
   }
 
   /* The expandable menu, stacked above the FAB */
@@ -1062,6 +1127,26 @@
     display:flex; align-items:center; justify-content:center;
   }
   .qa-item-icon svg{ width:17px; height:17px; }
+  .qa-item{ position:relative; overflow:visible; z-index:1; }
+  .qa-item::before{
+    content:"";
+    position:absolute;
+    inset:-5px;
+    border-radius:30px;
+    z-index:-1;
+    filter:blur(9px);
+    opacity:.28;
+    animation:qaGlowPulse 2.6s ease-in-out infinite;
+  }
+  .qa-request::before{ background:var(--orange); }
+  .qa-inquiry::before{ background:#164dcc; animation-delay:.5s; }
+  @keyframes qaGlowPulse{
+    0%, 100%{ opacity:.18; transform:scale(.94); }
+    50%{ opacity:.4; transform:scale(1.04); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .qa-item::before{ animation:none; opacity:.4; }
+  }
   .qa-request{ background:var(--orange); color:var(--white); }
   .qa-request .qa-item-icon{ background:rgba(255,255,255,0.22); color:var(--white); }
   .qa-inquiry{ background:#164dcc; color:var(--white); }
@@ -1072,16 +1157,24 @@
 
   /* Always-on attention pulse: each pill breathes in its own brand
      color so both options are noticeable without needing a click. */
-  .qa-request{ animation:qaPulseOrange 2.6s ease-in-out infinite; }
-  .qa-inquiry{ animation:qaPulseBlue 2.6s ease-in-out .5s infinite; }
+  .qa-request{ animation:qaPulseOrange 2.6s ease-in-out infinite, qaShake 4.5s ease-in-out infinite; }
+  .qa-inquiry{ animation:qaPulseBlue 2.6s ease-in-out .5s infinite, qaShake 4.5s ease-in-out .3s infinite; }
+  @keyframes qaShake{
+    0%, 88%, 100%{ transform:translateX(0) rotate(0); }
+    90%{ transform:translateX(-4px) rotate(-2deg); }
+    92%{ transform:translateX(4px) rotate(2deg); }
+    94%{ transform:translateX(-3px) rotate(-1.5deg); }
+    96%{ transform:translateX(3px) rotate(1.5deg); }
+    98%{ transform:translateX(-1px) rotate(0); }
+  }
   .qa-request:hover, .qa-inquiry:hover{ animation-play-state:paused; }
   @keyframes qaPulseOrange{
-    0%, 100%{ box-shadow:0 14px 30px -12px rgba(10,13,31,0.28), 0 0 0 0 rgba(253,87,43,0.35); }
-    50%{ box-shadow:0 14px 30px -12px rgba(10,13,31,0.28), 0 0 0 9px rgba(253,87,43,0); }
+    0%, 100%{ box-shadow:0 14px 30px -12px rgba(10,13,31,0.28), 0 0 0 0 rgba(253,87,43,0.22); }
+    50%{ box-shadow:0 14px 30px -12px rgba(10,13,31,0.28), 0 0 0 5px rgba(253,87,43,0); }
   }
   @keyframes qaPulseBlue{
-    0%, 100%{ box-shadow:0 14px 30px -12px rgba(10,13,31,0.28), 0 0 0 0 rgba(22,77,204,0.32); }
-    50%{ box-shadow:0 14px 30px -12px rgba(10,13,31,0.28), 0 0 0 9px rgba(22,77,204,0); }
+    0%, 100%{ box-shadow:0 14px 30px -12px rgba(10,13,31,0.28), 0 0 0 0 rgba(22,77,204,0.2); }
+    50%{ box-shadow:0 14px 30px -12px rgba(10,13,31,0.28), 0 0 0 5px rgba(22,77,204,0); }
   }
   @media (prefers-reduced-motion: reduce){
     .qa-request, .qa-inquiry{ animation:none; }
@@ -1127,8 +1220,8 @@
   .quick-actions.open .qa-fab-icon-close{ opacity:1; transform:rotate(0deg); }
 
   @keyframes qaFabPulse{
-    0%, 100%{ box-shadow:0 14px 32px -12px rgba(10,13,31,0.35), 0 0 0 0 rgba(253,87,43,0.35); }
-    50%{ box-shadow:0 14px 32px -12px rgba(10,13,31,0.35), 0 0 0 12px rgba(253,87,43,0); }
+    0%, 100%{ box-shadow:0 14px 32px -12px rgba(10,13,31,0.35), 0 0 0 0 rgba(253,87,43,0.22); }
+    50%{ box-shadow:0 14px 32px -12px rgba(10,13,31,0.35), 0 0 0 6px rgba(253,87,43,0); }
   }
 
   /* Persistent tooltip bubble: tells the visitor to tap the button,
@@ -1184,6 +1277,7 @@
     .qa-item-icon{ width:30px; height:30px; }
     .qa-item-icon svg{ width:15px; height:15px; }
     .qa-tooltip{ font-size:12.5px; padding:8px 13px; }
+    .qa-badge{ top:-9px; font-size:9.5px; padding:3px 7px; }
   }
 
   @media (max-width:460px){
