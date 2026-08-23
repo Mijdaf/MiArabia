@@ -947,11 +947,21 @@
     background-image:linear-gradient(rgba(10,13,31,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(10,13,31,0.04) 1px, transparent 1px);
     background-size:52px 52px;
     pointer-events:none;
+    z-index:0;
   }
   html[data-theme="dark"] .why::before{
     background-image:linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
   }
-  .why .wrap{position:relative;}
+  #whyCanvas{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    z-index:1;
+    display:block;
+    pointer-events:none;
+  }
+  .why .wrap{position:relative;z-index:2;}
   .why .section-head h2{color:var(--heading);}
   .why .section-head p{color:var(--text-soft);}
 
