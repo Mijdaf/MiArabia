@@ -3,6 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+  // Always start in light mode by default. If the visitor has explicitly
+  // toggled dark mode before, honor that saved choice; otherwise ignore
+  // the OS/browser color-scheme preference and stay light.
+  (function(){
+    try {
+      const saved = localStorage.getItem('mijdaf-theme');
+      if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+    } catch(e) {}
+  })();
+</script>
 <title>مجداف العربية للمقاولات العامة — مقاولات عامة وخدمات صناعية</title>
 <meta name="description" content="مجداف العربية للمقاولات العامة — شركة سعودية متخصصة في أعمال الأنابيب واللحام والتصنيع والصيانة وخدمات القوى العاملة، وفق أعلى معايير السلامة والجودة.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,7 +26,7 @@
 <header id="siteHeader">
   <div class="wrap">
     <a href="#top" class="logo">
-      <img src="assets/mijdaf-header-lockup-t.png" alt="Mijdaf Arabia" class="logo-img">
+      <img src="assets/mijdaf-header-lockup-new.png" alt="Mijdaf Arabia" class="logo-img">
     </a>
     <nav class="primary" id="primaryNav">
       <a href="#about">
@@ -36,6 +47,10 @@
       </a>
     </nav>
     <div class="header-actions">
+      <button class="btn btn-ghost theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark mode / التبديل للوضع الداكن" aria-pressed="false">
+        <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.4"/><path d="M12 2.5v2.6M12 18.9v2.6M4.6 4.6l1.85 1.85M17.55 17.55l1.85 1.85M2.5 12h2.6M18.9 12h2.6M4.6 19.4l1.85-1.85M17.55 6.45l1.85-1.85"/></svg>
+        <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>
+      </button>
       <button class="btn btn-ghost lang-toggle" id="langToggle" type="button" aria-label="Switch language / تبديل اللغة">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
           <rect x="2.5" y="2.5" width="12" height="12" rx="3.5"/>
@@ -374,18 +389,31 @@
 
 <!-- QUICK ACTIONS -->
 <div class="quick-actions" id="quickActions">
-  <button type="button" class="qa-btn qa-request" id="openRequestModal" aria-haspopup="dialog">
-    <span class="qa-icon">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/></svg>
-    </span>
-    <span class="qa-label" data-en="Request a Quote">قدّم طلبك</span>
-  </button>
-  <button type="button" class="qa-btn qa-inquiry" id="openInquiryModal" aria-haspopup="dialog">
-    <span class="qa-icon">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
-    </span>
-    <span class="qa-label" data-en="Inquiries">الاستفسارات</span>
-  </button>
+  <div class="qa-menu" id="qaMenu">
+    <button type="button" class="qa-item qa-request" id="openRequestModal" aria-haspopup="dialog">
+      <span class="qa-item-label" data-en="Request a Quote">قدّم طلبك</span>
+      <span class="qa-item-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/></svg>
+      </span>
+    </button>
+    <button type="button" class="qa-item qa-inquiry" id="openInquiryModal" aria-haspopup="dialog">
+      <span class="qa-item-label" data-en="Inquiries">الاستفسارات</span>
+      <span class="qa-item-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+      </span>
+    </button>
+  </div>
+  <div class="qa-fab-wrap">
+    <span class="qa-tooltip" id="qaTooltip" data-en="Click here for inquiries">اضغط هنا للاستفسار</span>
+    <button type="button" class="qa-fab" id="qaFab" aria-expanded="false" aria-label="تواصل معنا / Contact us">
+      <span class="qa-fab-icon qa-fab-icon-plus">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+      </span>
+      <span class="qa-fab-icon qa-fab-icon-close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </span>
+    </button>
+  </div>
 </div>
 
 <!-- REQUEST MODAL -->

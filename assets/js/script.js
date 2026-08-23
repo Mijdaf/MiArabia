@@ -1,6 +1,38 @@
   // Year
   document.getElementById('year').textContent = new Date().getFullYear();
 
+  // Light / dark theme toggle
+  (function(){
+    const root = document.documentElement;
+    const toggleBtn = document.getElementById('themeToggle');
+    if (!toggleBtn) return;
+
+    const isDark = () => root.getAttribute('data-theme') === 'dark';
+
+    const syncLabel = () => {
+      const dark = isDark();
+      toggleBtn.setAttribute('aria-pressed', String(dark));
+      const isEnglish = root.getAttribute('lang') === 'en';
+      toggleBtn.setAttribute('aria-label',
+        dark
+          ? (isEnglish ? 'Switch to light mode' : 'التبديل للوضع الفاتح')
+          : (isEnglish ? 'Switch to dark mode' : 'التبديل للوضع الداكن')
+      );
+    };
+    syncLabel();
+
+    toggleBtn.addEventListener('click', () => {
+      const dark = !isDark();
+      if (dark) {
+        root.setAttribute('data-theme', 'dark');
+      } else {
+        root.removeAttribute('data-theme');
+      }
+      try { localStorage.setItem('mijdaf-theme', dark ? 'dark' : 'light'); } catch(e) {}
+      syncLabel();
+    });
+  })();
+
   // Header scroll state
   const header = document.getElementById('siteHeader');
   const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 12);
@@ -327,6 +359,54 @@
         });
       }, { threshold: [0, 1] });
       heroObs.observe(collapseAnchor);
+    }
+
+    // FAB toggle: opens/closes the small menu (Request a Quote / Inquiries)
+    const qaFab = document.getElementById('qaFab');
+    const qaMenu = document.getElementById('qaMenu');
+    if (qaFab && qaMenu && quickActions) {
+      const closeMenu = () => {
+        quickActions.classList.remove('open');
+        qaFab.setAttribute('aria-expanded', 'false');
+      };
+      const openMenu = () => {
+        quickActions.classList.add('open');
+        qaFab.setAttribute('aria-expanded', 'true');
+      };
+      qaFab.addEventListener('click', () => {
+        quickActions.classList.contains('open') ? closeMenu() : openMenu();
+      });
+      // Close after picking an option, so the menu doesn't stay open behind the modal
+      qaMenu.querySelectorAll('.qa-item').forEach(item => {
+        item.addEventListener('click', closeMenu);
+      });
+      // Close on outside click / tap
+      document.addEventListener('pointerdown', (e) => {
+        if (!quickActions.contains(e.target)) closeMenu();
+      });
+      // Close on Escape
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeMenu();
+      });
+
+      // One-time "peek": briefly reveal the menu on first visit so the user
+      // notices it exists, then auto-collapse back to the small round FAB.
+      // Runs once per browser session (sessionStorage), and is skipped for
+      // users who prefer reduced motion.
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!prefersReducedMotion && !sessionStorage.getItem('qaPeeked')) {
+        sessionStorage.setItem('qaPeeked', '1');
+        const peekTimer = setTimeout(() => {
+          if (!quickActions.classList.contains('open')) openMenu();
+          setTimeout(() => {
+            if (quickActions.classList.contains('open')) closeMenu();
+          }, 2600);
+        }, 1400);
+        // If the user interacts before the peek fires, don't force it open
+        ['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach(evt => {
+          document.addEventListener(evt, () => clearTimeout(peekTimer), { once: true, passive: true });
+        });
+      }
     }
 
     function openModal(overlay){
