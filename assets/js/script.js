@@ -52,37 +52,105 @@
     entries.forEach(entry => {
       if(!entry.isIntersecting) return;
       const el = entry.target;
-      el.classList.add('in');
+      const idx = parseInt(el.style.getPropertyValue('--i')) || 0;
+      const delay = idx * 140;
 
-      // icon draws itself in like a blueprint line
-      const path = el.querySelector('.why-icon svg path');
-      if(path){
-        const len = path.getTotalLength();
-        path.style.strokeDasharray = len;
-        path.style.strokeDashoffset = len;
-        requestAnimationFrame(() => { path.style.strokeDashoffset = '0'; });
-      }
+      setTimeout(() => {
+        el.classList.add('in');
 
-      // big background number counts up
-      const numEl = el.querySelector('.why-bignum');
-      if(numEl){
-        const target = parseInt(numEl.textContent, 10) || 0;
-        const duration = 750;
-        const delay = (parseInt(el.style.getPropertyValue('--i')) || 0) * 140;
-        const startTime = performance.now() + delay;
-        const tick = (now) => {
-          const p = Math.min(Math.max((now - startTime) / duration, 0), 1);
-          const eased = 1 - Math.pow(1 - p, 3);
-          numEl.textContent = String(Math.round(eased * target)).padStart(2, '0');
-          if(p < 1) requestAnimationFrame(tick);
-        };
-        requestAnimationFrame(tick);
-      }
+        // icon draws itself in like a blueprint line
+        const path = el.querySelector('.why-icon svg path');
+        if(path){
+          const len = path.getTotalLength();
+          path.style.transition = 'none';
+          path.style.strokeDasharray = len;
+          path.style.strokeDashoffset = len;
+          requestAnimationFrame(() => {
+            path.style.transition = 'stroke-dashoffset 1s cubic-bezier(.16,.84,.44,1)';
+            path.style.strokeDashoffset = '0';
+          });
+        }
+
+        // big background number counts up
+        const numEl = el.querySelector('.why-bignum');
+        if(numEl){
+          const target = parseInt(numEl.textContent, 10) || 0;
+          const duration = 750;
+          const startTime = performance.now();
+          const tick = (now) => {
+            const p = Math.min((now - startTime) / duration, 1);
+            const eased = 1 - Math.pow(1 - p, 3);
+            numEl.textContent = String(Math.round(eased * target)).padStart(2, '0');
+            if(p < 1) requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+        }
+      }, delay);
 
       whyObs.unobserve(el);
     });
-  }, { threshold: 0.35 });
+  }, { threshold: 0.3 });
   whyItems.forEach(el => whyObs.observe(el));
+
+  // Capability cards (about section): staggered reveal + icon line-draw
+  const specItems = document.querySelectorAll('.spec-reveal');
+  const specObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(!entry.isIntersecting) return;
+      const el = entry.target;
+      const idx = parseInt(el.style.getPropertyValue('--i')) || 0;
+      const delay = idx * 120;
+
+      setTimeout(() => {
+        el.classList.add('in');
+
+        const path = el.querySelector('.spec-icon svg path');
+        if(path){
+          const len = path.getTotalLength();
+          path.style.transition = 'none';
+          path.style.strokeDasharray = len;
+          path.style.strokeDashoffset = len;
+          requestAnimationFrame(() => {
+            path.style.transition = 'stroke-dashoffset .9s cubic-bezier(.16,.84,.44,1)';
+            path.style.strokeDashoffset = '0';
+          });
+        }
+      }, delay);
+
+      specObs.unobserve(el);
+    });
+  }, { threshold: 0.25 });
+  specItems.forEach(el => specObs.observe(el));
+
+  // Services cards: staggered reveal + icon line-draw
+  const serviceItems = document.querySelectorAll('.service-reveal');
+  const serviceObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(!entry.isIntersecting) return;
+      const el = entry.target;
+      const idx = parseInt(el.style.getPropertyValue('--i')) || 0;
+      const delay = idx * 120;
+
+      setTimeout(() => {
+        el.classList.add('in');
+
+        const path = el.querySelector('.icon svg path');
+        if(path){
+          const len = path.getTotalLength();
+          path.style.transition = 'none';
+          path.style.strokeDasharray = len;
+          path.style.strokeDashoffset = len;
+          requestAnimationFrame(() => {
+            path.style.transition = 'stroke-dashoffset .9s cubic-bezier(.16,.84,.44,1)';
+            path.style.strokeDashoffset = '0';
+          });
+        }
+      }, delay);
+
+      serviceObs.unobserve(el);
+    });
+  }, { threshold: 0.25 });
+  serviceItems.forEach(el => serviceObs.observe(el));
 
   // Language toggle (Arabic <-> English)
   (function(){
@@ -117,6 +185,11 @@
       });
       document.querySelectorAll('[data-en-placeholder]').forEach(el => {
         el.setAttribute('placeholder', lang === 'ar' ? el.getAttribute('data-ar-placeholder') : el.getAttribute('data-en-placeholder'));
+      });
+      document.querySelectorAll('[data-tooltip-en]').forEach(el => {
+        const text = lang === 'ar' ? el.getAttribute('data-tooltip') : el.getAttribute('data-tooltip-en');
+        el.setAttribute('title', text);
+        el.setAttribute('aria-label', text);
       });
 
       titleEl.textContent = titles[lang];
