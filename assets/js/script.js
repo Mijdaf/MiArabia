@@ -34,17 +34,105 @@
   }, { rootMargin: '-45% 0px -50% 0px' });
   sections.forEach(s => s && spy.observe(s));
 
-  // Reveal on scroll
+  // Reveal on scroll (3D) — one-shot, GPU-only (transform/opacity), will-change cleared after use
   const revealEls = document.querySelectorAll('.reveal');
   const revealObs = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if(entry.isIntersecting){
-        entry.target.classList.add('in');
-        revealObs.unobserve(entry.target);
+        const el = entry.target;
+        el.classList.add('in');
+        const clearWillChange = () => { el.style.willChange = 'auto'; el.removeEventListener('transitionend', clearWillChange); };
+        el.addEventListener('transitionend', clearWillChange);
+        revealObs.unobserve(el);
       }
     });
   }, { threshold: 0.15 });
   revealEls.forEach(el => revealObs.observe(el));
+
+  // ---------- 3D pointer tilt for cards (desktop / precise-pointer only) ----------
+  // Skips entirely on touch devices and when the user prefers reduced motion,
+  // so mobile never pays for mousemove listeners it can't use.
+  (function(){
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const hasFinePointer = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+    if (prefersReducedMotion || !hasFinePointer) return;
+
+    const TILT_TARGETS = [
+      { selector: '.spec-card',    max: 8,  lift: -6,  scale: 1.02 },
+      { selector: '.service-card', max: 8,  lift: -8,  scale: 1.02 },
+      { selector: '.why-item',     max: 7,  lift: -8,  scale: 1.015 }
+    ];
+
+    TILT_TARGETS.forEach(({ selector, max, lift, scale }) => {
+      document.querySelectorAll(selector).forEach(el => {
+        let rect = null;
+        let ticking = false;
+        let pendingEvent = null;
+
+        const update = () => {
+          ticking = false;
+          if (!pendingEvent || !rect) return;
+          const px = (pendingEvent.clientX - rect.left) / rect.width;
+          const py = (pendingEvent.clientY - rect.top) / rect.height;
+          const rx = (0.5 - py) * max;   // rotateX: up/down tilt
+          const ry = (px - 0.5) * max;   // rotateY: left/right tilt
+          el.style.transform = `translateY(${lift}px) perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) scale(${scale})`;
+        };
+
+        el.addEventListener('pointerenter', (e) => {
+          if (e.pointerType !== 'mouse' && e.pointerType !== 'pen') return;
+          rect = el.getBoundingClientRect();
+          el.style.willChange = 'transform';
+        });
+
+        el.addEventListener('pointermove', (e) => {
+          if (e.pointerType !== 'mouse' && e.pointerType !== 'pen') return;
+          pendingEvent = e;
+          if (!ticking) {
+            ticking = true;
+            requestAnimationFrame(update);
+          }
+        });
+
+        el.addEventListener('pointerleave', () => {
+          el.style.transform = '';
+          el.style.willChange = 'auto';
+          rect = null;
+        });
+      });
+    });
+  })();
+
+  // ---------- Hero 3D parallax on scroll (rAF-throttled, transform-only) ----------
+  (function(){
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // Parallax targets the wrapper div, not .hero-bg itself — the video already
+    // runs its own continuous heroZoom transform animation, so moving a separate
+    // wrapper avoids two transform sources fighting over the same element.
+    const heroBgWrap = document.querySelector('.hero-bg-wrap');
+    const heroContent = document.querySelector('.hero-content');
+    const heroSection = document.querySelector('.hero');
+    if (prefersReducedMotion || !heroBgWrap || !heroContent || !heroSection) return;
+    if (window.matchMedia('(max-width:760px)').matches) return; // heroZoom itself is disabled on mobile
+
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      const rect = heroSection.getBoundingClientRect();
+      const h = rect.height || 1;
+      // progress: 0 at top of hero in view, 1 once fully scrolled past
+      const progress = Math.min(Math.max(-rect.top / h, 0), 1);
+      if (rect.bottom < 0 || rect.top > window.innerHeight) return; // off-screen, skip work
+      heroBgWrap.style.transform = `translateY(${progress * 40}px) scale(${1 + progress * 0.03})`;
+      heroContent.style.transform = `translateY(${progress * -18}px) rotateX(${progress * 5}deg) translateZ(0)`;
+    };
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    }, { passive: true });
+  })();
 
   // Why-us cards: staggered 3D reveal + icon line-draw + number count-up
   const whyItems = document.querySelectorAll('.why-reveal');
@@ -226,16 +314,19 @@
     const WHATSAPP_NUMBER = '201152932977'; // Mijdaf Arabia WhatsApp (country code + number, no leading 0/plus)
     let lastFocused = null;
 
-    // Lighter, glassy look once the hero (dark video) is scrolled past, so page content stays prominent
+    // Lighter, glassy look once the hero (dark video) is scrolled past, so page content stays prominent.
+    // We check boundingClientRect.bottom directly (not just isIntersecting) because relying on
+    // isIntersecting alone can misfire depending on scroll position at load time.
     const quickActions = document.getElementById('quickActions');
-    const heroSection = document.querySelector('.hero');
-    if (quickActions && heroSection) {
+    const collapseAnchor = document.querySelector('.hero');
+    if (quickActions && collapseAnchor) {
       const heroObs = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-          quickActions.classList.toggle('past-hero', !entry.isIntersecting);
+          const scrolledPast = entry.boundingClientRect.bottom < 0;
+          quickActions.classList.toggle('past-hero', scrolledPast);
         });
-      }, { threshold: 0, rootMargin: '0px 0px -15% 0px' });
-      heroObs.observe(heroSection);
+      }, { threshold: [0, 1] });
+      heroObs.observe(collapseAnchor);
     }
 
     function openModal(overlay){
