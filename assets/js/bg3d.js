@@ -220,15 +220,23 @@ import * as THREE from './vendor/three.module.min.js';
   if (window.IntersectionObserver) {
     new IntersectionObserver((entries) => {
       inView = entries[0].isIntersecting;
-      if (inView && !reduceMotion) requestAnimationFrame(frame);
+      ensureLoop();
     }, { threshold: 0.05 }).observe(section);
   }
 
-  /* ---------- render loop ---------- */
+  /* ---------- render loop (single-flight: never more than one RAF chain) ---------- */
   const clock = new THREE.Clock();
   let running = true;
+  let rafId = null;
+
+  function ensureLoop() {
+    if (rafId === null && running && inView && !reduceMotion) {
+      rafId = requestAnimationFrame(frame);
+    }
+  }
 
   function frame() {
+    rafId = null;
     if (!running || !inView) return;
     const t = clock.getElapsedTime();
 
@@ -247,14 +255,17 @@ import * as THREE from './vendor/three.module.min.js';
     }
 
     renderer.render(scene, camera);
-    if (!reduceMotion) requestAnimationFrame(frame);
+    if (!reduceMotion) ensureLoop();
   }
 
   document.addEventListener('visibilitychange', () => {
     running = !document.hidden;
-    if (running && !reduceMotion) requestAnimationFrame(frame);
+    ensureLoop();
   });
 
-  frame();
-  if (reduceMotion) renderer.render(scene, camera); // single static frame
+  if (reduceMotion) {
+    renderer.render(scene, camera); // single static frame
+  } else {
+    ensureLoop();
+  }
 })();
