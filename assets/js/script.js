@@ -176,8 +176,7 @@
     if (prefersReducedMotion || !hasFinePointer) return;
 
     const TILT_TARGETS = [
-      { selector: '.service-card', max: 8,  lift: -8,  scale: 1.02 },
-      { selector: '.why-item',     max: 7,  lift: -8,  scale: 1.015 }
+      { selector: '.service-card', max: 8,  lift: -8,  scale: 1.02 }
     ];
 
     TILT_TARGETS.forEach(({ selector, max, lift, scale }) => {
@@ -251,14 +250,14 @@
     }, { passive: true });
   })();
 
-  // Why-us cards: staggered 3D reveal + icon line-draw + number count-up
+  // Why-us rows: staggered reveal + icon line-draw
   const whyItems = document.querySelectorAll('.why-reveal');
   const whyObs = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if(!entry.isIntersecting) return;
       const el = entry.target;
       const idx = parseInt(el.style.getPropertyValue('--i')) || 0;
-      const delay = idx * 140;
+      const delay = idx * 110;
 
       setTimeout(() => {
         el.classList.add('in');
@@ -274,21 +273,6 @@
             path.style.transition = 'stroke-dashoffset 1s cubic-bezier(.16,.84,.44,1)';
             path.style.strokeDashoffset = '0';
           });
-        }
-
-        // big background number counts up
-        const numEl = el.querySelector('.why-bignum');
-        if(numEl){
-          const target = parseInt(numEl.textContent, 10) || 0;
-          const duration = 750;
-          const startTime = performance.now();
-          const tick = (now) => {
-            const p = Math.min((now - startTime) / duration, 1);
-            const eased = 1 - Math.pow(1 - p, 3);
-            numEl.textContent = String(Math.round(eased * target)).padStart(2, '0');
-            if(p < 1) requestAnimationFrame(tick);
-          };
-          requestAnimationFrame(tick);
         }
       }, delay);
 
