@@ -113,6 +113,54 @@
   img,svg{display:block;max-width:100%;}
   button{font-family:inherit;cursor:pointer;border:none;background:none;}
 
+  /* ---------- scroll progress bar ---------- */
+  .scroll-progress{
+    position:fixed;
+    inset-block-start:0; inset-inline-start:0;
+    width:0%;
+    height:3px;
+    z-index:2000;
+    background:linear-gradient(90deg, var(--orange), #ff8a5c 55%, var(--steel));
+    box-shadow:0 0 10px rgba(253,87,43,0.55);
+    transform-origin:0 50%;
+    pointer-events:none;
+    will-change:width;
+  }
+  @media (prefers-reduced-motion: reduce){
+    .scroll-progress{transition:none;}
+  }
+
+  /* ---------- magnetic buttons ---------- */
+  /* JS nudges these with a small transform on pointermove; this transition
+     is what makes them spring back to place on pointerleave. Kept separate
+     from each button's own hover transition so the two don't fight. */
+  [data-magnetic]{
+    transition:transform .35s cubic-bezier(.34,1.56,.64,1);
+  }
+
+  /* ---------- click ripple ---------- */
+  [data-ripple]{ position:relative; overflow:hidden; isolation:isolate; }
+  .ripple-dot{
+    position:absolute;
+    border-radius:50%;
+    background:rgba(255,255,255,0.55);
+    transform:scale(0);
+    opacity:.6;
+    pointer-events:none;
+    animation:rippleOut .6s cubic-bezier(.16,.84,.44,1) forwards;
+    z-index:0;
+  }
+  .btn-ghost .ripple-dot,
+  .spec-pill .ripple-dot{ background:rgba(253,87,43,0.35); }
+  @keyframes rippleOut{
+    0%{transform:scale(0); opacity:.55;}
+    100%{transform:scale(1); opacity:0;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    [data-magnetic]{transition:none;}
+    .ripple-dot{display:none;}
+  }
+
   .wrap{
     width:min(1240px, 92%);
     margin-inline:auto;
@@ -934,12 +982,12 @@
   }
   .why-item{
     position:relative;
-    background:linear-gradient(165deg,#04044a 0%,#020230 100%);
+    background:var(--surface);
     padding:44px 34px 40px;
     display:flex;
     flex-direction:column;
     gap:18px;
-    border:1px solid rgba(255,255,255,0.1);
+    border:1px solid var(--border);
     border-radius:20px;
     overflow:hidden;
     isolation:isolate;
@@ -948,7 +996,12 @@
       opacity .8s cubic-bezier(.16,.84,.44,1),
       transform .4s cubic-bezier(.16,.84,.44,1),
       border-color .35s ease,
-      box-shadow .35s ease;
+      box-shadow .35s ease,
+      background .35s ease;
+  }
+  html[data-theme="dark"] .why-item{
+    background:linear-gradient(165deg,#04044a 0%,#020230 100%);
+    border-color:rgba(255,255,255,0.1);
   }
   .why-item::before{
     content:"";
@@ -971,11 +1024,12 @@
     font-size:72px;
     font-weight:700;
     line-height:1;
-    color:rgba(255,255,255,0.07);
+    color:var(--tint-2);
     z-index:-1;
     transition:color .35s ease;
     user-select:none;
   }
+  html[data-theme="dark"] .why-bignum{color:rgba(255,255,255,0.07);}
   .why-item:hover .why-bignum{color:rgba(253,87,43,0.14);}
   .why-top{
     display:flex;
@@ -998,11 +1052,14 @@
     font-family:var(--font-body);
     font-size:13.5px;
     font-weight:500;
-    color:#7c88bd;
+    color:var(--text-soft);
     letter-spacing:.04em;
   }
-  .why-item h4{color:var(--white); font-size:20px; font-weight:600; line-height:1.35;}
-  .why-item p{color:#a9b6e4; font-size:16.5px; line-height:1.7;}
+  html[data-theme="dark"] .why-item .num{color:#7c88bd;}
+  .why-item h4{color:var(--heading); font-size:20px; font-weight:600; line-height:1.35;}
+  .why-item p{color:var(--text-soft); font-size:16.5px; line-height:1.7;}
+  html[data-theme="dark"] .why-item h4{color:var(--white);}
+  html[data-theme="dark"] .why-item p{color:#a9b6e4;}
 
   /* ---------- contact ---------- */
   .contact{background:color-mix(in srgb, var(--surface-2) 82%, transparent);}

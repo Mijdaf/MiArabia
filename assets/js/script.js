@@ -33,6 +33,77 @@
     });
   })();
 
+  // ---------- scroll progress bar ----------
+  (function(){
+    const bar = document.getElementById('scrollProgress');
+    if(!bar) return;
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      const doc = document.documentElement;
+      const max = doc.scrollHeight - doc.clientHeight;
+      const pct = max > 0 ? (doc.scrollTop / max) * 100 : 0;
+      bar.style.width = pct + '%';
+    };
+    update();
+    window.addEventListener('scroll', () => {
+      if(!ticking){ ticking = true; requestAnimationFrame(update); }
+    }, { passive:true });
+    window.addEventListener('resize', update);
+  })();
+
+  // ---------- magnetic buttons ----------
+  // Nudges [data-magnetic] elements a few px toward the cursor while hovered,
+  // for a subtle premium feel. Desktop / precise-pointer only.
+  (function(){
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const hasFinePointer = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+    if(prefersReducedMotion || !hasFinePointer) return;
+
+    const STRENGTH = 0.28;
+    const MAX_OFFSET = 10;
+
+    document.querySelectorAll('[data-magnetic]').forEach(el => {
+      let rect = null;
+      el.addEventListener('pointerenter', (e) => {
+        if(e.pointerType !== 'mouse' && e.pointerType !== 'pen') return;
+        rect = el.getBoundingClientRect();
+      });
+      el.addEventListener('pointermove', (e) => {
+        if(!rect) return;
+        const relX = e.clientX - (rect.left + rect.width / 2);
+        const relY = e.clientY - (rect.top + rect.height / 2);
+        const x = Math.max(-MAX_OFFSET, Math.min(MAX_OFFSET, relX * STRENGTH));
+        const y = Math.max(-MAX_OFFSET, Math.min(MAX_OFFSET, relY * STRENGTH));
+        el.style.transform = `translate(${x}px, ${y}px)`;
+      });
+      el.addEventListener('pointerleave', () => {
+        rect = null;
+        el.style.transform = '';
+      });
+    });
+  })();
+
+  // ---------- click ripple ----------
+  (function(){
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(prefersReducedMotion) return;
+
+    document.querySelectorAll('[data-ripple]').forEach(el => {
+      el.addEventListener('pointerdown', (e) => {
+        const rect = el.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height) * 1.6;
+        const dot = document.createElement('span');
+        dot.className = 'ripple-dot';
+        dot.style.width = dot.style.height = size + 'px';
+        dot.style.left = (e.clientX - rect.left - size / 2) + 'px';
+        dot.style.top = (e.clientY - rect.top - size / 2) + 'px';
+        el.appendChild(dot);
+        dot.addEventListener('animationend', () => dot.remove());
+      });
+    });
+  })();
+
   // Header scroll state
   const header = document.getElementById('siteHeader');
   const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 12);
