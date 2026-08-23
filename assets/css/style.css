@@ -478,7 +478,7 @@
 
   /* ---------- section shell ---------- */
   section{padding:110px 0; background:var(--surface-2);}
-  #services{background:color-mix(in srgb, var(--surface-2) 82%, transparent);}
+  #services{background:transparent;}
 
   /* floating dot-particle background */
   .dot-field{position:relative; overflow:hidden;}
