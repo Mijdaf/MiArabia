@@ -330,6 +330,50 @@
     initExpandGroup(Array.from(document.querySelectorAll('[data-spec-card]')));
   })();
 
+  // About section: horizontal auto-advancing card strip, phone only.
+  (function(){
+    const track = document.querySelector('.spec-grid');
+    if(!track) return;
+
+    const mq = window.matchMedia('(max-width: 760px)');
+    let timer = null;
+    let resumeTimer = null;
+    let index = 0;
+
+    const cards = () => Array.from(track.querySelectorAll(':scope > .spec-card'));
+
+    const goTo = (i) => {
+      const list = cards();
+      if(!list.length) return;
+      index = ((i % list.length) + list.length) % list.length;
+      list[index].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    };
+
+    const stop = () => {
+      if(timer){ clearInterval(timer); timer = null; }
+    };
+    const start = () => {
+      stop();
+      if(!mq.matches) return;
+      timer = setInterval(() => goTo(index + 1), 5000);
+    };
+
+    const pauseThenResume = () => {
+      stop();
+      clearTimeout(resumeTimer);
+      resumeTimer = setTimeout(start, 6000);
+    };
+
+    ['touchstart', 'pointerdown', 'wheel'].forEach(evt => {
+      track.addEventListener(evt, pauseThenResume, { passive: true });
+    });
+
+    const sync = () => { if(mq.matches) start(); else stop(); };
+    sync();
+    if(mq.addEventListener) mq.addEventListener('change', sync);
+    else if(mq.addListener) mq.addListener(sync);
+  })();
+
   // Language toggle (Arabic <-> English)
   (function(){
     const htmlEl = document.documentElement;

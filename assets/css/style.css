@@ -744,9 +744,9 @@
   .service-expand-hint{
     display:flex; align-items:center; gap:7px;
     margin-top:14px;
-    font-family:var(--font-mono);
-    font-size:12.5px;
-    font-weight:600;
+    font-family:var(--font-body);
+    font-size:13px;
+    font-weight:700;
     letter-spacing:.02em;
     color:var(--orange);
   }
@@ -1007,7 +1007,7 @@
     display:flex; align-items:center; justify-content:center;
     transition:opacity .25s ease, transform .35s cubic-bezier(.16,.84,.44,1);
   }
-  .qa-fab-icon svg{width:24px;height:24px;}
+  .qa-fab-icon svg{width:30px;height:30px;}
   .qa-fab-icon-plus{ opacity:1; transform:rotate(0deg); }
   .qa-fab-icon-close{ opacity:0; transform:rotate(-45deg); }
   .quick-actions.open .qa-fab{ animation:none; }
@@ -1024,7 +1024,7 @@
   .qa-tooltip{
     position:absolute;
     top:50%;
-    inset-inline-start:calc(100% + 14px);
+    inset-inline-end:calc(100% + 14px);
     transform:translateY(-50%);
     white-space:nowrap;
     background:var(--surface);
@@ -1041,10 +1041,10 @@
   .qa-tooltip::after{
     content:"";
     position:absolute;
-    top:50%; inset-inline-end:100%;
+    top:50%; inset-inline-start:100%;
     transform:translateY(-50%);
     border:6px solid transparent;
-    border-inline-end-color:var(--surface);
+    border-inline-start-color:var(--surface);
   }
   .quick-actions.open .qa-tooltip{
     opacity:0;
@@ -1261,9 +1261,28 @@
     .lang-toggle{padding:9px 12px; font-size:13px; gap:6px;}
     .lang-toggle svg{width:16px;height:16px;}
     .logo-img{height:32px;}
+
+    /* About / capability cards: horizontal auto-advancing strip on phone only */
+    .spec-grid{
+      display:flex;
+      flex-wrap:nowrap;
+      grid-template-columns:none;
+      align-items:flex-start;
+      gap:16px;
+      overflow-x:auto;
+      scroll-snap-type:x mandatory;
+      -webkit-overflow-scrolling:touch;
+      scrollbar-width:none;
+      margin-inline:-4px;
+      padding:4px 4px 8px;
+    }
+    .spec-grid::-webkit-scrollbar{display:none;}
+    .spec-card{
+      flex:0 0 84%;
+      scroll-snap-align:center;
+    }
     .services-grid{grid-template-columns:1fr;}
     .why-grid{grid-template-columns:1fr;}
-    .spec-grid{grid-template-columns:1fr;}
     .form-row{grid-template-columns:1fr;}
     footer .wrap{grid-template-columns:1fr 1fr; gap:28px 20px;}
     .footer-brand{grid-column:1 / -1;}
