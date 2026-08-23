@@ -941,17 +941,6 @@
   /* ---------- why us ---------- */
   .why{background:var(--surface-2);color:var(--heading);position:relative;overflow:hidden;}
   html[data-theme="dark"] .why{background:var(--navy-deep);color:var(--white);}
-  .why::before{
-    content:"";
-    position:absolute; inset:0;
-    background-image:linear-gradient(rgba(10,13,31,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(10,13,31,0.04) 1px, transparent 1px);
-    background-size:52px 52px;
-    pointer-events:none;
-    z-index:0;
-  }
-  html[data-theme="dark"] .why::before{
-    background-image:linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
-  }
   #whyCanvas{
     position:absolute;
     inset:0;
@@ -960,6 +949,7 @@
     z-index:1;
     display:block;
     pointer-events:none;
+    opacity:0.55;
   }
   .why .wrap{position:relative;z-index:2;}
   .why .section-head h2{color:var(--heading);}
