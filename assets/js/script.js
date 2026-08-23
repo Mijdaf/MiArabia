@@ -425,7 +425,7 @@
 
   // Quick action popups (Request a Quote / Inquiries) -> WhatsApp handoff
   (function(){
-    const WHATSAPP_NUMBER = '201152932977'; // Mijdaf Arabia WhatsApp (country code + number, no leading 0/plus)
+    const WHATSAPP_NUMBER = '966536760429'; // Mijdaf Arabia WhatsApp (country code + number, no leading 0/plus)
     let lastFocused = null;
 
     // Lighter, glassy look once the hero (dark video) is scrolled past, so page content stays prominent.
@@ -443,53 +443,8 @@
       heroObs.observe(collapseAnchor);
     }
 
-    // FAB toggle: opens/closes the small menu (Request a Quote / Inquiries)
-    const qaFab = document.getElementById('qaFab');
-    const qaMenu = document.getElementById('qaMenu');
-    if (qaFab && qaMenu && quickActions) {
-      const closeMenu = () => {
-        quickActions.classList.remove('open');
-        qaFab.setAttribute('aria-expanded', 'false');
-      };
-      const openMenu = () => {
-        quickActions.classList.add('open');
-        qaFab.setAttribute('aria-expanded', 'true');
-      };
-      qaFab.addEventListener('click', () => {
-        quickActions.classList.contains('open') ? closeMenu() : openMenu();
-      });
-      // Close after picking an option, so the menu doesn't stay open behind the modal
-      qaMenu.querySelectorAll('.qa-item').forEach(item => {
-        item.addEventListener('click', closeMenu);
-      });
-      // Close on outside click / tap
-      document.addEventListener('pointerdown', (e) => {
-        if (!quickActions.contains(e.target)) closeMenu();
-      });
-      // Close on Escape
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeMenu();
-      });
-
-      // One-time "peek": briefly reveal the menu on first visit so the user
-      // notices it exists, then auto-collapse back to the small round FAB.
-      // Runs once per browser session (sessionStorage), and is skipped for
-      // users who prefer reduced motion.
-      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (!prefersReducedMotion && !sessionStorage.getItem('qaPeeked')) {
-        sessionStorage.setItem('qaPeeked', '1');
-        const peekTimer = setTimeout(() => {
-          if (!quickActions.classList.contains('open')) openMenu();
-          setTimeout(() => {
-            if (quickActions.classList.contains('open')) closeMenu();
-          }, 2600);
-        }, 1400);
-        // If the user interacts before the peek fires, don't force it open
-        ['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach(evt => {
-          document.addEventListener(evt, () => clearTimeout(peekTimer), { once: true, passive: true });
-        });
-      }
-    }
+    // The two quick-action pills (Request a Quote / Inquiries) are always
+    // visible by design — no FAB toggle needed, nothing to expand/collapse.
 
     function openModal(overlay){
       lastFocused = document.activeElement;
