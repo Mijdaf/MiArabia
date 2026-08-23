@@ -80,7 +80,7 @@
   body{ transition:var(--theme-toggle-transition); }
 
   *{margin:0;padding:0;box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
+  html{scroll-behavior:smooth; overflow-x:hidden; width:100%;}
   @media (prefers-reduced-motion: reduce){
     html{scroll-behavior:auto;}
     *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important;}
@@ -478,6 +478,7 @@
 
   /* ---------- section shell ---------- */
   section{padding:110px 0; background:var(--surface-2);}
+  #services{background:color-mix(in srgb, var(--surface-2) 82%, transparent);}
 
   /* floating dot-particle background */
   .dot-field{position:relative; overflow:hidden;}
