@@ -531,6 +531,7 @@
 
   /* ---------- about ---------- */
   .about{background:color-mix(in srgb, var(--surface-2) 82%, transparent);}
+  html[data-theme="dark"] .about{background:color-mix(in srgb, var(--surface-2) 40%, transparent);}
   .about .wrap{
     display:flex;
     flex-direction:column;
@@ -847,6 +848,7 @@
 
   /* ---------- why us ---------- */
   .why{background:color-mix(in srgb, var(--navy-deep) 80%, transparent);color:var(--white);position:relative;overflow:hidden;}
+  html[data-theme="dark"] .why{background:color-mix(in srgb, var(--navy-deep) 45%, transparent);}
   .why::before{
     content:"";
     position:absolute; inset:0;
@@ -947,6 +949,7 @@
 
   /* ---------- contact ---------- */
   .contact{background:color-mix(in srgb, var(--surface-2) 82%, transparent);}
+  html[data-theme="dark"] .contact{background:color-mix(in srgb, var(--surface-2) 40%, transparent);}
   .contact .wrap{
     display:grid;
     grid-template-columns:0.85fr 1.15fr;
@@ -1290,6 +1293,7 @@
     color:#b7bcd6;
     padding:56px 0 26px;
   }
+  html[data-theme="dark"] footer{background:color-mix(in srgb, var(--black) 45%, transparent);}
   footer .wrap{
     display:grid;
     grid-template-columns:1.4fr 1fr 1fr;
@@ -1422,6 +1426,7 @@
     .footer-bottom{flex-direction:column; align-items:flex-start; gap:8px;}
     section{padding:76px 0;}
     .hero{padding-top:130px; min-height:560px;}
+    .hero::before{display:none;}
     .hero-bg{
       inset:0;
       width:100%;
