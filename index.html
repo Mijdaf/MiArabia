@@ -117,129 +117,105 @@
         <p data-en="Our specialized team executes every scope of work in line with the highest safety and quality standards — from first pipe route to final commissioning.">ينفذ فريقنا المتخصص كل نطاق عمل وفق أعلى معايير السلامة والجودة، من أول خط أنابيب وحتى التشغيل النهائي.</p>
       </div>
 
-      <div class="spec-grid">
-        <div class="spec-card spec-reveal" style="--i:0" data-spec-card tabindex="0" role="button" aria-expanded="false">
-          <div class="spec-card-inner">
-            <div class="spec-card-face spec-card-front">
-              <div class="spec-top">
-                <span class="spec-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                </span>
+      <div class="spec-panel reveal" data-spec-panel>
+        <div class="spec-pills" role="tablist" aria-label="مجالات عمل مجداف">
+          <button type="button" class="spec-pill is-active" data-tab-index="0" role="tab" aria-selected="true" aria-controls="spec-view-0" id="spec-tab-0">
+            <span class="spec-pill-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            </span>
+            <span class="spec-pill-label" data-en="Scope">نطاق متكامل</span>
+          </button>
+          <button type="button" class="spec-pill" data-tab-index="1" role="tab" aria-selected="false" aria-controls="spec-view-1" id="spec-tab-1" tabindex="-1">
+            <span class="spec-pill-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="7" r="4"/><path d="M2 21v-2a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v2"/><path d="M18 8a3 3 0 0 1 0 6M21 21v-2a4 4 0 0 0-3-3.87"/></svg>
+            </span>
+            <span class="spec-pill-label" data-en="Crews">طواقم</span>
+          </button>
+          <button type="button" class="spec-pill" data-tab-index="2" role="tab" aria-selected="false" aria-controls="spec-view-2" id="spec-tab-2" tabindex="-1">
+            <span class="spec-pill-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2 4 5v6c0 5 3.4 8.6 8 11 4.6-2.4 8-6 8-11V5l-8-3z"/><path d="M9 12l2 2 4-4"/></svg>
+            </span>
+            <span class="spec-pill-label" data-en="Safety">سلامة</span>
+          </button>
+          <button type="button" class="spec-pill" data-tab-index="3" role="tab" aria-selected="false" aria-controls="spec-view-3" id="spec-tab-3" tabindex="-1">
+            <span class="spec-pill-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg>
+            </span>
+            <span class="spec-pill-label" data-en="Response">استجابة</span>
+          </button>
+        </div>
+
+        <div class="spec-viewport">
+          <div class="spec-view is-active" data-view-index="0" role="tabpanel" id="spec-view-0" aria-labelledby="spec-tab-0">
+            <div class="spec-view-head">
+              <span class="spec-view-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+              </span>
+              <div>
                 <span class="spec-tag">CAP-01</span>
+                <h4 data-en="Integrated Scope">نطاق متكامل</h4>
               </div>
-              <h4 data-en="Integrated Scope">نطاق متكامل</h4>
-              <p data-en="Piping, fabrication, maintenance and manpower delivered under one accountable team.">أعمال الأنابيب والتصنيع والصيانة والقوى العاملة، تحت فريق واحد مسؤول.</p>
-              <span class="spec-expand-hint">
-                <span data-en="Explore details">استعرض التفاصيل</span>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-              </span>
             </div>
-            <div class="spec-card-face spec-card-back">
-              <span class="spec-tag">CAP-01</span>
-              <h4 data-en="Integrated Scope">نطاق متكامل</h4>
-              <ul>
-                <li data-en="Piping, fabrication, maintenance and manpower run within one project cycle">تنفيذ أعمال الأنابيب والتصنيع والصيانة والقوى العاملة ضمن دورة مشروع واحدة</li>
-                <li data-en="A single point of contact coordinating every discipline">نقطة اتصال واحدة تنسّق بين جميع التخصصات</li>
-                <li data-en="Fewer handover gaps between subcontractors, faster decisions">تقليل نقاط التماس بين المقاولين الفرعيين وتسريع اتخاذ القرار</li>
-              </ul>
-              <span class="spec-expand-hint spec-back-hint">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
-                <span data-en="Back">رجوع</span>
-              </span>
-            </div>
+            <p data-en="Piping, fabrication, maintenance and manpower delivered under one accountable team.">أعمال الأنابيب والتصنيع والصيانة والقوى العاملة، تحت فريق واحد مسؤول.</p>
+            <ul class="spec-view-list">
+              <li data-en="Piping, fabrication, maintenance and manpower run within one project cycle">تنفيذ أعمال الأنابيب والتصنيع والصيانة والقوى العاملة ضمن دورة مشروع واحدة</li>
+              <li data-en="A single point of contact coordinating every discipline">نقطة اتصال واحدة تنسّق بين جميع التخصصات</li>
+              <li data-en="Fewer handover gaps between subcontractors, faster decisions">تقليل نقاط التماس بين المقاولين الفرعيين وتسريع اتخاذ القرار</li>
+            </ul>
           </div>
-        </div>
-        <div class="spec-card spec-reveal" style="--i:1" data-spec-card tabindex="0" role="button" aria-expanded="false">
-          <div class="spec-card-inner">
-            <div class="spec-card-face spec-card-front">
-              <div class="spec-top">
-                <span class="spec-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="7" r="4"/><path d="M2 21v-2a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v2"/><path d="M18 8a3 3 0 0 1 0 6M21 21v-2a4 4 0 0 0-3-3.87"/></svg>
-                </span>
+
+          <div class="spec-view" data-view-index="1" role="tabpanel" id="spec-view-1" aria-labelledby="spec-tab-1" hidden>
+            <div class="spec-view-head">
+              <span class="spec-view-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="7" r="4"/><path d="M2 21v-2a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v2"/><path d="M18 8a3 3 0 0 1 0 6M21 21v-2a4 4 0 0 0-3-3.87"/></svg>
+              </span>
+              <div>
                 <span class="spec-tag">CAP-02</span>
+                <h4 data-en="Specialized Crews">طواقم متخصصة</h4>
               </div>
-              <h4 data-en="Specialized Crews">طواقم متخصصة</h4>
-              <p data-en="Technical and skilled labor trained to project specification and site conditions.">كوادر فنية وعمالية مدربة وفق مواصفات المشروع وظروف الموقع.</p>
-              <span class="spec-expand-hint">
-                <span data-en="Explore details">استعرض التفاصيل</span>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-              </span>
             </div>
-            <div class="spec-card-face spec-card-back">
-              <span class="spec-tag">CAP-02</span>
-              <h4 data-en="Specialized Crews">طواقم متخصصة</h4>
-              <ul>
-                <li data-en="Technicians and labor briefed on specification before mobilization">فنيون وعمال مدربون على مواصفات المشروع قبل المباشرة</li>
-                <li data-en="Continuous upskilling to match each site's requirements">تأهيل مستمر يواكب متطلبات كل موقع</li>
-                <li data-en="Direct field supervision to keep execution on plan">إشراف ميداني مباشر لضمان الالتزام بالخطة</li>
-              </ul>
-              <span class="spec-expand-hint spec-back-hint">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
-                <span data-en="Back">رجوع</span>
-              </span>
-            </div>
+            <p data-en="Technical and skilled labor trained to project specification and site conditions.">كوادر فنية وعمالية مدربة وفق مواصفات المشروع وظروف الموقع.</p>
+            <ul class="spec-view-list">
+              <li data-en="Technicians and labor briefed on specification before mobilization">فنيون وعمال مدربون على مواصفات المشروع قبل المباشرة</li>
+              <li data-en="Continuous upskilling to match each site's requirements">تأهيل مستمر يواكب متطلبات كل موقع</li>
+              <li data-en="Direct field supervision to keep execution on plan">إشراف ميداني مباشر لضمان الالتزام بالخطة</li>
+            </ul>
           </div>
-        </div>
-        <div class="spec-card spec-reveal" style="--i:2" data-spec-card tabindex="0" role="button" aria-expanded="false">
-          <div class="spec-card-inner">
-            <div class="spec-card-face spec-card-front">
-              <div class="spec-top">
-                <span class="spec-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2 4 5v6c0 5 3.4 8.6 8 11 4.6-2.4 8-6 8-11V5l-8-3z"/><path d="M9 12l2 2 4-4"/></svg>
-                </span>
+
+          <div class="spec-view" data-view-index="2" role="tabpanel" id="spec-view-2" aria-labelledby="spec-tab-2" hidden>
+            <div class="spec-view-head">
+              <span class="spec-view-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2 4 5v6c0 5 3.4 8.6 8 11 4.6-2.4 8-6 8-11V5l-8-3z"/><path d="M9 12l2 2 4-4"/></svg>
+              </span>
+              <div>
                 <span class="spec-tag">CAP-03</span>
+                <h4 data-en="Safety &amp; Quality Systems">أنظمة السلامة والجودة</h4>
               </div>
-              <h4 data-en="Safety &amp; Quality Systems">أنظمة السلامة والجودة</h4>
-              <p data-en="Execution governed by strict safety protocols and quality checkpoints throughout.">تنفيذ يخضع لبروتوكولات سلامة صارمة ونقاط تفتيش للجودة في كل مرحلة.</p>
-              <span class="spec-expand-hint">
-                <span data-en="Explore details">استعرض التفاصيل</span>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-              </span>
             </div>
-            <div class="spec-card-face spec-card-back">
-              <span class="spec-tag">CAP-03</span>
-              <h4 data-en="Safety &amp; Quality Systems">أنظمة السلامة والجودة</h4>
-              <ul>
-                <li data-en="Documented safety protocols for every stage of execution">بروتوكولات سلامة موثقة لكل مرحلة من مراحل التنفيذ</li>
-                <li data-en="Quality checkpoints during the work, not only after it">نقاط تفتيش وجودة دورية أثناء العمل وليس بعده فقط</li>
-                <li data-en="Progress reporting that tracks performance as it happens">تقارير متابعة تتيح تتبع الأداء أولاً بأول</li>
-              </ul>
-              <span class="spec-expand-hint spec-back-hint">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
-                <span data-en="Back">رجوع</span>
-              </span>
-            </div>
+            <p data-en="Execution governed by strict safety protocols and quality checkpoints throughout.">تنفيذ يخضع لبروتوكولات سلامة صارمة ونقاط تفتيش للجودة في كل مرحلة.</p>
+            <ul class="spec-view-list">
+              <li data-en="Documented safety protocols for every stage of execution">بروتوكولات سلامة موثقة لكل مرحلة من مراحل التنفيذ</li>
+              <li data-en="Quality checkpoints during the work, not only after it">نقاط تفتيش وجودة دورية أثناء العمل وليس بعده فقط</li>
+              <li data-en="Progress reporting that tracks performance as it happens">تقارير متابعة تتيح تتبع الأداء أولاً بأول</li>
+            </ul>
           </div>
-        </div>
-        <div class="spec-card spec-reveal" style="--i:3" data-spec-card tabindex="0" role="button" aria-expanded="false">
-          <div class="spec-card-inner">
-            <div class="spec-card-face spec-card-front">
-              <div class="spec-top">
-                <span class="spec-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg>
-                </span>
+
+          <div class="spec-view" data-view-index="3" role="tabpanel" id="spec-view-3" aria-labelledby="spec-tab-3" hidden>
+            <div class="spec-view-head">
+              <span class="spec-view-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg>
+              </span>
+              <div>
                 <span class="spec-tag">CAP-04</span>
+                <h4 data-en="Responsive Delivery">استجابة سريعة</h4>
               </div>
-              <h4 data-en="Responsive Delivery">استجابة سريعة</h4>
-              <p data-en="Structured to move quickly when project timelines and site demands shift.">جاهزون للتحرك بسرعة عند تغيّر الجداول الزمنية ومتطلبات الموقع.</p>
-              <span class="spec-expand-hint">
-                <span data-en="Explore details">استعرض التفاصيل</span>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-              </span>
             </div>
-            <div class="spec-card-face spec-card-back">
-              <span class="spec-tag">CAP-04</span>
-              <h4 data-en="Responsive Delivery">استجابة سريعة</h4>
-              <ul>
-                <li data-en="Crews mobilized within a short lead time">تعبئة فرق العمل خلال فترة زمنية قصيرة</li>
-                <li data-en="Flexible re-prioritization as the schedule shifts">مرونة في إعادة ترتيب الأولويات مع تغيّر الجدول الزمني</li>
-                <li data-en="Direct communication with the client on any scope change">تواصل مباشر مع العميل عند أي تعديل بالنطاق</li>
-              </ul>
-              <span class="spec-expand-hint spec-back-hint">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
-                <span data-en="Back">رجوع</span>
-              </span>
-            </div>
+            <p data-en="Structured to move quickly when project timelines and site demands shift.">جاهزون للتحرك بسرعة عند تغيّر الجداول الزمنية ومتطلبات الموقع.</p>
+            <ul class="spec-view-list">
+              <li data-en="Crews mobilized within a short lead time">تعبئة فرق العمل خلال فترة زمنية قصيرة</li>
+              <li data-en="Flexible re-prioritization as the schedule shifts">مرونة في إعادة ترتيب الأولويات مع تغيّر الجدول الزمني</li>
+              <li data-en="Direct communication with the client on any scope change">تواصل مباشر مع العميل عند أي تعديل بالنطاق</li>
+            </ul>
           </div>
         </div>
       </div>

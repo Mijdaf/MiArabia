@@ -504,128 +504,122 @@
   }
   .about-copy p:first-of-type{margin-top:16px;}
 
-  .spec-grid{
-    display:grid;
-    grid-template-columns:1fr;
-    gap:18px;
-    perspective:1200px;
-  }
-  .spec-reveal{
-    opacity:0;
-    transform:translateY(32px) rotateX(-16deg) scale(.95);
-    transform-origin:bottom center;
-    will-change:transform, opacity;
-  }
-  .spec-reveal.in{
-    opacity:1;
-    transform:translateY(0) rotateX(0) scale(1);
-    transition:opacity .7s cubic-bezier(.16,.84,.44,1), transform .6s cubic-bezier(.16,.84,.44,1);
-  }
-  .spec-card{
+  /* ---------- interactive capability panel (pill tabs) ---------- */
+  .spec-panel{
     position:relative;
-    perspective:1400px;
   }
-  .spec-card-inner{
-    position:relative;
-    width:100%;
-    height:230px;
-    transform-style:preserve-3d;
-    transition:transform .7s cubic-bezier(.16,.84,.44,1);
-  }
-  .spec-card.is-open .spec-card-inner{transform:rotateY(180deg);}
-  .spec-card-face{
-    position:absolute;
-    inset:0;
-    background:var(--surface);
-    border:1px solid var(--border);
-    border-radius:18px;
-    padding:30px 28px 28px;
-    overflow:hidden;
-    isolation:isolate;
-    backface-visibility:hidden;
-    -webkit-backface-visibility:hidden;
+  .spec-pills{
     display:flex;
-    flex-direction:column;
-    transition:box-shadow .35s ease, border-color .35s ease;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:22px;
   }
-  .spec-card-front::before{
-    content:"";
-    position:absolute;
-    inset-inline-start:0; top:0;
-    height:3px; width:0;
-    background:linear-gradient(90deg, var(--orange), #ff8a5c);
-    transition:width .6s cubic-bezier(.16,.84,.44,1) .15s;
-  }
-  .spec-reveal.in .spec-card-front::before{width:100%;}
-  .spec-card-back{
-    transform:rotateY(180deg);
-  }
-  .spec-card:hover .spec-card-face{
-    border-color:rgba(253,87,43,0.4);
-    box-shadow:0 22px 44px -26px rgba(0,0,50,0.28);
-  }
-  .spec-top{
+  .spec-pill{
+    position:relative;
     display:flex;
     align-items:center;
-    justify-content:space-between;
+    gap:10px;
     flex-direction:row-reverse;
-    margin-bottom:16px;
+    padding:8px 20px 8px 8px;
+    border-radius:999px;
+    border:1px solid var(--border);
+    background:var(--surface);
+    cursor:pointer;
+    font-family:var(--font-body);
+    color:var(--text-soft);
+    transition:color .3s ease, background .35s ease, border-color .35s ease, box-shadow .35s ease, transform .2s ease;
   }
-  .spec-icon{
-    width:50px; height:50px;
-    border-radius:13px;
+  .spec-pill-icon{
+    width:32px; height:32px;
+    border-radius:50%;
     display:flex; align-items:center; justify-content:center;
     background:rgba(253,87,43,0.1);
     color:var(--orange);
     flex-shrink:0;
-    transition:background .35s ease, color .35s ease, transform .35s ease;
+    transition:background .35s ease, color .35s ease;
   }
-  .spec-icon svg{width:23px; height:23px;}
-  .spec-card:hover .spec-icon{background:var(--orange); color:var(--white); transform:rotate(-8deg) scale(1.06);}
+  .spec-pill-icon svg{width:16px; height:16px;}
+  .spec-pill-label{font-size:15px; font-weight:700; white-space:nowrap;}
+  .spec-pill:hover{border-color:rgba(253,87,43,0.4); color:var(--heading);}
+  .spec-pill:hover .spec-pill-icon{background:rgba(253,87,43,0.18);}
+  .spec-pill:focus-visible{outline:2px solid var(--orange); outline-offset:2px;}
+  .spec-pill.is-active{
+    background:linear-gradient(135deg, var(--orange), #ff7a48);
+    border-color:transparent;
+    color:var(--white);
+    box-shadow:0 14px 28px -14px rgba(253,87,43,0.6);
+    transform:translateY(-1px);
+  }
+  .spec-pill.is-active .spec-pill-icon{background:rgba(255,255,255,0.22); color:var(--white);}
+
+  .spec-viewport{
+    display:grid;
+    padding:36px;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:22px;
+    box-shadow:0 30px 60px -38px rgba(0,0,50,0.24);
+  }
+  .spec-view{
+    grid-area:1 / 1;
+    display:flex;
+    flex-direction:column;
+    opacity:0;
+    transform:translateY(10px);
+    transition:opacity .4s cubic-bezier(.16,.84,.44,1), transform .45s cubic-bezier(.16,.84,.44,1);
+    pointer-events:none;
+  }
+  .spec-view.is-active{
+    opacity:1;
+    transform:translateY(0);
+    pointer-events:auto;
+    position:relative;
+  }
+  .spec-view-head{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    flex-direction:row-reverse;
+    justify-content:flex-end;
+    margin-bottom:18px;
+  }
+  .spec-view-icon{
+    width:54px; height:54px;
+    border-radius:14px;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(253,87,43,0.1);
+    color:var(--orange);
+    flex-shrink:0;
+  }
+  .spec-view-icon svg{width:25px; height:25px;}
   .spec-tag{
     font-family:var(--font-mono);
     font-size:13px;
     font-weight:600;
     color:var(--text-soft);
     letter-spacing:.06em;
+    display:block;
+    margin-bottom:4px;
   }
-  .spec-card-back .spec-tag{display:block; margin-bottom:10px;}
-  .spec-card h4{font-size:20px;color:var(--heading);margin-bottom:8px;font-family:var(--font-body);font-weight:700;}
-  .spec-card p{font-size:17px;color:var(--text-soft);line-height:1.75;}
+  .spec-view h4{font-size:22px;color:var(--heading);font-family:var(--font-body);font-weight:700;}
+  .spec-view > p{font-size:17.5px;color:var(--text-soft);line-height:1.8; max-width:640px;}
 
-  /* click-to-flip capability detail */
-  .spec-card{cursor:pointer;}
-  .spec-card:focus-visible{outline:2px solid var(--orange); outline-offset:3px;}
-
-  .spec-card-back ul{list-style:none; margin:2px 0 0; padding:0; display:flex; flex-direction:column; gap:10px; flex:1;}
-  .spec-card-back li{
+  .spec-view-list{list-style:none; margin:22px 0 0; padding:0; display:flex; flex-direction:column; gap:12px;}
+  .spec-view-list li{
     position:relative;
-    padding-inline-start:20px;
-    font-size:15px;
+    padding-inline-start:22px;
+    font-size:15.5px;
     color:var(--text-soft);
-    line-height:1.65;
+    line-height:1.7;
   }
-  .spec-card-back li::before{
+  .spec-view-list li::before{
     content:"";
     position:absolute;
-    inset-inline-start:0; top:.6em;
+    inset-inline-start:0; top:.65em;
     width:6px; height:6px;
     border-radius:50%;
     background:var(--orange);
   }
-
-  .spec-expand-hint{
-    display:flex; align-items:center; gap:7px;
-    margin-top:16px;
-    font-family:var(--font-mono);
-    font-size:12.5px;
-    font-weight:600;
-    letter-spacing:.02em;
-    color:var(--orange);
-  }
-  .spec-expand-hint svg{width:14px; height:14px;}
-  .spec-card-front .spec-expand-hint{margin-top:auto; padding-top:16px;}
-  .spec-back-hint{margin-top:auto; padding-top:16px;}
 
   /* ---------- services ---------- */
   .services-grid{
@@ -1079,25 +1073,29 @@
     .lang-toggle{padding:9px; width:38px; height:38px; justify-content:center;}
 
     /* Not enough room beside the FAB on very small screens: tuck the
-       tooltip above it instead, so it never runs off-screen. */
+       tooltip above it instead, so it never runs off-screen. Anchored to
+       the same edge as the FAB itself (inline-end) so it can only grow
+       inward toward the middle of the screen, never past the far edge. */
     .qa-tooltip{
-      inset-inline-start:50%;
-      inset-inline-end:auto;
+      inset-inline-start:auto;
+      inset-inline-end:0;
       top:auto;
       bottom:calc(100% + 12px);
-      transform:translateX(50%);
+      transform:none;
+      max-width:calc(100vw - 40px);
+      white-space:normal;
+      text-align:center;
     }
     .qa-tooltip::after{
-      inset-inline-start:50%;
-      inset-inline-end:auto;
+      inset-inline-start:auto;
+      inset-inline-end:22px;
       top:100%;
-      transform:translateX(50%);
+      transform:none;
       border-color:transparent;
       border-inline-end-color:transparent;
       border-top-color:var(--surface);
-      margin-inline-start:-6px;
     }
-    .quick-actions.open .qa-tooltip{ transform:translateX(50%) translateY(6px); }
+    .quick-actions.open .qa-tooltip{ transform:translateY(6px); }
   }
 
 
@@ -1261,26 +1259,27 @@
     .lang-toggle svg{width:16px;height:16px;}
     .logo-img{height:32px;}
 
-    /* About / capability cards: horizontal auto-advancing strip on phone only */
-    .spec-grid{
-      display:flex;
+    /* About / capability panel: scrollable pill row on phone */
+    .spec-pills{
       flex-wrap:nowrap;
-      grid-template-columns:none;
-      align-items:flex-start;
-      gap:16px;
       overflow-x:auto;
       scroll-snap-type:x mandatory;
       -webkit-overflow-scrolling:touch;
       scrollbar-width:none;
       margin-inline:-4px;
-      padding:4px 4px 8px;
+      padding:4px 4px 6px;
     }
-    .spec-grid::-webkit-scrollbar{display:none;}
-    .spec-card{
-      flex:0 0 84%;
-      scroll-snap-align:center;
-    }
-    .spec-card-inner{height:300px;}
+    .spec-pills::-webkit-scrollbar{display:none;}
+    .spec-pill{padding:7px 16px 7px 7px; scroll-snap-align:start; flex-shrink:0;}
+    .spec-pill-icon{width:28px; height:28px;}
+    .spec-pill-icon svg{width:14px; height:14px;}
+    .spec-pill-label{font-size:14px;}
+    .spec-viewport{border-radius:18px; padding:26px 22px;}
+    .spec-view-head{gap:12px;}
+    .spec-view-icon{width:44px; height:44px;}
+    .spec-view-icon svg{width:21px; height:21px;}
+    .spec-view h4{font-size:19px;}
+    .spec-view > p{font-size:16px;}
     .service-card-inner{height:420px;}
     .services-grid{grid-template-columns:1fr;}
     .why-grid{grid-template-columns:1fr;}
@@ -1306,12 +1305,11 @@
 
     /* Lighter 3D on small screens: keep the effect, cut the GPU cost */
     .reveal{transform:translateY(22px) rotateX(-6deg) translateZ(0);}
-    .spec-reveal{transform:translateY(24px) rotateX(-8deg) scale(.96);}
     .service-reveal{transform:translateY(24px) rotateX(-8deg) scale(.96);}
     .why-reveal{transform:translateY(28px) rotateX(-10deg) scale(.95);}
     .hero-content{will-change:auto;}
   }
   @media (hover:none), (pointer:coarse){
     /* No pointer-driven tilt on touch devices; keep simple tap/hover fallbacks light */
-    .spec-card, .service-card, .why-item, .logo-img{ transition-duration:.3s; }
+    .service-card, .why-item, .logo-img{ transition-duration:.3s; }
   }

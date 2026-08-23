@@ -90,7 +90,6 @@
     if (prefersReducedMotion || !hasFinePointer) return;
 
     const TILT_TARGETS = [
-      { selector: '.spec-card',    max: 8,  lift: -6,  scale: 1.02 },
       { selector: '.service-card', max: 8,  lift: -8,  scale: 1.02 },
       { selector: '.why-item',     max: 7,  lift: -8,  scale: 1.015 }
     ];
@@ -212,36 +211,6 @@
   }, { threshold: 0.3 });
   whyItems.forEach(el => whyObs.observe(el));
 
-  // Capability cards (about section): staggered reveal + icon line-draw
-  const specItems = document.querySelectorAll('.spec-reveal');
-  const specObs = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if(!entry.isIntersecting) return;
-      const el = entry.target;
-      const idx = parseInt(el.style.getPropertyValue('--i')) || 0;
-      const delay = idx * 120;
-
-      setTimeout(() => {
-        el.classList.add('in');
-
-        const path = el.querySelector('.spec-icon svg path');
-        if(path){
-          const len = path.getTotalLength();
-          path.style.transition = 'none';
-          path.style.strokeDasharray = len;
-          path.style.strokeDashoffset = len;
-          requestAnimationFrame(() => {
-            path.style.transition = 'stroke-dashoffset .9s cubic-bezier(.16,.84,.44,1)';
-            path.style.strokeDashoffset = '0';
-          });
-        }
-      }, delay);
-
-      specObs.unobserve(el);
-    });
-  }, { threshold: 0.25 });
-  specItems.forEach(el => specObs.observe(el));
-
   // Services cards: staggered reveal + icon line-draw
   const serviceItems = document.querySelectorAll('.service-reveal');
   const serviceObs = new IntersectionObserver((entries) => {
@@ -327,51 +296,47 @@
     };
 
     initExpandGroup(Array.from(document.querySelectorAll('[data-service-card]')));
-    initExpandGroup(Array.from(document.querySelectorAll('[data-spec-card]')));
   })();
 
-  // About section: horizontal auto-advancing card strip, phone only.
+  // About section: interactive capability panel (pill tabs, fade/slide content)
   (function(){
-    const track = document.querySelector('.spec-grid');
-    if(!track) return;
+    const panel = document.querySelector('[data-spec-panel]');
+    if(!panel) return;
 
-    const mq = window.matchMedia('(max-width: 760px)');
-    let timer = null;
-    let resumeTimer = null;
-    let index = 0;
+    const tabs = Array.from(panel.querySelectorAll('.spec-pill'));
+    const views = Array.from(panel.querySelectorAll('.spec-view'));
+    if(!tabs.length || !views.length) return;
 
-    const cards = () => Array.from(track.querySelectorAll(':scope > .spec-card'));
-
-    const goTo = (i) => {
-      const list = cards();
-      if(!list.length) return;
-      index = ((i % list.length) + list.length) % list.length;
-      list[index].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    const activate = (index) => {
+      tabs.forEach((tab, i) => {
+        const active = i === index;
+        tab.classList.toggle('is-active', active);
+        tab.setAttribute('aria-selected', active ? 'true' : 'false');
+        tab.tabIndex = active ? 0 : -1;
+        if(active) tab.scrollIntoView({ behavior:'smooth', inline:'nearest', block:'nearest' });
+      });
+      views.forEach((view, i) => {
+        const active = i === index;
+        view.classList.toggle('is-active', active);
+        if(active) view.removeAttribute('hidden'); else view.setAttribute('hidden', '');
+      });
     };
 
-    const stop = () => {
-      if(timer){ clearInterval(timer); timer = null; }
-    };
-    const start = () => {
-      stop();
-      if(!mq.matches) return;
-      timer = setInterval(() => goTo(index + 1), 5000);
-    };
-
-    const pauseThenResume = () => {
-      stop();
-      clearTimeout(resumeTimer);
-      resumeTimer = setTimeout(start, 6000);
-    };
-
-    ['touchstart', 'pointerdown', 'wheel'].forEach(evt => {
-      track.addEventListener(evt, pauseThenResume, { passive: true });
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => activate(i));
+      tab.addEventListener('keydown', (e) => {
+        let target = null;
+        if(e.key === 'ArrowRight') target = i + 1;
+        else if(e.key === 'ArrowLeft') target = i - 1;
+        else if(e.key === 'Home') target = 0;
+        else if(e.key === 'End') target = tabs.length - 1;
+        if(target === null) return;
+        e.preventDefault();
+        target = ((target % tabs.length) + tabs.length) % tabs.length;
+        tabs[target].focus();
+        activate(target);
+      });
     });
-
-    const sync = () => { if(mq.matches) start(); else stop(); };
-    sync();
-    if(mq.addEventListener) mq.addEventListener('change', sync);
-    else if(mq.addListener) mq.addListener(sync);
   })();
 
   // Language toggle (Arabic <-> English)
