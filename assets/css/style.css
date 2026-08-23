@@ -352,7 +352,7 @@
     position:absolute; inset:-4%;
     width:108%; height:108%;
     object-fit:cover;
-    object-position:center center;
+    object-position:center 22%;
     animation:heroZoom 24s ease-in-out infinite alternate;
     background:#060a20;
   }
