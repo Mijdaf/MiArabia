@@ -949,7 +949,7 @@
     z-index:1;
     display:block;
     pointer-events:none;
-    opacity:0.55;
+    opacity:0.2;
   }
   .why .wrap{position:relative;z-index:2;}
   .why .section-head h2{color:var(--heading);}

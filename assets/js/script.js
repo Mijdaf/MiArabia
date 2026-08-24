@@ -1,6 +1,10 @@
   // Year
   document.getElementById('year').textContent = new Date().getFullYear();
 
+  // Shared WhatsApp number used by the contact form and both quick-action
+  // popups (Request a Quote / Inquiries) — one place to update it.
+  const CONTACT_WHATSAPP_NUMBER = '966536760429';
+
   // Light / dark theme toggle
   (function(){
     const root = document.documentElement;
@@ -281,6 +285,19 @@
   }, { threshold: 0.3 });
   whyItems.forEach(el => whyObs.observe(el));
 
+  // Haptic tap feedback on the "why" rows — Android/Chrome support the
+  // Vibration API on touch taps (iOS Safari doesn't expose it; this is a
+  // platform limitation, not a bug, so the tap still works fine there,
+  // just silently without the buzz).
+  if ('vibrate' in navigator) {
+    document.querySelectorAll('.why-row').forEach(row => {
+      row.addEventListener('pointerdown', (e) => {
+        if (e.pointerType !== 'touch') return; // mouse/pen taps stay silent
+        navigator.vibrate(15);
+      }, { passive: true });
+    });
+  }
+
   // Services cards: staggered reveal + icon line-draw
   const serviceItems = document.querySelectorAll('.service-reveal');
   const serviceObs = new IntersectionObserver((entries) => {
@@ -493,11 +510,31 @@
     if (saved === 'en') setLanguage('en');
   })();
 
-  // Contact form (front-end only demo)
+  // Contact form -> WhatsApp handoff (same number as the quick-action popups)
   const form = document.getElementById('contactForm');
   const success = document.getElementById('formSuccess');
   form.addEventListener('submit', (e) => {
     e.preventDefault();
+
+    const name = document.getElementById('fname').value.trim();
+    const company = document.getElementById('fcompany').value.trim();
+    const email = document.getElementById('femail').value.trim();
+    const service = document.getElementById('fservice').value;
+    const phone = document.getElementById('fphone').value.trim();
+    const phone2 = document.getElementById('fphone2').value.trim();
+    const details = document.getElementById('fmsg').value.trim();
+
+    let msg = `طلب جديد من موقع مجداف العربية:\n\n*الاسم:* ${name}`;
+    if (company) msg += `\n*الشركة:* ${company}`;
+    msg += `\n*البريد الإلكتروني:* ${email}`;
+    msg += `\n*الخدمة المطلوبة:* ${service}`;
+    msg += `\n*رقم الجوال:* ${phone}`;
+    if (phone2) msg += `\n*رقم بديل:* ${phone2}`;
+    if (details) msg += `\n*تفاصيل المشروع:* ${details}`;
+
+    const url = `https://wa.me/${CONTACT_WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+    window.open(url, '_blank');
+
     success.classList.add('show');
     form.querySelectorAll('input, textarea').forEach(el => el.value = '');
     success.scrollIntoView({ behavior:'smooth', block:'nearest' });
@@ -505,7 +542,7 @@
 
   // Quick action popups (Request a Quote / Inquiries) -> WhatsApp handoff
   (function(){
-    const WHATSAPP_NUMBER = '966536760429'; // Mijdaf Arabia WhatsApp (country code + number, no leading 0/plus)
+    const WHATSAPP_NUMBER = CONTACT_WHATSAPP_NUMBER;
     let lastFocused = null;
 
     // Lighter, glassy look once the hero (dark video) is scrolled past, so page content stays prominent.
