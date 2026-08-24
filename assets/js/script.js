@@ -144,7 +144,7 @@
   primaryNav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setNavOpen(false)));
 
   // Active nav link on scroll
-  const sections = ['about','services','why','contact'].map(id => document.getElementById(id));
+  const sections = ['about','services','gallery','why','contact'].map(id => document.getElementById(id));
   const navLinks = Array.from(primaryNav.querySelectorAll('a'));
   const spy = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -643,5 +643,79 @@
         const phone = form.querySelector('#qiPhone').value.trim();
         return `استفسار جديد من موقع مجداف العربية:\n\n*الاستفسار:* ${message}\n*رقم التواصل:* ${phone}`;
       }
+    });
+  })();
+
+  // Gallery: staggered bento reveal on scroll
+  (function(){
+    const galleryItems = document.querySelectorAll('.gallery-reveal');
+    if (!galleryItems.length) return;
+    const galleryObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        const idx = parseInt(el.style.getPropertyValue('--i')) || 0;
+        setTimeout(() => el.classList.add('in'), idx * 90);
+        galleryObs.unobserve(el);
+      });
+    }, { threshold: 0.15 });
+    galleryItems.forEach(el => galleryObs.observe(el));
+  })();
+
+  // Gallery: click-to-expand lightbox
+  (function(){
+    const items = Array.from(document.querySelectorAll('[data-gallery-item]'));
+    const overlay = document.getElementById('lightboxOverlay');
+    if (!items.length || !overlay) return;
+
+    const imgEl = document.getElementById('lightboxImg');
+    const titleEl = document.getElementById('lightboxTitle');
+    const textEl = document.getElementById('lightboxText');
+    const closeBtn = document.getElementById('lightboxClose');
+    let lastFocused = null;
+
+    const isEnglish = () => document.documentElement.getAttribute('lang') === 'en';
+
+    function openLightbox(item){
+      lastFocused = document.activeElement;
+      const src = item.querySelector('img').getAttribute('src');
+      const alt = item.querySelector('img').getAttribute('alt') || '';
+      imgEl.setAttribute('src', src);
+      imgEl.setAttribute('alt', alt);
+
+      const titleAr = item.getAttribute('data-caption-title') || '';
+      const titleEn = item.getAttribute('data-caption-title-en') || titleAr;
+      const textAr = item.getAttribute('data-caption-text') || '';
+      const textEn = item.getAttribute('data-caption-text-en') || textAr;
+      titleEl.textContent = isEnglish() ? titleEn : titleAr;
+      textEl.textContent = isEnglish() ? textEn : textAr;
+
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      setTimeout(() => closeBtn.focus(), 250);
+    }
+
+    function closeLightbox(){
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+      if (lastFocused) lastFocused.focus();
+    }
+
+    items.forEach(item => {
+      item.addEventListener('click', () => openLightbox(item));
+      item.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openLightbox(item);
+        }
+      });
+    });
+
+    closeBtn.addEventListener('click', closeLightbox);
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) closeLightbox();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && overlay.classList.contains('open')) closeLightbox();
     });
   })();
