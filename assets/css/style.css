@@ -545,6 +545,7 @@
     font-size:clamp(33px,3.9vw,46px);
     margin-top:16px;
     line-height:1.15;
+    position:relative;
   }
   .section-head p{
     margin-top:16px;
@@ -552,6 +553,22 @@
     color:var(--text-soft);
     line-height:1.7;
   }
+
+  /* Underline that draws itself under the heading once the section-head has revealed */
+  .section-head h2::after{
+    content:"";
+    display:block;
+    margin-top:14px;
+    height:3px;
+    width:64px;
+    border-radius:999px;
+    background:linear-gradient(90deg, var(--orange), color-mix(in srgb, var(--orange) 30%, transparent));
+    transform:scaleX(0);
+    transform-origin:right center;
+    transition:transform .7s .25s var(--ease);
+  }
+  html[lang="en"] .section-head h2::after{transform-origin:left center;}
+  .section-head.reveal.in h2::after{transform:scaleX(1);}
 
   /* reveal (3D) */
   .reveal{
@@ -562,6 +579,28 @@
     will-change:transform, opacity;
   }
   .reveal.in{opacity:1; transform:translateY(0) rotateX(0) translateZ(0);}
+
+  /* ---------- nested stagger reveal ----------
+     Applies a soft fade+rise to the direct children of a .reveal element,
+     one after another, once the parent has scrolled into view. Used for
+     .about-copy and .contact-list so text/rows feel alive while scrolling
+     instead of arriving as one flat block — most noticeable on phones
+     where each block fills more of the viewport. */
+  .stagger-children > *{
+    opacity:0;
+    transform:translateY(16px);
+    transition:opacity .6s var(--ease), transform .6s var(--ease);
+  }
+  .reveal.in.stagger-children > *{opacity:1; transform:translateY(0);}
+  .reveal.in.stagger-children > *:nth-child(1){transition-delay:.05s;}
+  .reveal.in.stagger-children > *:nth-child(2){transition-delay:.16s;}
+  .reveal.in.stagger-children > *:nth-child(3){transition-delay:.27s;}
+  .reveal.in.stagger-children > *:nth-child(4){transition-delay:.38s;}
+  .reveal.in.stagger-children > *:nth-child(5){transition-delay:.49s;}
+  @media (prefers-reduced-motion: reduce){
+    .stagger-children > *{opacity:1; transform:none; transition:none;}
+    .section-head h2::after{transition:none;}
+  }
 
   /* ---------- about ---------- */
   .about{background:color-mix(in srgb, var(--surface-2) 82%, transparent);}
@@ -984,14 +1023,21 @@
     position:absolute; inset:0;
     width:100%; height:100%;
     object-fit:cover;
-    transform:scale(1.06);
+    /* --py is updated continuously on scroll (JS) for a soft parallax drift;
+       the transition below smooths/lerps those frequent updates instead of
+       jumping, and still handles the hover zoom below. */
+    transform:translateY(var(--py, 0px)) scale(1.06);
     filter:saturate(0.94) contrast(1.02);
-    transition:transform .9s cubic-bezier(.16,.84,.44,1), filter .6s ease;
+    transition:transform .5s linear, filter .6s ease;
   }
   .gallery-item:hover img,
   .gallery-item:focus-visible img{
-    transform:scale(1.16) rotate(-0.4deg);
+    transform:translateY(var(--py, 0px)) scale(1.16) rotate(-0.4deg);
     filter:saturate(1.08) contrast(1.05);
+    transition:transform .9s cubic-bezier(.16,.84,.44,1), filter .6s ease;
+  }
+  @media (prefers-reduced-motion: reduce){
+    .gallery-item img{transform:scale(1.06) !important; transition:filter .6s ease !important;}
   }
 
   .gallery-item::before{
@@ -1314,6 +1360,36 @@
     .why-row:hover .why-row-arrow{opacity:1; transform:translateX(0); color:var(--orange);}
   }
 
+  /* Touch/coarse-pointer equivalent — same accent sweep, sheen and glow as
+     the desktop hover state above, but triggered once by JS (via .is-active)
+     as each row scrolls into view, since touch devices have no hover to
+     trigger it with. Kept as a separate rule (not merged into the hover
+     query) so desktop behaviour is untouched. */
+  @media (hover:none), (pointer:coarse){
+    .why-row.is-active::before{width:100%;}
+    .why-row.is-active{padding-inline-end:14px;}
+    .why-row.is-active::after{
+      opacity:1;
+      animation:whySheen .9s cubic-bezier(.16,.84,.44,1);
+    }
+    .why-row.is-active .why-index{
+      color:var(--orange);
+      -webkit-text-stroke:1.4px var(--orange);
+      text-shadow:0 0 20px rgba(253,87,43,0.4);
+      transform:scale(1.06);
+    }
+    .why-row.is-active .why-icon{
+      background:var(--orange);
+      color:var(--white);
+      transform:rotate(-10deg) scale(1.08);
+      box-shadow:0 0 0 8px rgba(253,87,43,0.14), 0 10px 24px -8px rgba(253,87,43,0.55);
+    }
+    .why-row.is-active .why-row-arrow{opacity:1; transform:translateX(0); color:var(--orange);}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .why-row.is-active::after{animation:none; opacity:0;}
+  }
+
   /* ---------- contact ---------- */
   .contact{background:color-mix(in srgb, var(--surface-2) 82%, transparent);}
   html[data-theme="dark"] .contact{background:color-mix(in srgb, var(--surface-2) 40%, transparent);}
@@ -1357,9 +1433,16 @@
     transition:background .3s var(--ease), border-color .3s var(--ease), transform .35s cubic-bezier(.34,1.56,.64,1), color .3s var(--ease);
   }
   .contact-list .row .ic svg{width:19px;height:19px;stroke:var(--navy); fill:none; stroke-width:1.7; transition:stroke .3s ease;}
-  .contact-list .row div{display:flex;flex-direction:column; flex:1; min-width:0; align-items:flex-start;}
-  .contact-list .row span.lbl{font-family:var(--font-mono); font-size:12.5px; letter-spacing:.06em; color:var(--steel); text-transform:uppercase;}
-  .contact-list .row span.val{font-size:17px; color:var(--heading); font-weight:600; margin-top:2px; transition:color .3s ease; text-align:match-parent;}
+  /* Each label/value stretches to the row's full width and is aligned with
+     text-align (not shrink-wrapped via align-items) so a value with its own
+     dir="ltr" — like the phone number, which needs its digits left-to-right —
+     still lines up flush with the label above it instead of drifting to the
+     opposite side of the row. */
+  .contact-list .row div{display:flex;flex-direction:column; flex:1; min-width:0;}
+  .contact-list .row span.lbl{font-family:var(--font-mono); font-size:12.5px; letter-spacing:.06em; color:var(--steel); text-transform:uppercase; text-align:right;}
+  .contact-list .row span.val{font-size:17px; color:var(--heading); font-weight:600; margin-top:2px; transition:color .3s ease; text-align:right;}
+  html[dir="ltr"] .contact-list .row span.lbl,
+  html[dir="ltr"] .contact-list .row span.val{text-align:left;}
   .contact-list .row-arrow{
     flex:none;
     width:20px;height:20px;

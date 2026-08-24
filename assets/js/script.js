@@ -81,6 +81,24 @@
     document.addEventListener('click', playClickSound, { passive: true });
   })();
 
+  // ---------- global haptic tap feedback (touch devices only) ----------
+  // A short buzz on every tap that performs an action — the touch
+  // equivalent of the click "thud" sound above. Scoped to real action
+  // elements (links, buttons, toggles, tabs, cards) so typing into a text
+  // field doesn't buzz on every tap. Android/Chrome support the Vibration
+  // API; iOS Safari doesn't expose it, so taps there just stay silent —
+  // a platform limitation, not a bug.
+  (function(){
+    if (!('vibrate' in navigator)) return;
+    const ACTION_SELECTOR = 'a, button, [role="button"], [role="tab"], [data-ripple], .service-card, .gallery-item, .spec-pill, .why-row';
+    document.addEventListener('pointerdown', (e) => {
+      if (e.pointerType !== 'touch') return;
+      if (e.target.closest && e.target.closest(ACTION_SELECTOR)) {
+        navigator.vibrate(12);
+      }
+    }, { passive: true });
+  })();
+
   // Shared WhatsApp number used by the contact form and both quick-action
   // popups (Request a Quote / Inquiries) — one place to update it.
   const CONTACT_WHATSAPP_NUMBER = '966536760429';
@@ -313,7 +331,15 @@
     const heroContent = document.querySelector('.hero-content');
     const heroSection = document.querySelector('.hero');
     if (prefersReducedMotion || !heroBgWrap || !heroContent || !heroSection) return;
-    if (window.matchMedia('(max-width:760px)').matches) return; // heroZoom itself is disabled on mobile
+
+    // heroZoom (the continuous CSS zoom animation) is disabled on mobile for
+    // performance, but a light scroll-linked parallax is still cheap (transform
+    // only) — so phones get a toned-down version instead of nothing.
+    const isMobile = window.matchMedia('(max-width:760px)').matches;
+    const bgShift = isMobile ? 18 : 40;
+    const bgScaleAmt = isMobile ? 0.015 : 0.03;
+    const contentShift = isMobile ? -10 : -18;
+    const contentTilt = isMobile ? 2 : 5;
 
     let ticking = false;
     const update = () => {
@@ -323,8 +349,8 @@
       // progress: 0 at top of hero in view, 1 once fully scrolled past
       const progress = Math.min(Math.max(-rect.top / h, 0), 1);
       if (rect.bottom < 0 || rect.top > window.innerHeight) return; // off-screen, skip work
-      heroBgWrap.style.transform = `translateY(${progress * 40}px) scale(${1 + progress * 0.03})`;
-      heroContent.style.transform = `translateY(${progress * -18}px) rotateX(${progress * 5}deg) translateZ(0)`;
+      heroBgWrap.style.transform = `translateY(${progress * bgShift}px) scale(${1 + progress * bgScaleAmt})`;
+      heroContent.style.transform = `translateY(${progress * contentShift}px) rotateX(${progress * contentTilt}deg) translateZ(0)`;
     };
     window.addEventListener('scroll', () => {
       if (!ticking) {
@@ -334,8 +360,53 @@
     }, { passive: true });
   })();
 
+  // ---------- Gallery images: continuous parallax drift while scrolling ----------
+  // Unlike .gallery-reveal (a one-shot enter animation), this keeps each photo
+  // gently drifting the whole time it's in view — most noticeable on phones,
+  // where the gallery is scrolled through slowly one card at a time.
+  (function(){
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const imgs = Array.from(document.querySelectorAll('.gallery-item img'));
+    if (prefersReducedMotion || !imgs.length) return;
+
+    const isMobile = window.matchMedia('(max-width:760px)').matches;
+    const STRENGTH = isMobile ? 12 : 20; // max px drift
+
+    // Only elements currently near the viewport get updated each frame.
+    const visible = new Set();
+    const parallaxObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) visible.add(entry.target);
+        else visible.delete(entry.target);
+      });
+    }, { rootMargin: '15% 0px' });
+    imgs.forEach(img => parallaxObs.observe(img));
+
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      const vh = window.innerHeight;
+      visible.forEach(img => {
+        const rect = img.getBoundingClientRect();
+        const elCenter = rect.top + rect.height / 2;
+        const distance = elCenter - vh / 2;
+        const progress = distance / (vh / 2 + rect.height / 2); // ~ -1..1
+        const clamped = Math.max(-1, Math.min(1, progress));
+        img.style.setProperty('--py', (clamped * STRENGTH).toFixed(1) + 'px');
+      });
+    };
+    update();
+    window.addEventListener('scroll', () => {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }, { passive: true });
+    window.addEventListener('resize', () => {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    });
+  })();
+
   // Why-us rows: staggered reveal + icon line-draw
   const whyItems = document.querySelectorAll('.why-reveal');
+  const isTouchDevice = window.matchMedia('(hover:none), (pointer:coarse)').matches;
   const whyObs = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if(!entry.isIntersecting) return;
@@ -358,6 +429,16 @@
             path.style.strokeDashoffset = '0';
           });
         }
+
+        // On touch devices there's no hover to trigger the accent sweep /
+        // sheen / icon glow, so replay that same flourish once here instead,
+        // right after the row settles in.
+        if (isTouchDevice) {
+          setTimeout(() => {
+            el.classList.add('is-active');
+            setTimeout(() => el.classList.remove('is-active'), 1000);
+          }, 250);
+        }
       }, delay);
 
       whyObs.unobserve(el);
@@ -365,15 +446,16 @@
   }, { threshold: 0.3 });
   whyItems.forEach(el => whyObs.observe(el));
 
-  // Haptic tap feedback on the "why" rows — Android/Chrome support the
-  // Vibration API on touch taps (iOS Safari doesn't expose it; this is a
-  // platform limitation, not a bug, so the tap still works fine there,
-  // just silently without the buzz).
-  if ('vibrate' in navigator) {
+  // Visual tap feedback on the "why" rows — replays the accent sweep /
+  // sheen / icon glow on each tap (the haptic buzz itself is handled by the
+  // global tap-feedback module above, which already covers .why-row).
+  if (isTouchDevice) {
     document.querySelectorAll('.why-row').forEach(row => {
       row.addEventListener('pointerdown', (e) => {
         if (e.pointerType !== 'touch') return; // mouse/pen taps stay silent
-        navigator.vibrate(15);
+        row.classList.add('is-active');
+        window.clearTimeout(row._shineTimer);
+        row._shineTimer = window.setTimeout(() => row.classList.remove('is-active'), 1000);
       }, { passive: true });
     });
   }
