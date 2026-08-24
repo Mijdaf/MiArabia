@@ -107,9 +107,8 @@
     height:100vh;
     z-index:-1;
     pointer-events:none;
-    opacity:0.85;
+    opacity:1;
   }
-  html[data-theme="dark"] #sparksCanvas{ opacity:1; }
   @media (prefers-reduced-motion: reduce){
     #sparksCanvas{ display:none; }
   }
