@@ -208,7 +208,7 @@ whenIdle(function () {
   }
   const dustGeo = new THREE.BufferGeometry();
   dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPos, 3));
-  const dustMat = new THREE.PointsMaterial({ color: 0x5a8bff, size: 3.5, sizeAttenuation: false, transparent: true, opacity: 0.25, depthWrite: false });
+  const dustMat = new THREE.PointsMaterial({ color: 0x5a8bff, size: 5, sizeAttenuation: false, transparent: true, opacity: 0.25, depthWrite: false });
   const dust = new THREE.Points(dustGeo, dustMat);
   rig.add(dust);
 

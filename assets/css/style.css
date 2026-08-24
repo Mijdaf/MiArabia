@@ -493,36 +493,9 @@
     flex-wrap:wrap;
   }
 
-  .hero-scroll-cue{
-    position:absolute;
-    inset-inline-start:50%;
-    bottom:34px;
-    transform:translateX(-50%);
-    z-index:3;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:8px;
-    color:rgba(255,255,255,0.75);
-    font-family:var(--font-mono);
-    font-size:11px;
-    letter-spacing:.16em;
-    text-transform:uppercase;
-    opacity:0;
-    animation:heroUp .9s var(--ease) .75s forwards, cueBob 2.2s ease-in-out 1.7s infinite;
-    transition:color .25s ease, opacity .25s ease;
-  }
-  .hero-scroll-cue:hover{color:var(--orange);}
-  .hero-scroll-cue svg{width:16px;height:16px;}
-  @keyframes cueBob{
-    0%,100%{transform:translateX(-50%) translateY(0);}
-    50%{transform:translateX(-50%) translateY(7px);}
-  }
-
   @media (prefers-reduced-motion: reduce){
     .hero-bg{animation:none;}
     .hero-content > *{animation:none; opacity:1; transform:none;}
-    .hero-scroll-cue{animation:none; opacity:1;}
   }
 
   /* ---------- ticker ---------- */
@@ -565,14 +538,20 @@
     content:"";
     position:absolute; inset:-60px;
     background-image:
-      radial-gradient(rgba(0,0,170,0.14) 1.6px, transparent 1.6px),
-      radial-gradient(rgba(0,0,170,0.09) 1.3px, transparent 1.3px),
-      radial-gradient(rgba(253,87,43,0.16) 1.4px, transparent 1.4px);
+      radial-gradient(rgba(0,0,170,0.16) 3px, transparent 3px),
+      radial-gradient(rgba(0,0,170,0.11) 2.4px, transparent 2.4px),
+      radial-gradient(rgba(253,87,43,0.2) 2.8px, transparent 2.8px);
     background-size:130px 130px, 84px 84px, 190px 190px;
     background-position:0 0, 38px 60px, 100px 20px;
     animation:dotDrift 34s linear infinite;
     pointer-events:none;
     z-index:0;
+  }
+  html[data-theme="dark"] .dot-field::before{
+    background-image:
+      radial-gradient(rgba(255,255,255,0.16) 3px, transparent 3px),
+      radial-gradient(rgba(90,139,255,0.28) 2.4px, transparent 2.4px),
+      radial-gradient(rgba(253,87,43,0.32) 2.8px, transparent 2.8px);
   }
   .dot-field > .wrap{position:relative; z-index:1; perspective:1400px;}
   @keyframes dotDrift{
@@ -1260,8 +1239,6 @@
     transition:width .5s var(--ease);
     pointer-events:none;
   }
-  .why-row:hover::before{width:100%;}
-  .why-row:hover{padding-inline-end:14px;}
   /* Diagonal light sweep that glides across the row on hover — a quick
      shimmer, not a loop, so it reads as a one-time flourish per hover. */
   .why-row::after{
@@ -1278,10 +1255,6 @@
   }
   html[data-theme="dark"] .why-row::after{
     background:linear-gradient(100deg, transparent, rgba(255,255,255,0.16) 45%, transparent 90%);
-  }
-  .why-row:hover::after{
-    opacity:1;
-    animation:whySheen .9s cubic-bezier(.16,.84,.44,1);
   }
   @keyframes whySheen{
     0%{inset-inline-start:-60%; opacity:0;}
@@ -1308,12 +1281,6 @@
   @supports not (-webkit-text-stroke: 1px black){
     .why-index{ color:var(--text-soft); }
   }
-  .why-row:hover .why-index{
-    color:var(--orange);
-    -webkit-text-stroke:1.4px var(--orange);
-    text-shadow:0 0 20px rgba(253,87,43,0.4);
-    transform:scale(1.06);
-  }
   .why-icon{
     width:56px; height:56px;
     display:flex; align-items:center; justify-content:center;
@@ -1324,12 +1291,6 @@
     transition:background .35s ease, transform .4s cubic-bezier(.34,1.56,.64,1), color .35s ease, box-shadow .4s ease;
   }
   .why-icon svg{width:26px;height:26px;}
-  .why-row:hover .why-icon{
-    background:var(--orange);
-    color:var(--white);
-    transform:rotate(-10deg) scale(1.08);
-    box-shadow:0 0 0 8px rgba(253,87,43,0.14), 0 10px 24px -8px rgba(253,87,43,0.55);
-  }
   .why-row-body{flex:1; min-width:0; display:flex; align-items:baseline; gap:18px; flex-wrap:wrap;}
   .why-row h4{color:var(--heading); font-size:20px; font-weight:800; letter-spacing:-.01em; flex-shrink:0; min-width:210px;}
   .why-row p{color:var(--text-soft); font-size:16px; font-weight:400; line-height:1.7; margin:0; flex:1; min-width:220px;}
@@ -1344,13 +1305,37 @@
   }
   html[dir="rtl"] .why-row-arrow{transform:translateX(-8px);}
   .why-row-arrow svg{width:16px; height:16px;}
-  .why-row:hover .why-row-arrow{opacity:1; transform:translateX(0); color:var(--orange);}
   @media (max-width:760px){
     .why-row{flex-wrap:wrap; gap:16px; padding:26px 4px;}
     .why-row-body{gap:6px;}
     .why-row h4{min-width:0; width:100%;}
     .why-row-arrow{display:none;}
     .why-index{font-size:28px; width:40px;}
+  }
+
+  /* Hover-only enhancements — scoped to real hover-capable pointers (mouse)
+     so tapping a row on touchscreens never leaves it "stuck" in a glowing
+     hover state (there's no pointerleave event to undo it there). */
+  @media (hover:hover) and (pointer:fine){
+    .why-row:hover::before{width:100%;}
+    .why-row:hover{padding-inline-end:14px;}
+    .why-row:hover::after{
+      opacity:1;
+      animation:whySheen .9s cubic-bezier(.16,.84,.44,1);
+    }
+    .why-row:hover .why-index{
+      color:var(--orange);
+      -webkit-text-stroke:1.4px var(--orange);
+      text-shadow:0 0 20px rgba(253,87,43,0.4);
+      transform:scale(1.06);
+    }
+    .why-row:hover .why-icon{
+      background:var(--orange);
+      color:var(--white);
+      transform:rotate(-10deg) scale(1.08);
+      box-shadow:0 0 0 8px rgba(253,87,43,0.14), 0 10px 24px -8px rgba(253,87,43,0.55);
+    }
+    .why-row:hover .why-row-arrow{opacity:1; transform:translateX(0); color:var(--orange);}
   }
 
   /* ---------- contact ---------- */
@@ -1896,7 +1881,6 @@
       text-align:center;
     }
     .hero-actions .btn svg{display:none;}
-    .hero-scroll-cue{display:none;}
 
     /* Lighter 3D on small screens: keep the effect, cut the GPU cost */
     .reveal{transform:translateY(22px) rotateX(-6deg) translateZ(0);}
@@ -1909,7 +1893,7 @@
     .service-card, .why-row, .logo-img{ transition-duration:.3s; }
   }
 
-  /* ---------- custom cursor (desktop, fine pointer, motion allowed) ---------- */
+  /* ---------- custom cursor: mini Mijdaf mark (desktop, fine pointer) ---------- */
   html.has-custom-cursor, html.has-custom-cursor body, html.has-custom-cursor a, html.has-custom-cursor button{
     cursor:none;
   }
@@ -1921,28 +1905,32 @@
     top:0; left:0;
     z-index:9999;
     pointer-events:none;
-    border-radius:50%;
     transform:translate(-50%, -50%);
     opacity:0;
   }
   .cursor-dot{
-    width:6px; height:6px;
-    background:var(--orange);
-    transition:opacity .2s ease, width .25s var(--ease), height .25s var(--ease), background .25s ease;
+    width:22px; height:22px;
+    background-image:url('../mijdaf-mark-orange.png');
+    background-size:contain;
+    background-repeat:no-repeat;
+    background-position:center;
+    filter:drop-shadow(0 2px 6px rgba(10,13,31,0.35));
+    transition:opacity .2s ease, width .25s var(--ease), height .25s var(--ease), transform .18s var(--ease);
   }
   .cursor-ring{
-    width:34px; height:34px;
-    border:1.4px solid rgba(253,87,43,0.55);
+    width:44px; height:44px;
+    border-radius:50%;
+    border:1.4px solid rgba(253,87,43,0.4);
     transition:opacity .25s ease, width .3s var(--ease), height .3s var(--ease), border-color .3s ease, background .3s ease;
   }
   html.has-custom-cursor .cursor-dot,
   html.has-custom-cursor .cursor-ring{opacity:1;}
   .cursor-ring.is-hovering{
-    width:52px; height:52px;
-    background:rgba(253,87,43,0.08);
-    border-color:rgba(253,87,43,0.85);
+    width:60px; height:60px;
+    background:rgba(253,87,43,0.06);
+    border-color:rgba(253,87,43,0.7);
   }
-  .cursor-dot.is-hovering{opacity:0;}
+  .cursor-dot.is-hovering{transform:translate(-50%, -50%) scale(1.18) rotate(-8deg);}
   @media (hover:none), (pointer:coarse){
     .cursor-dot, .cursor-ring{display:none;}
   }
