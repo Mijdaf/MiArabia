@@ -123,8 +123,8 @@ whenIdle(function () {
   for (let i = 0; i < NODE_COUNT; i++) {
     const isAccent = Math.random() < 0.16;
     const isPrimary = !isAccent && Math.random() < 0.3;
-    const scale = isPrimary ? (isSmall ? 0.2 : 0.42) + Math.random() * (isSmall ? 0.08 : 0.14)
-                             : (isSmall ? 0.14 : 0.19) + Math.random() * 0.1;
+    const scale = isPrimary ? (isSmall ? 0.3 : 0.63) + Math.random() * (isSmall ? 0.12 : 0.21)
+                             : (isSmall ? 0.21 : 0.29) + Math.random() * 0.15;
 
     const color = isAccent ? ORANGE.clone() : (isPrimary ? BLUE.clone() : BLUE_LIGHT.clone().lerp(BLUE, Math.random()));
 
@@ -208,7 +208,7 @@ whenIdle(function () {
   }
   const dustGeo = new THREE.BufferGeometry();
   dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPos, 3));
-  const dustMat = new THREE.PointsMaterial({ color: 0x5a8bff, size: 1.5, sizeAttenuation: false, transparent: true, opacity: 0.25, depthWrite: false });
+  const dustMat = new THREE.PointsMaterial({ color: 0x5a8bff, size: 3.5, sizeAttenuation: false, transparent: true, opacity: 0.25, depthWrite: false });
   const dust = new THREE.Points(dustGeo, dustMat);
   rig.add(dust);
 

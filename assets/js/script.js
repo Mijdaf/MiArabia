@@ -1,6 +1,86 @@
   // Year
   document.getElementById('year').textContent = new Date().getFullYear();
 
+  // ---------- custom cursor (desktop, fine pointer, motion allowed) ----------
+  (function(){
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const hasFinePointer = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+    const dot = document.getElementById('cursorDot');
+    const ring = document.getElementById('cursorRing');
+    if(!dot || !ring || prefersReducedMotion || !hasFinePointer) return;
+
+    document.documentElement.classList.add('has-custom-cursor');
+
+    let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+    let ringX = mouseX, ringY = mouseY;
+    let started = false;
+
+    window.addEventListener('pointermove', (e) => {
+      if(e.pointerType !== 'mouse') return;
+      mouseX = e.clientX; mouseY = e.clientY;
+      dot.style.left = mouseX + 'px';
+      dot.style.top = mouseY + 'px';
+      if(!started){ ringX = mouseX; ringY = mouseY; started = true; }
+    }, { passive:true });
+
+    // Ring trails the dot with a light spring/lag for a smoother, premium feel
+    function tick(){
+      ringX += (mouseX - ringX) * 0.18;
+      ringY += (mouseY - ringY) * 0.18;
+      ring.style.left = ringX + 'px';
+      ring.style.top = ringY + 'px';
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+
+    const hoverSelector = 'a, button, [data-ripple], .service-card, .gallery-item, input, textarea, select, .spec-pill, [role="tab"]';
+    document.addEventListener('pointerover', (e) => {
+      if(e.target.closest && e.target.closest(hoverSelector)){
+        ring.classList.add('is-hovering');
+        dot.classList.add('is-hovering');
+      }
+    }, { passive:true });
+    document.addEventListener('pointerout', (e) => {
+      if(e.target.closest && e.target.closest(hoverSelector) && !(e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest(hoverSelector))){
+        ring.classList.remove('is-hovering');
+        dot.classList.remove('is-hovering');
+      }
+    }, { passive:true });
+
+    document.addEventListener('mouseleave', () => { dot.style.opacity = '0'; ring.style.opacity = '0'; });
+    document.addEventListener('mouseenter', () => { dot.style.opacity = ''; ring.style.opacity = ''; });
+  })();
+
+  // ---------- global click sound (soft "thud" on every click) ----------
+  (function(){
+    let audioCtx;
+    function playClickSound(){
+      try {
+        if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if(audioCtx.state === 'suspended') audioCtx.resume();
+
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(200, now);
+        osc.frequency.exponentialRampToValueAtTime(60, now + 0.09);
+
+        gain.gain.setValueAtTime(0.0001, now);
+        gain.gain.exponentialRampToValueAtTime(0.22, now + 0.006);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.14);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start(now);
+        osc.stop(now + 0.15);
+      } catch(e) { /* ignore (autoplay restrictions, unsupported browsers, etc.) */ }
+    }
+    document.addEventListener('click', playClickSound, { passive: true });
+  })();
+
   // Shared WhatsApp number used by the contact form and both quick-action
   // popups (Request a Quote / Inquiries) — one place to update it.
   const CONTACT_WHATSAPP_NUMBER = '966536760429';

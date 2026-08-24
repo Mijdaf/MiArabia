@@ -308,10 +308,24 @@
     white-space:nowrap;
   }
   .btn-primary{
+    position:relative;
+    overflow:hidden;
     background:var(--orange);
     color:var(--white);
     box-shadow:0 8px 20px -8px rgba(253,87,43,0.6);
   }
+  .btn-primary::before{
+    content:"";
+    position:absolute;
+    inset-block:0;
+    inset-inline-start:-60%;
+    width:45%;
+    background:linear-gradient(115deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
+    transform:skewX(-20deg);
+    transition:inset-inline-start .65s var(--ease);
+    pointer-events:none;
+  }
+  .btn-primary:hover::before{ inset-inline-start:130%; }
   .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 14px 26px -10px rgba(253,87,43,0.65); }
   .btn-ghost{
     background:transparent;
@@ -479,9 +493,36 @@
     flex-wrap:wrap;
   }
 
+  .hero-scroll-cue{
+    position:absolute;
+    inset-inline-start:50%;
+    bottom:34px;
+    transform:translateX(-50%);
+    z-index:3;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+    color:rgba(255,255,255,0.75);
+    font-family:var(--font-mono);
+    font-size:11px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    opacity:0;
+    animation:heroUp .9s var(--ease) .75s forwards, cueBob 2.2s ease-in-out 1.7s infinite;
+    transition:color .25s ease, opacity .25s ease;
+  }
+  .hero-scroll-cue:hover{color:var(--orange);}
+  .hero-scroll-cue svg{width:16px;height:16px;}
+  @keyframes cueBob{
+    0%,100%{transform:translateX(-50%) translateY(0);}
+    50%{transform:translateX(-50%) translateY(7px);}
+  }
+
   @media (prefers-reduced-motion: reduce){
     .hero-bg{animation:none;}
     .hero-content > *{animation:none; opacity:1; transform:none;}
+    .hero-scroll-cue{animation:none; opacity:1;}
   }
 
   /* ---------- ticker ---------- */
@@ -1855,6 +1896,7 @@
       text-align:center;
     }
     .hero-actions .btn svg{display:none;}
+    .hero-scroll-cue{display:none;}
 
     /* Lighter 3D on small screens: keep the effect, cut the GPU cost */
     .reveal{transform:translateY(22px) rotateX(-6deg) translateZ(0);}
@@ -1865,4 +1907,42 @@
   @media (hover:none), (pointer:coarse){
     /* No pointer-driven tilt on touch devices; keep simple tap/hover fallbacks light */
     .service-card, .why-row, .logo-img{ transition-duration:.3s; }
+  }
+
+  /* ---------- custom cursor (desktop, fine pointer, motion allowed) ---------- */
+  html.has-custom-cursor, html.has-custom-cursor body, html.has-custom-cursor a, html.has-custom-cursor button{
+    cursor:none;
+  }
+  html.has-custom-cursor input, html.has-custom-cursor textarea, html.has-custom-cursor select{
+    cursor:auto;
+  }
+  .cursor-dot, .cursor-ring{
+    position:fixed;
+    top:0; left:0;
+    z-index:9999;
+    pointer-events:none;
+    border-radius:50%;
+    transform:translate(-50%, -50%);
+    opacity:0;
+  }
+  .cursor-dot{
+    width:6px; height:6px;
+    background:var(--orange);
+    transition:opacity .2s ease, width .25s var(--ease), height .25s var(--ease), background .25s ease;
+  }
+  .cursor-ring{
+    width:34px; height:34px;
+    border:1.4px solid rgba(253,87,43,0.55);
+    transition:opacity .25s ease, width .3s var(--ease), height .3s var(--ease), border-color .3s ease, background .3s ease;
+  }
+  html.has-custom-cursor .cursor-dot,
+  html.has-custom-cursor .cursor-ring{opacity:1;}
+  .cursor-ring.is-hovering{
+    width:52px; height:52px;
+    background:rgba(253,87,43,0.08);
+    border-color:rgba(253,87,43,0.85);
+  }
+  .cursor-dot.is-hovering{opacity:0;}
+  @media (hover:none), (pointer:coarse){
+    .cursor-dot, .cursor-ring{display:none;}
   }
