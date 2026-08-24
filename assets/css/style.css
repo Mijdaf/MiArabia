@@ -1357,9 +1357,9 @@
     transition:background .3s var(--ease), border-color .3s var(--ease), transform .35s cubic-bezier(.34,1.56,.64,1), color .3s var(--ease);
   }
   .contact-list .row .ic svg{width:19px;height:19px;stroke:var(--navy); fill:none; stroke-width:1.7; transition:stroke .3s ease;}
-  .contact-list .row div{display:flex;flex-direction:column; flex:1; min-width:0;}
+  .contact-list .row div{display:flex;flex-direction:column; flex:1; min-width:0; align-items:flex-start;}
   .contact-list .row span.lbl{font-family:var(--font-mono); font-size:12.5px; letter-spacing:.06em; color:var(--steel); text-transform:uppercase;}
-  .contact-list .row span.val{font-size:17px; color:var(--heading); font-weight:600; margin-top:2px; transition:color .3s ease;}
+  .contact-list .row span.val{font-size:17px; color:var(--heading); font-weight:600; margin-top:2px; transition:color .3s ease; text-align:match-parent;}
   .contact-list .row-arrow{
     flex:none;
     width:20px;height:20px;
@@ -1384,7 +1384,7 @@
 
   .contact-form{
     background:var(--surface);
-    border:1px solid var(--border-strong);
+    border:2px solid var(--border-strong);
     border-radius:18px;
     padding:36px;
     position:relative;
@@ -1395,12 +1395,12 @@
   .contact-form::before{
     content:"";
     position:absolute; inset-block-start:0; inset-inline:0;
-    height:3px;
+    height:4px;
     background:linear-gradient(90deg, var(--orange), var(--navy) 70%);
     opacity:.85;
   }
   .contact-form:focus-within{
-    border-color:rgba(253,87,43,0.4);
+    border-color:rgba(253,87,43,0.5);
     box-shadow:0 24px 54px -28px rgba(253,87,43,0.28);
   }
   .form-row{display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-bottom:18px;}
