@@ -81,27 +81,52 @@
     document.addEventListener('click', playClickSound, { passive: true });
   })();
 
+  // ---------- shared touch "genuine tap" detector ----------
+  // 'click' alone isn't reliable enough here: on a quick flick where the
+  // finger barely moves, the browser can still treat it as a tap even
+  // though the page kept scrolling underneath it (momentum scroll). So
+  // this tracks BOTH how far the finger moved AND whether the page's
+  // scroll position actually changed during the touch, and only then
+  // dispatches an 'app:tap' event — anything that wants "tap, not scroll"
+  // (haptics, the why-row shine) listens for that instead of pointerdown/click.
+  (function(){
+    const MOVE_THRESHOLD = 10; // px of finger movement allowed and still count as a tap
+    const SCROLL_THRESHOLD = 2; // px of page scroll allowed and still count as a tap
+    let startX = 0, startY = 0, startScrollY = 0, tracking = false, downTarget = null;
+
+    document.addEventListener('pointerdown', (e) => {
+      if (e.pointerType !== 'touch') { tracking = false; return; }
+      startX = e.clientX; startY = e.clientY;
+      startScrollY = window.scrollY;
+      downTarget = e.target;
+      tracking = true;
+    }, { passive: true, capture: true });
+
+    document.addEventListener('pointerup', (e) => {
+      if (!tracking || e.pointerType !== 'touch') { tracking = false; return; }
+      tracking = false;
+      const dx = Math.abs(e.clientX - startX);
+      const dy = Math.abs(e.clientY - startY);
+      const scrolled = Math.abs(window.scrollY - startScrollY) > SCROLL_THRESHOLD;
+      if (dx > MOVE_THRESHOLD || dy > MOVE_THRESHOLD || scrolled) return; // was a scroll/drag, not a tap
+      (downTarget || e.target).dispatchEvent(new CustomEvent('app:tap', { bubbles: true }));
+    }, { passive: true, capture: true });
+
+    document.addEventListener('pointercancel', () => { tracking = false; }, { passive: true, capture: true });
+  })();
+
   // ---------- global haptic tap feedback (touch devices only) ----------
-  // A short buzz on every genuine TAP that performs an action — the touch
+  // A short buzz on every genuine tap that performs an action — the touch
   // equivalent of the click "thud" sound above. Scoped to real action
   // elements (links, buttons, toggles, tabs, cards) so typing into a text
   // field doesn't buzz on every tap. Android/Chrome support the Vibration
   // API; iOS Safari doesn't expose it, so taps there just stay silent —
-  // a platform limitation, not a bug.
-  //
-  // Deliberately listens on 'click', not 'pointerdown': pointerdown fires
-  // the instant a finger touches the screen, before the browser knows
-  // whether it's a tap or the start of a scroll — so it was buzzing on
-  // every scroll too. 'click' only fires once the browser has confirmed
-  // the touch was a real tap (it's suppressed when the finger drags to
-  // scroll), so this fires exactly when intended.
+  // a platform limitation, not a bug. Listens for 'app:tap' (see above)
+  // rather than pointerdown/click, so scrolling never triggers it.
   (function(){
     if (!('vibrate' in navigator)) return;
     const ACTION_SELECTOR = 'a, button, [role="button"], [role="tab"], [data-ripple], .service-card, .gallery-item, .spec-pill, .why-row';
-    let lastPointerType = null;
-    document.addEventListener('pointerdown', (e) => { lastPointerType = e.pointerType; }, { passive: true, capture: true });
-    document.addEventListener('click', (e) => {
-      if (lastPointerType !== 'touch') return;
+    document.addEventListener('app:tap', (e) => {
       if (e.target.closest && e.target.closest(ACTION_SELECTOR)) {
         navigator.vibrate(12);
       }
@@ -458,11 +483,11 @@
   // Visual tap feedback on the "why" rows — replays the accent sweep /
   // sheen / icon glow on each genuine tap (the haptic buzz itself is
   // handled by the global tap-feedback module above, which already covers
-  // .why-row). Uses 'click' rather than 'pointerdown' so scrolling past a
-  // row never triggers it — see the note on the haptic module above.
+  // .why-row). Listens for 'app:tap' so scrolling past a row never
+  // triggers it — see the shared tap detector near the top of this file.
   if (isTouchDevice) {
     document.querySelectorAll('.why-row').forEach(row => {
-      row.addEventListener('click', () => {
+      row.addEventListener('app:tap', () => {
         row.classList.add('is-active');
         window.clearTimeout(row._shineTimer);
         row._shineTimer = window.setTimeout(() => row.classList.remove('is-active'), 1000);
