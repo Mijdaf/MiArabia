@@ -30,6 +30,11 @@ whenIdle(function () {
   const isSmall = window.matchMedia('(max-width: 760px)').matches;
   const isCoarse = window.matchMedia('(pointer: coarse)').matches;
 
+  /* Skip the ambient 3D background scene entirely on phone — the "why"
+     section just shows its plain background there, no particles/nodes.
+     Desktop is unaffected. */
+  if (isSmall) return;
+
   /* ---------- renderer / scene / camera ---------- */
   let renderer;
   try {
