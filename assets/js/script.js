@@ -82,21 +82,30 @@
   })();
 
   // ---------- global haptic tap feedback (touch devices only) ----------
-  // A short buzz on every tap that performs an action — the touch
+  // A short buzz on every genuine TAP that performs an action — the touch
   // equivalent of the click "thud" sound above. Scoped to real action
   // elements (links, buttons, toggles, tabs, cards) so typing into a text
   // field doesn't buzz on every tap. Android/Chrome support the Vibration
   // API; iOS Safari doesn't expose it, so taps there just stay silent —
   // a platform limitation, not a bug.
+  //
+  // Deliberately listens on 'click', not 'pointerdown': pointerdown fires
+  // the instant a finger touches the screen, before the browser knows
+  // whether it's a tap or the start of a scroll — so it was buzzing on
+  // every scroll too. 'click' only fires once the browser has confirmed
+  // the touch was a real tap (it's suppressed when the finger drags to
+  // scroll), so this fires exactly when intended.
   (function(){
     if (!('vibrate' in navigator)) return;
     const ACTION_SELECTOR = 'a, button, [role="button"], [role="tab"], [data-ripple], .service-card, .gallery-item, .spec-pill, .why-row';
-    document.addEventListener('pointerdown', (e) => {
-      if (e.pointerType !== 'touch') return;
+    let lastPointerType = null;
+    document.addEventListener('pointerdown', (e) => { lastPointerType = e.pointerType; }, { passive: true, capture: true });
+    document.addEventListener('click', (e) => {
+      if (lastPointerType !== 'touch') return;
       if (e.target.closest && e.target.closest(ACTION_SELECTOR)) {
         navigator.vibrate(12);
       }
-    }, { passive: true });
+    });
   })();
 
   // Shared WhatsApp number used by the contact form and both quick-action
@@ -447,16 +456,17 @@
   whyItems.forEach(el => whyObs.observe(el));
 
   // Visual tap feedback on the "why" rows — replays the accent sweep /
-  // sheen / icon glow on each tap (the haptic buzz itself is handled by the
-  // global tap-feedback module above, which already covers .why-row).
+  // sheen / icon glow on each genuine tap (the haptic buzz itself is
+  // handled by the global tap-feedback module above, which already covers
+  // .why-row). Uses 'click' rather than 'pointerdown' so scrolling past a
+  // row never triggers it — see the note on the haptic module above.
   if (isTouchDevice) {
     document.querySelectorAll('.why-row').forEach(row => {
-      row.addEventListener('pointerdown', (e) => {
-        if (e.pointerType !== 'touch') return; // mouse/pen taps stay silent
+      row.addEventListener('click', () => {
         row.classList.add('is-active');
         window.clearTimeout(row._shineTimer);
         row._shineTimer = window.setTimeout(() => row.classList.remove('is-active'), 1000);
-      }, { passive: true });
+      });
     });
   }
 
