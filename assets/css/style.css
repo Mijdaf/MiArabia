@@ -532,35 +532,11 @@
   #services{background:color-mix(in srgb, var(--surface-2) 82%, transparent);}
   html[data-theme="dark"] #services{background:color-mix(in srgb, var(--surface-2) 40%, transparent);}
 
-  /* floating dot-particle background */
+  /* dot-particle background removed per request; .dot-field kept as a
+     structural class (position/overflow + z-index context for .wrap) so
+     no HTML changes are needed elsewhere. */
   .dot-field{position:relative; overflow:hidden;}
-  .dot-field::before{
-    content:"";
-    position:absolute; inset:-60px;
-    background-image:
-      radial-gradient(rgba(0,0,170,0.16) 3px, transparent 3px),
-      radial-gradient(rgba(0,0,170,0.11) 2.4px, transparent 2.4px),
-      radial-gradient(rgba(253,87,43,0.2) 2.8px, transparent 2.8px);
-    background-size:130px 130px, 84px 84px, 190px 190px;
-    background-position:0 0, 38px 60px, 100px 20px;
-    animation:dotDrift 34s linear infinite;
-    pointer-events:none;
-    z-index:0;
-  }
-  html[data-theme="dark"] .dot-field::before{
-    background-image:
-      radial-gradient(rgba(255,255,255,0.16) 3px, transparent 3px),
-      radial-gradient(rgba(90,139,255,0.28) 2.4px, transparent 2.4px),
-      radial-gradient(rgba(253,87,43,0.32) 2.8px, transparent 2.8px);
-  }
   .dot-field > .wrap{position:relative; z-index:1; perspective:1400px;}
-  @keyframes dotDrift{
-    from{background-position:0 0, 38px 60px, 100px 20px;}
-    to{background-position:130px 86px, 122px 144px, -90px 170px;}
-  }
-  @media (prefers-reduced-motion: reduce){
-    .dot-field::before{animation:none;}
-  }
   .section-head{
     max-width:640px;
     margin-bottom:56px;
