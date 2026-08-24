@@ -885,12 +885,20 @@
     font-size:34px;
     font-weight:700;
     color:var(--tint-2);
-    z-index:-1;
+    z-index:0;
     transition:color .35s ease;
     user-select:none;
   }
   .service-card:hover .service-tag{color:rgba(253,87,43,0.18);}
   .service-card-back .service-tag{position:static; display:block; margin-bottom:2px; color:var(--tint-2);}
+  .service-card-body{
+    position:relative;
+    z-index:1;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    height:100%;
+  }
   .service-card .icon{
     width:52px;height:52px;
     border-radius:14px;
