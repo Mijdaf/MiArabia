@@ -89,17 +89,24 @@
   /* ---------- particle pool ---------- */
   const GRAVITY = 260; // px/s²
   const DRAG = 0.985;
-  /* Bumped up on every form factor so the effect reads clearly instead
-     of being a barely-there accent. */
-  const MAX_PARTICLES = isSmall || isCoarse ? 70 : 130;
+  /* Dialed back from the "as much as possible" pass — still noticeably
+     livelier than the original, but tuned so low-end phones don't drop
+     frames. */
+  const MAX_PARTICLES = isSmall || isCoarse ? 55 : 95;
+
+  /* shadowBlur is by far the most expensive part of this effect (it's
+     a real blur pass per shape, per frame). Skip it on touch/small
+     devices entirely — the boosted colour + streak already reads
+     clearly there without it. */
+  let useGlow = !isSmall && !isCoarse;
 
   let particles = [];
 
   function spawnBurst() {
-    if (particles.length > MAX_PARTICLES - 10) return;
+    if (particles.length > dynamicCap - 8) return;
     const x = Math.random() * W;
     const y = Math.random() * H;
-    const count = 5 + Math.floor(Math.random() * 6); // 5–10 per burst
+    const count = 4 + Math.floor(Math.random() * 4); // 4–7 per burst
     const baseAngle = Math.random() * Math.PI * 2;
     for (let i = 0; i < count; i++) {
       const angle = baseAngle + (Math.random() - 0.5) * 2.2;
@@ -110,20 +117,39 @@
         vy: Math.sin(angle) * speed - 30, // slight initial upward kick
         life: 0,
         maxLife: 0.55 + Math.random() * 0.65,
-        size: 1.7 + Math.random() * 2.1,
+        size: 1.5 + Math.random() * 1.9,
         px: x, py: y, // previous position, for the streak
       });
     }
   }
 
-  /* Spawn cadence: roughly one burst every 0.45–1.1s, independent of
-     frame rate — noticeably livelier than the original slow trickle. */
+  /* Spawn cadence: roughly one burst every 0.6–1.4s, independent of
+     frame rate — livelier than the original but not a firehose. */
   let spawnTimer = 0;
-  let nextSpawnAt = 0.3;
+  let nextSpawnAt = 0.4;
   function scheduleNextSpawn() {
-    nextSpawnAt = 0.45 + Math.random() * 0.65;
+    nextSpawnAt = 0.6 + Math.random() * 0.8;
   }
   scheduleNextSpawn();
+
+  /* ---------- adaptive performance guard ----------
+     Watch real frame time; if the device is visibly struggling, back
+     off automatically — drop the glow first, then thin the particle
+     cap — rather than assuming every device can afford the full effect. */
+  let frameSamples = [];
+  let degraded = false;
+  function checkPerformance(dt) {
+    frameSamples.push(dt);
+    if (frameSamples.length < 40) return;
+    const avg = frameSamples.reduce((a, b) => a + b, 0) / frameSamples.length;
+    frameSamples = [];
+    if (!degraded && avg > 1 / 40) { // averaging under ~40fps
+      degraded = true;
+      useGlow = false;
+      dynamicCap = Math.max(24, Math.round(dynamicCap * 0.6));
+    }
+  }
+  let dynamicCap = MAX_PARTICLES;
 
   /* ---------- animation loop ---------- */
   let running = true;
@@ -142,13 +168,16 @@
       spawnBurst();
     }
 
+    checkPerformance(dt);
+    if (particles.length > dynamicCap) particles.length = dynamicCap;
+
     ctx.clearRect(0, 0, W, H);
     ctx.globalCompositeOperation = 'lighter';
 
     const stops = dark ? STOPS_DARK : STOPS_LIGHT;
-    // Light backgrounds swallow low-alpha glow, so push opacity harder
-    // and add a real shadow blur to make each spark pop as a distinct
-    // glint rather than a faint smudge.
+    // Light backgrounds swallow low-alpha glow, so push opacity harder;
+    // the actual shadow blur only runs where useGlow allows it (see
+    // adaptive performance guard above).
     const alphaBoost = dark ? 1 : 1.35;
     const glow = dark ? 8 : 10;
 
@@ -168,8 +197,12 @@
       const alpha = Math.min(1, rawAlpha * alphaBoost);
       const rgb = colorAt(t, stops);
 
-      ctx.shadowColor = `rgba(${rgb},${Math.min(1, alpha * 0.85).toFixed(3)})`;
-      ctx.shadowBlur = glow * (1 - t * 0.3);
+      if (useGlow) {
+        ctx.shadowColor = `rgba(${rgb},${Math.min(1, alpha * 0.85).toFixed(3)})`;
+        ctx.shadowBlur = glow * (1 - t * 0.3);
+      } else {
+        ctx.shadowBlur = 0;
+      }
 
       // hot streak (short line from previous to current position)
       ctx.strokeStyle = `rgba(${rgb},${(Math.min(1, alpha) * 0.95).toFixed(3)})`;
