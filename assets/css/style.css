@@ -97,6 +97,23 @@
     overflow-x:hidden;
   }
 
+  /* Ambient welding-sparks background: fixed behind every section, full
+     viewport. Sits above the body's own background but below all page
+     content (header/modals/etc. all sit in the hundreds/thousands). */
+  #sparksCanvas{
+    position:fixed;
+    inset:0;
+    width:100vw;
+    height:100vh;
+    z-index:-1;
+    pointer-events:none;
+    opacity:0.85;
+  }
+  html[data-theme="dark"] #sparksCanvas{ opacity:1; }
+  @media (prefers-reduced-motion: reduce){
+    #sparksCanvas{ display:none; }
+  }
+
   a{color:inherit;text-decoration:none;}
   ul{list-style:none;}
   img,svg{display:block;max-width:100%;}
@@ -935,6 +952,7 @@
     height:100%;
   }
   .service-card .icon{
+    position:relative;
     width:52px;height:52px;
     border-radius:14px;
     background:rgba(253,87,43,0.1);
@@ -943,6 +961,54 @@
     transition:background .35s ease, transform .35s ease, color .35s ease;
   }
   .service-card:hover .icon{background:var(--orange); color:var(--white); transform:rotate(-8deg) scale(1.06);}
+
+  /* clear, always-on 2D motion: a pulsing ring "breathing" around each icon */
+  .service-card .icon::before{
+    content:"";
+    position:absolute;
+    inset:-7px;
+    border-radius:18px;
+    border:2px solid rgba(253,87,43,0.5);
+    opacity:0;
+    animation:iconPulse 2.6s ease-out infinite;
+    animation-delay:calc(var(--i, 0) * .35s);
+    pointer-events:none;
+  }
+  @keyframes iconPulse{
+    0%{transform:scale(.82); opacity:.65;}
+    75%,100%{transform:scale(1.38); opacity:0;}
+  }
+
+  /* glass "shine" sweep — plays once when the card enters view, replays on hover */
+  .service-card-face::after{
+    content:"";
+    position:absolute;
+    inset-block:0;
+    inset-inline-start:-60%;
+    width:38%;
+    background:linear-gradient(115deg, transparent 0%, rgba(255,255,255,0) 30%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 70%, transparent 100%);
+    transform:skewX(-20deg);
+    z-index:2;
+    pointer-events:none;
+  }
+  html[data-theme="dark"] .service-card-face::after{
+    background:linear-gradient(115deg, transparent 0%, rgba(255,255,255,0) 30%, rgba(255,255,255,0.16) 50%, rgba(255,255,255,0) 70%, transparent 100%);
+  }
+  @keyframes cardShine{
+    from{inset-inline-start:-60%;}
+    to{inset-inline-start:130%;}
+  }
+  .service-reveal.in .service-card-face::after{
+    animation:cardShine 1.15s ease-out calc(.3s + var(--i, 0) * .12s) 1;
+  }
+  .service-card:hover .service-card-face::after{
+    animation:cardShine .9s ease-out;
+  }
+  @media (prefers-reduced-motion: reduce){
+    .service-card .icon::before{animation:none; opacity:0;}
+    .service-reveal.in .service-card-face::after,
+    .service-card:hover .service-card-face::after{animation:none; opacity:0;}
+  }
   .service-card .icon svg{width:25px;height:25px;stroke:currentColor;fill:none;stroke-width:1.6;}
   .service-card h3{font-size:20px;color:var(--heading);line-height:1.35; margin-top:4px;}
   .service-card p{font-size:16px;color:var(--text-soft);line-height:1.7;}
@@ -1030,14 +1096,25 @@
     filter:saturate(0.94) contrast(1.02);
     transition:transform .5s linear, filter .6s ease;
   }
+  /* slow, always-on Ken Burns drift so the photos feel alive even without hover */
+  .gallery-reveal.in img{
+    animation:kenBurns 9s ease-in-out calc(var(--i, 0) * .25s) infinite alternate;
+  }
+  @keyframes kenBurns{
+    from{transform:translateY(var(--py, 0px)) scale(1.05) rotate(0deg);}
+    to{transform:translateY(var(--py, 0px)) scale(1.14) rotate(.6deg);}
+  }
   .gallery-item:hover img,
   .gallery-item:focus-visible img{
+    animation-play-state:paused;
     transform:translateY(var(--py, 0px)) scale(1.16) rotate(-0.4deg);
     filter:saturate(1.08) contrast(1.05);
     transition:transform .9s cubic-bezier(.16,.84,.44,1), filter .6s ease;
   }
   @media (prefers-reduced-motion: reduce){
-    .gallery-item img{transform:scale(1.06) !important; transition:filter .6s ease !important;}
+    .gallery-item img{transform:scale(1.06) !important; transition:filter .6s ease !important; animation:none !important;}
+    .gallery-reveal.in .gallery-tag,
+    .gallery-expand::after{animation:none;}
   }
 
   .gallery-item::before{
@@ -1071,6 +1148,7 @@
   .gallery-item:hover .gallery-caption,
   .gallery-item:focus-visible .gallery-caption{transform:translateY(0);}
   .gallery-tag{
+    display:inline-block;
     font-family:var(--font-mono);
     font-size:12px;
     letter-spacing:.14em;
@@ -1081,6 +1159,15 @@
   }
   .gallery-item:hover .gallery-tag,
   .gallery-item:focus-visible .gallery-tag{opacity:1; transform:translateY(0);}
+  /* clear pop-in bounce for the number badge, independent of hover */
+  .gallery-reveal.in .gallery-tag{
+    animation:tagPop .6s cubic-bezier(.34,1.56,.64,1) calc(.5s + var(--i, 0) * .12s) both;
+  }
+  @keyframes tagPop{
+    0%{transform:translateY(6px) scale(.6); opacity:0;}
+    60%{transform:translateY(0) scale(1.15); opacity:1;}
+    100%{transform:translateY(0) scale(1); opacity:1;}
+  }
   .gallery-caption h4{
     color:var(--white);
     font-size:17px;
@@ -1118,6 +1205,19 @@
   .gallery-item:hover .gallery-expand,
   .gallery-item:focus-visible .gallery-expand{opacity:1; transform:scale(1) rotate(0);}
   .gallery-item:hover .gallery-expand:hover{background:var(--orange);}
+  /* soft attention pulse so the expand cue reads clearly even before hover */
+  .gallery-expand::after{
+    content:"";
+    position:absolute; inset:-5px;
+    border-radius:50%;
+    border:1.5px solid rgba(255,255,255,0.55);
+    opacity:0;
+    animation:expandPulse 2.4s ease-out calc(1.4s + var(--i, 0) * .3s) infinite;
+  }
+  @keyframes expandPulse{
+    0%{transform:scale(.8); opacity:.6;}
+    75%,100%{transform:scale(1.35); opacity:0;}
+  }
 
   html[data-theme="dark"] .gallery-item{background:var(--surface-2); border-color:var(--border);}
   html[data-theme="dark"] .gallery-item::before{background:linear-gradient(180deg, rgba(0,0,20,0) 30%, rgba(0,0,20,0.86) 100%);}
