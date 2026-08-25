@@ -107,7 +107,7 @@
     height:100vh;
     z-index:-2;
     pointer-events:none;
-    opacity:0.8;
+    opacity:0.95;
   }
   html[data-theme="dark"] #pipeRackCanvas{ opacity:1; }
   @media (prefers-reduced-motion: reduce){

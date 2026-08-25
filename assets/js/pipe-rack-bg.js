@@ -188,9 +188,9 @@ whenIdle(function () {
   function applyTheme() {
     const dark = document.documentElement.getAttribute('data-theme') === 'dark';
     fog.color.set(dark ? 0x000032 : 0xdfe5f6);
-    steelMat.opacity = dark ? 0.55 : 0.32;
-    pipeMat.opacity = dark ? 0.42 : 0.26;
-    jointMat.opacity = dark ? 0.95 : 0.85;
+    steelMat.opacity = dark ? 0.55 : 0.6;
+    pipeMat.opacity = dark ? 0.42 : 0.5;
+    jointMat.opacity = dark ? 0.95 : 0.95;
     hemi.intensity = dark ? 0.9 : 0.7;
     key.intensity = dark ? 1.0 : 0.85;
   }
