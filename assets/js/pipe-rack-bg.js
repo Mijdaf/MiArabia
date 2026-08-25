@@ -189,12 +189,17 @@ whenIdle(function () {
   rig.rotation.y = 0.1;
 
   /* ---------- theme-aware palette ---------- */
+  let glowOpacityScale = 1;
   function applyTheme() {
     const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+    /* Extra-faint pass for dark mode on desktop only — the rig reads too
+       heavy against the dark hero art at wide viewports. */
+    const darkDesktop = dark && !isSmall;
     fog.color.set(dark ? 0x000032 : 0xdfe5f6);
-    steelMat.opacity = dark ? 0.55 : 0.6;
-    pipeMat.opacity = dark ? 0.42 : 0.5;
-    jointMat.opacity = dark ? 0.95 : 0.95;
+    steelMat.opacity = dark ? (darkDesktop ? 0.22 : 0.55) : 0.6;
+    pipeMat.opacity = dark ? (darkDesktop ? 0.16 : 0.42) : 0.5;
+    jointMat.opacity = dark ? (darkDesktop ? 0.55 : 0.95) : 0.95;
+    glowOpacityScale = darkDesktop ? 0.55 : 1;
     hemi.intensity = dark ? 0.9 : 0.7;
     key.intensity = dark ? 1.0 : 0.85;
   }
@@ -307,7 +312,7 @@ whenIdle(function () {
 
       for (const j of jointDots) {
         if (j.sprite.visible) {
-          j.sprite.material.opacity = 0.55 + Math.sin(t * 0.7 + j.phase) * 0.25;
+          j.sprite.material.opacity = (0.55 + Math.sin(t * 0.7 + j.phase) * 0.25) * glowOpacityScale;
         }
       }
     }
