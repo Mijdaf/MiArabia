@@ -965,3 +965,69 @@
     }
   });
 })();
+
+// ---------- easter egg: request button plays hard-to-get (desktop mouse only) ----------
+(function(){
+  const btn = document.getElementById('openRequestModal');
+  if(!btn) return;
+
+  const hasFinePointer = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!hasFinePointer || prefersReducedMotion) return; // touch & reduced-motion users: normal button, always
+
+  const MAX_DODGES = 1;
+  const PADDING = 14;
+  let dodges = 0;
+  let settled = true;
+  let initialRect = null;
+
+  function getInitialRect(){
+    if(!initialRect){
+      initialRect = btn.getBoundingClientRect();
+    }
+    return initialRect;
+  }
+
+  function settle(){
+    settled = true;
+    btn.style.transition = 'transform .35s ease';
+    btn.style.transform = 'translate(0px, 0px)';
+    btn.classList.add('qa-caught');
+    setTimeout(() => btn.classList.remove('qa-caught'), 500);
+  }
+
+  function dodge(){
+    if(dodges >= MAX_DODGES){ settle(); return; }
+    dodges++;
+    settled = false;
+    const rect = getInitialRect();
+    const minX = Math.min(PADDING - rect.left, (window.innerWidth - PADDING) - rect.right);
+    const maxX = Math.max(PADDING - rect.left, (window.innerWidth - PADDING) - rect.right);
+    const minY = Math.min(PADDING - rect.top, (window.innerHeight - PADDING) - rect.bottom);
+    const maxY = Math.max(PADDING - rect.top, (window.innerHeight - PADDING) - rect.bottom);
+    const dx = minX + Math.random() * (maxX - minX);
+    const dy = minY + Math.random() * (maxY - minY);
+    btn.style.transition = 'transform .28s cubic-bezier(.34,1.56,.64,1)';
+    btn.style.transform = `translate(${dx}px, ${dy}px)`;
+    if(dodges >= MAX_DODGES){
+      // After teasing a few times, it gives up so the request can actually be submitted
+      setTimeout(settle, 260);
+    }
+  }
+
+  btn.addEventListener('pointerenter', (e) => {
+    if(e.pointerType !== 'mouse') return; // touch/pen: never dodges, always tappable
+    dodge();
+  });
+
+  btn.addEventListener('click', () => {
+    // Reset the game for next time, after letting this click go through
+    setTimeout(() => { dodges = 0; settle(); }, 400);
+  });
+
+  window.addEventListener('resize', () => {
+    initialRect = null;
+    settle();
+    dodges = 0;
+  });
+})();

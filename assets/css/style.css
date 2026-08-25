@@ -2200,3 +2200,12 @@ header .logo{ cursor: pointer; }
   .egg-emoji{ display: none; }
   .egg-shake{ animation: none; }
 }
+
+/* ---------- easter egg: request button dodge ---------- */
+.qa-request{ will-change: transform; }
+.qa-caught{ animation: qa-caught-flash .5s ease; }
+@keyframes qa-caught-flash{
+  0%{ box-shadow: 0 0 0 0 color-mix(in srgb, var(--orange) 55%, transparent); }
+  70%{ box-shadow: 0 0 0 14px transparent; }
+  100%{ box-shadow: 0 0 0 0 transparent; }
+}
