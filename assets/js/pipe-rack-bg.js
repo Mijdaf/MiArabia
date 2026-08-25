@@ -196,10 +196,10 @@ whenIdle(function () {
        heavy against the dark hero art at wide viewports. */
     const darkDesktop = dark && !isSmall;
     fog.color.set(dark ? 0x000032 : 0xdfe5f6);
-    steelMat.opacity = dark ? (darkDesktop ? 0.22 : 0.55) : 0.6;
-    pipeMat.opacity = dark ? (darkDesktop ? 0.16 : 0.42) : 0.5;
-    jointMat.opacity = dark ? (darkDesktop ? 0.55 : 0.95) : 0.95;
-    glowOpacityScale = darkDesktop ? 0.55 : 1;
+    steelMat.opacity = dark ? (darkDesktop ? 0.6 : 0.55) : 0.6;
+    pipeMat.opacity = dark ? (darkDesktop ? 0.5 : 0.42) : 0.5;
+    jointMat.opacity = dark ? (darkDesktop ? 0.95 : 0.95) : 0.95;
+    glowOpacityScale = darkDesktop ? 1 : 1;
     hemi.intensity = dark ? 0.9 : 0.7;
     key.intensity = dark ? 1.0 : 0.85;
   }
