@@ -2128,7 +2128,7 @@
     .service-card, .why-row, .logo-img{ transition-duration:.3s; }
   }
 
-  /* ---------- custom cursor: mini Mijdaf mark (desktop, fine pointer) ---------- */
+  /* ---------- custom cursor: mini MiArabia mark (desktop, fine pointer) ---------- */
   html.has-custom-cursor, html.has-custom-cursor body, html.has-custom-cursor a, html.has-custom-cursor button{
     cursor:none;
   }

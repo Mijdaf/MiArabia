@@ -1,5 +1,5 @@
 /* ============================================================
-   Mijdaf — "Why Us" ambient 3D scene: a soft constellation of
+   MiArabia — "Why Us" ambient 3D scene: a soft constellation of
    faceted, low-poly nodes (structural units) drifting slowly in
    depth and linked by a light network of connectors. Contained
    entirely inside the #why section — not a full-page background —

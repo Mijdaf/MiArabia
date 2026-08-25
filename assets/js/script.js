@@ -656,12 +656,12 @@
     const labelEls = document.querySelectorAll('.lang-toggle-label');
 
     const titles = {
-      ar: 'مجداف العربية للمقاولات العامة — مقاولات عامة وخدمات صناعية',
-      en: 'Mijdaf Arabia — General Contracting & Industrial Services'
+      ar: 'مي أرابيا للمقاولات العامة — مقاولات عامة وخدمات صناعية',
+      en: 'MiArabia — General Contracting & Industrial Services'
     };
     const descriptions = {
-      ar: 'مجداف العربية للمقاولات العامة — شركة سعودية متخصصة في أعمال الأنابيب واللحام والتصنيع والصيانة وخدمات القوى العاملة، وفق أعلى معايير السلامة والجودة.',
-      en: 'Mijdaf Arabia for General Contracting — a Saudi company delivering piping, welding & fabrication, maintenance and manpower services to the highest safety and quality standards.'
+      ar: 'مي أرابيا للمقاولات العامة — شركة سعودية متخصصة في أعمال الأنابيب واللحام والتصنيع والصيانة وخدمات القوى العاملة، وفق أعلى معايير السلامة والجودة.',
+      en: 'MiArabia for General Contracting — a Saudi company delivering piping, welding & fabrication, maintenance and manpower services to the highest safety and quality standards.'
     };
 
     // Capture the original Arabic content once, before any switching happens.
@@ -721,7 +721,7 @@
     const phone2 = document.getElementById('fphone2').value.trim();
     const details = document.getElementById('fmsg').value.trim();
 
-    let msg = `طلب جديد من موقع مجداف العربية:\n\n*الاسم:* ${name}`;
+    let msg = `طلب جديد من موقع مي أرابيا:\n\n*الاسم:* ${name}`;
     if (company) msg += `\n*الشركة:* ${company}`;
     msg += `\n*البريد الإلكتروني:* ${email}`;
     msg += `\n*الخدمة المطلوبة:* ${service}`;
@@ -823,7 +823,7 @@
         const company = form.querySelector('#qrCompany').value.trim();
         const phone = form.querySelector('#qrPhone').value.trim();
         const service = form.querySelector('#qrService').value;
-        let msg = `طلب جديد من موقع مجداف العربية:\n\n*الاسم:* ${name}`;
+        let msg = `طلب جديد من موقع مي أرابيا:\n\n*الاسم:* ${name}`;
         if (company) msg += `\n*الشركة:* ${company}`;
         msg += `\n*رقم الجوال:* ${phone}\n*الخدمة المطلوبة:* ${service}`;
         return msg;
@@ -838,7 +838,7 @@
       buildMessage: (form) => {
         const message = form.querySelector('#qiMessage').value.trim();
         const phone = form.querySelector('#qiPhone').value.trim();
-        return `استفسار جديد من موقع مجداف العربية:\n\n*الاستفسار:* ${message}\n*رقم التواصل:* ${phone}`;
+        return `استفسار جديد من موقع مي أرابيا:\n\n*الاستفسار:* ${message}\n*رقم التواصل:* ${phone}`;
       }
     });
   })();

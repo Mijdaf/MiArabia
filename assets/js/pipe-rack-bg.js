@@ -1,5 +1,5 @@
 /* ============================================================
-   Mijdaf — ambient "pipe rack" 3D background.
+   MiArabia — ambient "pipe rack" 3D background.
    A slow, faint industrial steel structure — the elevated frames
    that carry pipe runs across a plant site — receding into depth
    behind every section of the page. Three connected tiers, X
@@ -55,9 +55,9 @@ whenIdle(function () {
   const fog = new THREE.FogExp2(0x000032, 0.05);
   scene.fog = fog;
 
-  const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 100);
-  camera.position.set(0, 2.6, 11);
-  camera.lookAt(0, 2, -6);
+  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+  camera.position.set(9.5, 1.0, 1.6);
+  camera.lookAt(0, 0.85, -1.2);
 
   const rig = new THREE.Group();
   scene.add(rig);
@@ -107,10 +107,10 @@ whenIdle(function () {
     return mesh;
   }
 
-  const FRAME_COUNT = isSmall ? 5 : 9;
-  const SPACING = 3.0;
-  const HALF_W = 1.7;
-  const TIERS = [0, 1.35, 2.7, 4.05]; // base + 3 structural floors
+  const FRAME_COUNT = isSmall ? 8 : 16;
+  const SPACING = 1.15;
+  const HALF_W = 0.55;
+  const TIERS = [0, 0.42, 0.85, 1.28]; // base + 3 structural floors, scaled down
   const TOP = TIERS[TIERS.length - 1];
   const startZ = -((FRAME_COUNT - 1) * SPACING) / 2;
 
@@ -120,19 +120,19 @@ whenIdle(function () {
     const z = startZ + i * SPACING;
 
     // columns
-    rig.add(rod(new THREE.Vector3(-HALF_W, 0, z), new THREE.Vector3(-HALF_W, TOP, z), 0.045, steelMat));
-    rig.add(rod(new THREE.Vector3(HALF_W, 0, z), new THREE.Vector3(HALF_W, TOP, z), 0.045, steelMat));
+    rig.add(rod(new THREE.Vector3(-HALF_W, 0, z), new THREE.Vector3(-HALF_W, TOP, z), 0.017, steelMat));
+    rig.add(rod(new THREE.Vector3(HALF_W, 0, z), new THREE.Vector3(HALF_W, TOP, z), 0.017, steelMat));
 
     // cross beams at every tier
     for (let t = 0; t < TIERS.length; t++) {
       const h = TIERS[t];
-      rig.add(rod(new THREE.Vector3(-HALF_W, h, z), new THREE.Vector3(HALF_W, h, z), 0.032, steelMat));
+      rig.add(rod(new THREE.Vector3(-HALF_W, h, z), new THREE.Vector3(HALF_W, h, z), 0.012, steelMat));
     }
 
     // top joints: glowing orange nodes at the two top corners of each frame
     [-HALF_W, HALF_W].forEach((x) => {
       const pos = new THREE.Vector3(x, TOP, z);
-      const dot = new THREE.Mesh(new THREE.SphereGeometry(0.07, 8, 8), jointMat);
+      const dot = new THREE.Mesh(new THREE.SphereGeometry(0.026, 8, 8), jointMat);
       dot.position.copy(pos);
       rig.add(dot);
 
@@ -141,7 +141,7 @@ whenIdle(function () {
         depthWrite: false, blending: THREE.AdditiveBlending
       });
       const sprite = new THREE.Sprite(spriteMat);
-      sprite.scale.set(0.7, 0.7, 1);
+      sprite.scale.set(0.26, 0.26, 1);
       sprite.position.copy(pos);
       rig.add(sprite);
       glowSprites.push(sprite);
@@ -154,8 +154,8 @@ whenIdle(function () {
     if (i < FRAME_COUNT - 1 && i % 2 === 0) {
       const z2 = z + SPACING;
       [-HALF_W, HALF_W].forEach((x) => {
-        rig.add(rod(new THREE.Vector3(x, 0, z), new THREE.Vector3(x, TOP, z2), 0.026, steelMat));
-        rig.add(rod(new THREE.Vector3(x, TOP, z), new THREE.Vector3(x, 0, z2), 0.026, steelMat));
+        rig.add(rod(new THREE.Vector3(x, 0, z), new THREE.Vector3(x, TOP, z2), 0.01, steelMat));
+        rig.add(rod(new THREE.Vector3(x, TOP, z), new THREE.Vector3(x, 0, z2), 0.01, steelMat));
       });
     }
   }
@@ -165,24 +165,24 @@ whenIdle(function () {
   const totalLen = (FRAME_COUNT - 1) * SPACING + 1.4;
   const midZ = 0;
   const pipeLines = [
-    { x: -1.1, tier: 1 },
-    { x: -0.3, tier: 1 },
-    { x: 0.5, tier: 2 },
-    { x: 1.1, tier: 2 },
-    { x: -0.6, tier: 3 },
-    { x: 0.7, tier: 3 },
+    { x: -0.35, tier: 1 },
+    { x: -0.1, tier: 1 },
+    { x: 0.16, tier: 2 },
+    { x: 0.35, tier: 2 },
+    { x: -0.2, tier: 3 },
+    { x: 0.22, tier: 3 },
   ];
   pipeLines.forEach((p) => {
-    const y = TIERS[p.tier] + 0.09;
+    const y = TIERS[p.tier] + 0.03;
     rig.add(rod(
       new THREE.Vector3(p.x, y, midZ - totalLen / 2),
       new THREE.Vector3(p.x, y, midZ + totalLen / 2),
-      0.055, pipeMat, 6
+      0.02, pipeMat, 6
     ));
   });
 
-  rig.position.z = -1.5;
-  rig.rotation.y = 0.12;
+  rig.position.z = 0;
+  rig.rotation.y = 0.1;
 
   /* ---------- theme-aware palette ---------- */
   function applyTheme() {

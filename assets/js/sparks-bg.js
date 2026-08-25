@@ -1,5 +1,5 @@
 /* ============================================================
-   Mijdaf — ambient "welding sparks" background.
+   MiArabia — ambient "welding sparks" background.
    A sparse, full-viewport 2D canvas that sits fixed behind every
    section on the page. Small bursts of hot orange sparks fire off
    at random points, arc briefly under gravity, cool from white-hot
