@@ -210,9 +210,12 @@
   }
   .eyebrow::before{
     content:"";
-    width:22px;height:1px;
-    background:var(--orange);
+    width:7px;height:7px;
+    border:1.6px solid var(--orange);
+    background:transparent;
+    transform:rotate(45deg);
     display:inline-block;
+    flex-shrink:0;
   }
 
   h1,h2,h3,h4{
@@ -583,9 +586,9 @@
   }
   .section-head p{
     margin-top:16px;
-    font-size:19px;
+    font-size:20.5px;
     color:var(--text-soft);
-    line-height:1.7;
+    line-height:1.75;
   }
 
   /* Underline that draws itself under the heading once the section-head has revealed */
@@ -1338,6 +1341,42 @@
   .why .wrap{position:relative;z-index:2;}
   .why .section-head h2{color:var(--heading);}
   .why .section-head p{color:var(--text-soft);}
+  .why-caption{
+    color:var(--heading);
+    font-size:clamp(19px,1.9vw,22px);
+    font-weight:800;
+    line-height:1.6;
+    margin-top:8px;
+    margin-bottom:40px;
+    padding-inline-start:18px;
+    border-inline-start:3px solid var(--orange);
+  }
+  .why-closing{
+    color:var(--heading);
+    font-size:clamp(22px,2.2vw,28px);
+    font-weight:800;
+    line-height:1.5;
+    letter-spacing:-.01em;
+    text-align:center;
+    max-width:640px;
+    margin:64px auto 0;
+    padding-top:32px;
+    position:relative;
+  }
+  .why-closing::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:50%;
+    transform:translateX(-50%);
+    width:64px;
+    height:3px;
+    border-radius:999px;
+    background:linear-gradient(90deg, var(--orange), color-mix(in srgb, var(--orange) 30%, transparent));
+  }
+  @media (max-width:760px){
+    .why-closing{margin-top:44px; padding-top:26px;}
+  }
 
   /* Deliberately NOT a card grid — services already owns that pattern.
      "Why us" reads as a numbered index list instead: big mono numerals,
@@ -1405,7 +1444,7 @@
     .why-row::after{display:none;}
   }
   .why-index{
-    font-family:var(--font-mono);
+    font-family:var(--font-display);
     font-size:38px;
     font-weight:800;
     line-height:1;
@@ -1431,8 +1470,8 @@
   }
   .why-icon svg{width:26px;height:26px;}
   .why-row-body{flex:1; min-width:0; display:flex; align-items:baseline; gap:18px; flex-wrap:wrap;}
-  .why-row h4{color:var(--heading); font-size:20px; font-weight:800; letter-spacing:-.01em; flex-shrink:0; min-width:210px;}
-  .why-row p{color:var(--text-soft); font-size:16px; font-weight:400; line-height:1.7; margin:0; flex:1; min-width:220px;}
+  .why-row h4{color:var(--heading); font-size:21px; font-weight:800; letter-spacing:-.01em; flex-shrink:0; min-width:210px;}
+  .why-row p{color:var(--text-soft); font-size:17px; font-weight:400; line-height:1.75; margin:0; flex:1; min-width:220px;}
   .why-row-arrow{
     flex-shrink:0;
     width:22px; height:22px;
@@ -1447,9 +1486,12 @@
   @media (max-width:760px){
     .why-row{flex-wrap:wrap; gap:16px; padding:26px 4px;}
     .why-row-body{gap:6px;}
-    .why-row h4{min-width:0; width:100%;}
+    .why-row h4{min-width:0; width:100%; font-size:21px;}
+    .why-row p{font-size:17px; line-height:1.75;}
     .why-row-arrow{display:none;}
     .why-index{font-size:28px; width:40px;}
+    .why-icon{width:44px; height:44px;}
+    .why-icon svg{width:20px; height:20px;}
   }
 
   /* Hover-only enhancements — scoped to real hover-capable pointers (mouse)
