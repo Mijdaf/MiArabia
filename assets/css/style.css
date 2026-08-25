@@ -97,8 +97,25 @@
     overflow-x:hidden;
   }
 
+  /* Ambient 3D pipe-rack background: fixed behind every section, full
+     viewport, sitting further back than the sparks layer so the sparks
+     read as flying in front of the steelwork. */
+  #pipeRackCanvas{
+    position:fixed;
+    inset:0;
+    width:100vw;
+    height:100vh;
+    z-index:-2;
+    pointer-events:none;
+    opacity:0.8;
+  }
+  html[data-theme="dark"] #pipeRackCanvas{ opacity:1; }
+  @media (prefers-reduced-motion: reduce){
+    #pipeRackCanvas{ display:none; }
+  }
+
   /* Ambient welding-sparks background: fixed behind every section, full
-     viewport. Sits above the body's own background but below all page
+     viewport. Sits above the pipe-rack layer but below all page
      content (header/modals/etc. all sit in the hundreds/thousands). */
   #sparksCanvas{
     position:fixed;
@@ -620,8 +637,8 @@
   }
 
   /* ---------- about ---------- */
-  .about{background:color-mix(in srgb, var(--surface-2) 82%, transparent);}
-  html[data-theme="dark"] .about{background:color-mix(in srgb, var(--surface-2) 40%, transparent);}
+  .about{background:color-mix(in srgb, var(--surface-2) 70%, transparent);}
+  html[data-theme="dark"] .about{background:color-mix(in srgb, var(--surface-2) 30%, transparent);}
   .about .wrap{
     display:flex;
     flex-direction:column;
@@ -1306,8 +1323,8 @@
   }
 
   /* ---------- why us ---------- */
-  .why{background:var(--surface-2);color:var(--heading);position:relative;overflow:hidden;}
-  html[data-theme="dark"] .why{background:var(--navy-deep);color:var(--white);}
+  .why{background:color-mix(in srgb, var(--surface-2) 72%, transparent);color:var(--heading);position:relative;overflow:hidden;}
+  html[data-theme="dark"] .why{background:color-mix(in srgb, var(--navy-deep) 32%, transparent);color:var(--white);}
   #whyCanvas{
     position:absolute;
     inset:0;
@@ -1491,8 +1508,8 @@
   }
 
   /* ---------- contact ---------- */
-  .contact{background:color-mix(in srgb, var(--surface-2) 82%, transparent);}
-  html[data-theme="dark"] .contact{background:color-mix(in srgb, var(--surface-2) 40%, transparent);}
+  .contact{background:color-mix(in srgb, var(--surface-2) 70%, transparent);}
+  html[data-theme="dark"] .contact{background:color-mix(in srgb, var(--surface-2) 30%, transparent);}
   .contact .wrap{
     display:grid;
     grid-template-columns:0.85fr 1.15fr;
@@ -1943,11 +1960,11 @@
 
   /* ---------- footer ---------- */
   footer{
-    background:color-mix(in srgb, var(--black) 82%, transparent);
+    background:color-mix(in srgb, var(--black) 68%, transparent);
     color:#b7bcd6;
     padding:56px 0 26px;
   }
-  html[data-theme="dark"] footer{background:color-mix(in srgb, var(--black) 45%, transparent);}
+  html[data-theme="dark"] footer{background:color-mix(in srgb, var(--black) 34%, transparent);}
   footer .wrap{
     display:grid;
     grid-template-columns:1.4fr 1fr 1fr;
