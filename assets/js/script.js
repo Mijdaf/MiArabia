@@ -916,3 +916,52 @@
       if (e.key === 'Escape' && overlay.classList.contains('open')) closeLightbox();
     });
   })();
+
+// ---------- easter egg: click the logo 2x fast ----------
+(function(){
+  const logo = document.querySelector('header .logo');
+  if(!logo) return;
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const EMOJIS = ['🦺','⛑️','🔧','🚧','🧰','⚙️','📐'];
+
+  let clickCount = 0;
+  let resetTimer = null;
+
+  function spawnRain(){
+    if(prefersReducedMotion) return;
+    const count = 28;
+    for(let i = 0; i < count; i++){
+      const span = document.createElement('span');
+      span.className = 'egg-emoji';
+      span.textContent = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
+      span.style.left = (Math.random() * 100) + 'vw';
+      span.style.fontSize = (18 + Math.random() * 22) + 'px';
+      span.style.animationDuration = (2 + Math.random() * 1.6) + 's';
+      span.style.animationDelay = (Math.random() * 0.5) + 's';
+      document.body.appendChild(span);
+      span.addEventListener('animationend', () => span.remove());
+    }
+  }
+
+  function triggerEasterEgg(){
+    if(!prefersReducedMotion){
+      document.body.classList.add('egg-shake');
+      setTimeout(() => document.body.classList.remove('egg-shake'), 550);
+    }
+    spawnRain();
+  }
+
+  logo.addEventListener('click', (e) => {
+    clickCount++;
+    clearTimeout(resetTimer);
+    resetTimer = setTimeout(() => { clickCount = 0; }, 1800);
+
+    if(clickCount >= 2){
+      e.preventDefault();
+      clickCount = 0;
+      triggerEasterEgg();
+    }
+  });
+})();
