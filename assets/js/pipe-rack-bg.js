@@ -109,7 +109,7 @@ whenIdle(function () {
 
   const FRAME_COUNT = isSmall ? 8 : 16;
   const SPACING = 1.15;
-  const HALF_W = 0.55;
+  const HALF_W = 0.85;
   const TIERS = [0, 0.42, 0.85, 1.28]; // base + 3 structural floors, scaled down
   const TOP = TIERS[TIERS.length - 1];
   const startZ = -((FRAME_COUNT - 1) * SPACING) / 2;
@@ -207,15 +207,20 @@ whenIdle(function () {
   resize();
   window.addEventListener('resize', resize);
 
-  /* ---------- gentle pointer parallax (desktop only) ---------- */
+  /* ---------- stronger pointer-driven parallax (desktop only) — both a
+     rotation and a translation shift, so nearer/farther members visibly
+     slide against each other for a real 3D feel, not just a subtle tilt ---------- */
   let targetYaw = rig.rotation.y, targetPitch = 0;
+  let targetOffsetX = 0, targetOffsetY = 0;
   const baseYaw = rig.rotation.y;
   if (!isCoarse && !reduceMotion) {
     window.addEventListener('pointermove', (e) => {
       const nx = (e.clientX / window.innerWidth) - 0.5;
       const ny = (e.clientY / window.innerHeight) - 0.5;
-      targetYaw = baseYaw + nx * 0.12;
-      targetPitch = ny * 0.05;
+      targetYaw = baseYaw + nx * 0.55;
+      targetPitch = ny * 0.24;
+      targetOffsetX = nx * 0.9;
+      targetOffsetY = -ny * 0.35;
     }, { passive: true });
   }
 
@@ -273,8 +278,10 @@ whenIdle(function () {
     const t = clock.getElapsedTime();
 
     if (!reduceMotion) {
-      rig.rotation.y += (targetYaw - rig.rotation.y) * 0.02 + 0.00025;
-      rig.rotation.x += (targetPitch - rig.rotation.x) * 0.02;
+      rig.rotation.y += (targetYaw - rig.rotation.y) * 0.045 + 0.00025;
+      rig.rotation.x += (targetPitch - rig.rotation.x) * 0.045;
+      rig.position.x += (targetOffsetX - rig.position.x) * 0.045;
+      rig.position.y += (targetOffsetY - rig.position.y) * 0.045;
 
       for (const j of jointDots) {
         if (j.sprite.visible) {
