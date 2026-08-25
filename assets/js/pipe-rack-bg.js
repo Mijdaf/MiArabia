@@ -26,7 +26,7 @@ whenIdle(function () {
   /* ---------- renderer ---------- */
   let renderer;
   try {
-    renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: false, powerPreference: 'low-power' });
+    renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: 'low-power' });
   } catch (e) { return; }
 
   /* Bail out entirely on software-rendered GPUs — this scene runs for the
@@ -46,7 +46,11 @@ whenIdle(function () {
     return;
   }
 
-  const pixelRatioCap = isSmall ? 1 : 1.5;
+  /* Phones have high device-pixel-ratios (2–3x); capping to 1x is what was
+     making the rig look blocky/pixelated on phone screens. The scene is
+     cheap (thin line-like geometry, no post-processing) so phones can
+     comfortably render at their native ratio, up to 2x. */
+  const pixelRatioCap = isSmall ? 2 : 1.5;
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, pixelRatioCap));
   renderer.setClearColor(0x000000, 0);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -224,6 +228,22 @@ whenIdle(function () {
     }, { passive: true });
   }
 
+  /* Touch devices don't have hover, so give the rig a gentle response to
+     a finger drag instead — same parallax feel, toned down a bit so it
+     doesn't fight with page scrolling. */
+  if (isCoarse && !reduceMotion) {
+    window.addEventListener('touchmove', (e) => {
+      const touch = e.touches && e.touches[0];
+      if (!touch) return;
+      const nx = (touch.clientX / window.innerWidth) - 0.5;
+      const ny = (touch.clientY / window.innerHeight) - 0.5;
+      targetYaw = baseYaw + nx * 0.35;
+      targetPitch = ny * 0.15;
+      targetOffsetX = nx * 0.55;
+      targetOffsetY = -ny * 0.2;
+    }, { passive: true });
+  }
+
   /* ---------- adaptive quality: preflight bench, then react ---------- */
   let quality = 0; // 0 = full, 1 = reduced, 2 = static-only
   let benchFrames = 0, benchTotal = 0;
@@ -233,15 +253,17 @@ whenIdle(function () {
     const preflightStart = performance.now();
     renderer.render(scene, camera);
     const preflightCost = performance.now() - preflightStart;
-    if (preflightCost > 60) downgradeToStatic();
-    else if (preflightCost > 22) downgradeToReduced();
+    if (preflightCost > 110) downgradeToStatic();
+    else if (preflightCost > 40) downgradeToReduced();
   }
 
   function downgradeToReduced() {
     if (quality >= 1) return;
     quality = 1;
     for (const s of glowSprites) s.visible = false;
-    if (renderer.getPixelRatio() > 1) renderer.setPixelRatio(1);
+    /* Keep the phone's sharper pixel ratio even in reduced mode — only
+       drop it on desktop, where the cap was higher to begin with. */
+    if (!isSmall && renderer.getPixelRatio() > 1) renderer.setPixelRatio(1);
   }
 
   function downgradeToStatic() {
@@ -296,12 +318,12 @@ whenIdle(function () {
     if (quality < 2 && !reduceMotion) {
       benchFrames++;
       benchTotal += cost;
-      if (cost > 60) {
+      if (cost > 110) {
         quality === 0 ? downgradeToReduced() : downgradeToStatic();
       } else if (benchFrames >= BENCH_SAMPLE) {
         const avg = benchTotal / benchFrames;
-        if (quality === 0 && avg > 18) downgradeToReduced();
-        else if (quality === 1 && avg > 18) downgradeToStatic();
+        if (quality === 0 && avg > 30) downgradeToReduced();
+        else if (quality === 1 && avg > 30) downgradeToStatic();
         benchFrames = 0; benchTotal = 0;
       }
       ensureLoop();
