@@ -687,8 +687,8 @@
   @media (max-width:900px){
     .about .wrap{flex-direction:column; align-items:stretch; gap:24px;}
     .about-copy{order:2;}
-    .about-kicker--stacked{align-items:center; margin-top:0; margin-bottom:4px; gap:48px; order:1; width:100%;}
-    .about-kicker-sub{gap:10px; flex-wrap:nowrap; width:100%; justify-content:center;}
+    .about-kicker--stacked{align-items:center; margin-top:0; margin-bottom:36px; gap:48px; order:1; width:100%;}
+    .about-kicker-sub{gap:20px; flex-wrap:nowrap; width:100%; justify-content:center;}
     .about-kicker--stacked .spec-pill-label{font-size:13px;}
     .about-kicker--stacked .spec-pill[data-anchor] .spec-pill-label{font-size:17px;}
     .about-kicker--stacked .spec-pill-icon{width:22px; height:22px;}
@@ -700,7 +700,7 @@
     .why{padding-top:0;}
   }
   @media (max-width:380px){
-    .about-kicker-sub{gap:6px;}
+    .about-kicker-sub{gap:12px;}
     .about-kicker--stacked .spec-pill-label{font-size:11.5px;}
     .about-kicker-sub .spec-pill{padding-inline:9px 4px;}
   }
@@ -884,6 +884,7 @@
     letter-spacing:.01em;
     color:#000;
   }
+  html[data-theme="dark"] .spec-pill[data-anchor] .spec-pill-label{color:#fff;}
   .spec-pill[data-anchor]::before{
     content:"";
     position:absolute;
@@ -1517,8 +1518,8 @@
   }
 
   /* ---------- how we work (process) ---------- */
-  .process{background:var(--surface-2);}
-  html[data-theme="dark"] .process{background:var(--surface-2);}
+  .process{background:color-mix(in srgb, var(--surface-2) 88%, transparent);}
+  html[data-theme="dark"] .process{background:color-mix(in srgb, var(--surface-2) 82%, transparent);}
 
   .process-timeline{
     position:relative;
@@ -1693,7 +1694,21 @@
     .process-step-body{padding-bottom:32px;}
     .process-step-head h4{font-size:19px;}
     .process-step-body p{font-size:16px;}
-    .process-flow{margin-top:44px; padding:18px 20px; font-size:13.5px; border-radius:26px; gap:8px 10px;}
+    .process-flow{
+      margin-top:44px;
+      padding:14px 16px;
+      font-size:11px;
+      border-radius:999px;
+      gap:4px 5px;
+      flex-wrap:nowrap;
+      overflow-x:auto;
+      max-width:100%;
+      scrollbar-width:none;
+      -webkit-overflow-scrolling:touch;
+    }
+    .process-flow::-webkit-scrollbar{display:none;}
+    .process-flow span{white-space:nowrap; flex-shrink:0;}
+    .process-flow-arrow{width:10px; height:10px; flex-shrink:0;}
     .process-closing{margin-top:40px; padding-top:26px;}
   }
   @media (prefers-reduced-motion: reduce){
