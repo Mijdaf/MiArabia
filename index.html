@@ -5,14 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="light dark">
 <script>
-  // Always start in light mode by default. If the visitor has explicitly
-  // toggled dark mode before, honor that saved choice; otherwise ignore
-  // the OS/browser color-scheme preference and stay light.
+  // Always start in dark mode by default. If the visitor has explicitly
+  // toggled light mode before, honor that saved choice; otherwise ignore
+  // the OS/browser color-scheme preference and stay dark.
   (function(){
     try {
       const saved = localStorage.getItem('mijdaf-theme');
-      if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
-    } catch(e) {}
+      if (saved !== 'light') document.documentElement.setAttribute('data-theme', 'dark');
+    } catch(e) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
   })();
 </script>
 <title>مي أرابيا للمقاولات العامة — مقاولات عامة وخدمات صناعية</title>
@@ -170,7 +172,7 @@
       <div class="section-head reveal">
         <div class="eyebrow" data-en="Why Us?">لماذا نحن؟</div>
         <h2 data-en="Because great work starts with the right foundation.">لأن العمل الجيد يبدأ من أساس صحيح.</h2>
-        <p data-en="Mi Arabia was founded with a clear vision: to build a contracting company on a strong professional foundation and deliver work that clients can rely on. We believe that quality execution does not begin on site. It begins long before that—with understanding requirements, precise planning, thorough preparation, and attention to detail.">بدأت Mi Arabia برؤية واضحة: بناء مؤسسة مقاولات تقوم على أساس مهني، وتقدم أعمالًا يمكن الاعتماد عليها. نؤمن أن جودة التنفيذ لا تبدأ عند الموقع، بل قبل ذلك؛ في فهم المتطلبات، ودقة التخطيط، والاستعداد الجيد، والاهتمام بالتفاصيل.</p>
+        <p data-en-html="Mi Arabia was founded with a clear vision:<br>to build a contracting company on a strong professional foundation and deliver work that clients can rely on. We believe that quality execution does not begin on site. It begins long before that—with understanding requirements, precise planning, thorough preparation, and attention to detail.">بدأت Mi Arabia برؤية واضحة:<br>بناء مؤسسة مقاولات تقوم على أساس مهني، وتقدم أعمالًا يمكن الاعتماد عليها. نؤمن أن جودة التنفيذ لا تبدأ عند الموقع، بل قبل ذلك؛ في فهم المتطلبات، ودقة التخطيط، والاستعداد الجيد، والاهتمام بالتفاصيل.</p>
       </div>
 
       <p class="why-caption reveal" data-en="We are at the beginning of our journey, and that is why our focus is on building the right foundation:">نحن في بداية رحلتنا، ولذلك نركز على بناء الأساس الصحيح:</p>
@@ -467,23 +469,15 @@
         <p data-en="We chose to start with Piping &amp; Welding &amp; Fabrication because we want to build real capability around clear areas.">اخترنا أن نبدأ من Piping &amp; Welding &amp; Fabrication لأننا نريد أن نبني قدرات حقيقية حول مجالات واضحة.</p>
         <p data-en="We don't want to be a company that claims to do everything.">لا نريد أن نكون جهة تقول إنها تفعل كل شيء.</p>
         <p data-en="We want to know what we do, grow our ability in it, then widen our scope as our expertise and resources grow.">نريد أن نعرف ما نفعله، ونطوّر قدرتنا عليه، ثم نوسع نطاقنا مع نمو خبرتنا ومواردنا.</p>
-        <p class="focus-highlight">
-          <span class="focus-highlight-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="3"/></svg>
-          </span>
-          <span data-en="We start with clear focus. And grow with real capability.">نبدأ بتركيز واضح وننمو بقدرة حقيقية.</span>
-        </p>
+        <p class="focus-highlight" data-en="We start with clear focus. And grow with real capability.">نبدأ بتركيز واضح وننمو بقدرة حقيقية.</p>
       </div>
       <div class="focus-visual reveal" aria-hidden="true">
         <div class="focus-frame">
-          <div class="focus-corners">
-            <span class="focus-corner focus-corner-tl"></span>
-            <span class="focus-corner focus-corner-tr"></span>
-            <span class="focus-corner focus-corner-bl"></span>
-            <span class="focus-corner focus-corner-br"></span>
-          </div>
-          <span class="focus-crosshair-h"></span>
-          <span class="focus-crosshair-v"></span>
+          <span class="focus-ring focus-ring-outer"></span>
+          <span class="focus-ring focus-ring-inner"></span>
+          <span class="focus-orbit">
+            <span class="focus-orbit-dot"></span>
+          </span>
           <span class="focus-center-dot"></span>
         </div>
       </div>
@@ -603,13 +597,108 @@
     </div>
   </section>
 
-  <!-- CONTACT -->
+  <!-- QUALITY, CAPABILITIES, JOURNEY & AMBITION -->
+  <section class="values" id="values">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow" data-en="Our Approach">نهجنا</div>
+        <h2 data-en="How we work, what we build, and where we're headed.">كيف نعمل، وماذا نبني، وإلى أين نتجه.</h2>
+      </div>
+
+      <div class="values-grid reveal stagger-children">
+
+        <!-- Quality & Safety -->
+        <div class="value-card">
+          <span class="value-tag">01</span>
+          <div class="value-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2l8 4v6c0 5-3.4 8.4-8 10-4.6-1.6-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg>
+          </div>
+          <h3 data-en="Quality &amp; Safety">الجودة والسلامة</h3>
+          <p class="value-lead" data-en="Part of the work, not a stage after it.">جزء من العمل، وليست مرحلة بعده.</p>
+          <p data-en="We treat quality and safety as part of how we execute, from planning through to handover.">نتعامل مع الجودة والسلامة كجزء من طريقة التنفيذ، من التخطيط وحتى التسليم.</p>
+          <ul class="value-checklist">
+            <li data-en="Safety in planning.">السلامة في التخطيط.</li>
+            <li data-en="Precision in execution.">الدقة في التنفيذ.</li>
+            <li data-en="Inspection during the work.">الفحص أثناء العمل.</li>
+            <li data-en="Verification before handover.">التأكد قبل التسليم.</li>
+          </ul>
+          <p data-en="We follow project requirements and relevant work procedures, in line with the nature and scope of each project.">نلتزم بمتطلبات المشروع وإجراءات العمل ذات العلاقة، وبما يتناسب مع طبيعة كل مشروع ونطاقه.</p>
+          <p class="value-note" data-en="Because work done right shows in the details.">لأن العمل المتقن يظهر في التفاصيل.</p>
+        </div>
+
+        <!-- Capabilities -->
+        <div class="value-card">
+          <span class="value-tag">02</span>
+          <div class="value-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          </div>
+          <h3 data-en="Our Capabilities">قدراتنا</h3>
+          <p class="value-lead" data-en="We build our capabilities around the work.">نبني قدراتنا حول العمل.</p>
+          <p data-en="We focus on developing our technical and operational capabilities in:">نركز على تطوير قدراتنا الفنية والتشغيلية في:</p>
+          <div class="value-pills">
+            <span class="value-pill">Piping &amp; Pipe Fitting</span>
+            <span class="value-pill">Welding</span>
+            <span class="value-pill">Fabrication</span>
+            <span class="value-pill">Site Execution</span>
+            <span class="value-pill">Quality &amp; Inspection</span>
+            <span class="value-pill">HSE</span>
+            <span class="value-pill">Workforce &amp; Resources</span>
+          </div>
+          <p data-en="As our operations grow, we work on developing and expanding these capabilities in line with project requirements.">ومع نمو أعمالنا، نعمل على تطوير هذه القدرات وتوسيعها بما يتناسب مع متطلبات المشاريع.</p>
+        </div>
+
+        <!-- Journey -->
+        <div class="value-card">
+          <span class="value-tag">03</span>
+          <div class="value-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+          </div>
+          <h3 data-en="Our Journey">رحلتنا</h3>
+          <p class="value-lead" data-en="We are at the beginning.">نحن في البداية.</p>
+          <p data-en="Mi Arabia is a young company, and for us, this beginning is an opportunity to build the foundation the right way.">Mi Arabia مؤسسة ناشئة، وهذه البداية بالنسبة لنا فرصة لبناء الأساس بالشكل الصحيح.</p>
+          <ul class="value-checklist">
+            <li data-en="Building our team.">نبني فريقنا.</li>
+            <li data-en="Developing our capabilities.">نطور قدراتنا.</li>
+            <li data-en="Establishing our systems.">نؤسس أنظمتنا.</li>
+            <li data-en="Growing our relationships.">نبني علاقاتنا.</li>
+          </ul>
+          <p data-en="We don't want to grow just to grow. We want our capability to grow before our name does.">لا نريد أن نكبر لمجرد أن نكبر. نريد أن تنمو قدرتنا قبل أن يكبر اسمنا.</p>
+        </div>
+
+        <!-- Ambition -->
+        <div class="value-card">
+          <span class="value-tag">04</span>
+          <div class="value-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+          </div>
+          <h3 data-en="Our Ambition">طموحنا</h3>
+          <p class="value-lead" data-en="For the name to grow as much as the capability does.">أن يكبر الاسم بقدر ما تكبر القدرة.</p>
+          <p data-en="Our ambition is to grow Mi Arabia into an establishment with trusted execution capability in the contracting sector.">طموحنا هو تطوير Mi Arabia لتصبح مؤسسة ذات قدرة تنفيذية موثوقة في قطاع المقاولات.</p>
+          <p data-en="We start with Piping, Welding &amp; Fabrication, and build on it step by step as our expertise, team and resources grow.">نبدأ من Piping, Welding &amp; Fabrication، ونبني عليها خطوة بخطوة مع تطور خبرتنا وفريقنا ومواردنا.</p>
+          <p data-en="We don't measure our progress by size alone, but by what we're able to execute better at every stage.">لا نقيس تقدمنا بالحجم فقط، بل بما نستطيع تنفيذه بشكل أفضل في كل مرحلة.</p>
+          <p class="focus-highlight">
+            <span class="focus-highlight-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+            </span>
+            <span data-en="Ambition isn't reaching fast. Ambition is reaching there while deserving to be there.">الطموح ليس أن تصل بسرعة. الطموح أن تصل وأنت مستحق للمكان.</span>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
   <section class="contact dot-field" id="contact">
     <div class="wrap">
       <div class="contact-info reveal stagger-children">
         <div class="eyebrow" data-en="Get In Touch">تواصل معنا</div>
-        <h2 style="margin-top:16px;" data-en="Let's scope your next project.">لنحدد نطاق مشروعك القادم.</h2>
-        <p data-en="Tell us about your site, timeline and the work involved — our team will follow up to plan the right crew and approach.">أخبرنا عن موقعك وجدولك الزمني وطبيعة الأعمال، وسيتواصل معك فريقنا لتحديد الطاقم والأسلوب المناسبين.</p>
+        <h2 style="margin-top:16px;" data-en="Let's build something worth relying on.">لنبني شيئًا يستحق الاعتماد.</h2>
+        <p data-en="Have a project or a partnership opportunity? We'd love to learn about your requirements and discuss the scope of work and project needs.">لديك مشروع أو فرصة تعاون؟ يسعدنا التعرف على متطلباتك ومناقشة نطاق العمل واحتياجات المشروع.</p>
+
+        <div class="contact-signature">
+          <span class="eyebrow-brand" data-en="MI ARABIA">MI ARABIA</span>
+          <span class="contact-signature-sub" data-en="General Contracting">مقاولات عامة</span>
+          <span class="contact-signature-sub" data-en="Piping | Welding | Fabrication">الأنابيب | اللحام | التصنيع</span>
+        </div>
 
         <div class="contact-highlight">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 2"/></svg>
@@ -617,9 +706,9 @@
         </div>
 
         <div class="contact-list">
-          <a class="row" href="https://maps.google.com/?q=Saudi+Arabia" target="_blank" rel="noopener" data-ripple>
+          <a class="row" href="https://maps.google.com/?q=Riyadh+Saudi+Arabia" target="_blank" rel="noopener" data-ripple>
             <span class="ic"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
-            <div><span class="lbl" data-en="Location">الموقع</span><span class="val" data-en="Kingdom of Saudi Arabia">المملكة العربية السعودية</span></div>
+            <div><span class="lbl" data-en="Location">الموقع</span><span class="val" data-en="Riyadh, Saudi Arabia">الرياض، المملكة العربية السعودية</span></div>
             <span class="row-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
           </a>
           <a class="row" href="mailto:info@mijdaf.sa" data-ripple>
