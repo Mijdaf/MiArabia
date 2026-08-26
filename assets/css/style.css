@@ -688,7 +688,7 @@
     .about .wrap{flex-direction:column; align-items:stretch; gap:24px;}
     .about-copy{order:2;}
     .about-kicker--stacked{align-items:center; margin-top:0; margin-bottom:36px; gap:48px; order:1; width:100%;}
-    .about-kicker-sub{gap:20px; flex-wrap:nowrap; width:100%; justify-content:center;}
+    .about-kicker-sub{gap:8px; flex-wrap:nowrap; width:100%; justify-content:space-between;}
     .about-kicker--stacked .spec-pill-label{font-size:13px;}
     .about-kicker--stacked .spec-pill[data-anchor] .spec-pill-label{font-size:17px;}
     .about-kicker--stacked .spec-pill-icon{width:22px; height:22px;}
@@ -1695,20 +1695,21 @@
     .process-step-head h4{font-size:19px;}
     .process-step-body p{font-size:16px;}
     .process-flow{
-      margin-top:44px;
-      padding:14px 16px;
-      font-size:11px;
+      margin:44px auto 0;
+      padding:16px 22px;
+      font-size:14.5px;
       border-radius:999px;
-      gap:4px 5px;
+      gap:6px 8px;
       flex-wrap:nowrap;
       overflow-x:auto;
+      width:fit-content;
       max-width:100%;
       scrollbar-width:none;
       -webkit-overflow-scrolling:touch;
     }
     .process-flow::-webkit-scrollbar{display:none;}
     .process-flow span{white-space:nowrap; flex-shrink:0;}
-    .process-flow-arrow{width:10px; height:10px; flex-shrink:0;}
+    .process-flow-arrow{width:13px; height:13px; flex-shrink:0;}
     .process-closing{margin-top:40px; padding-top:26px;}
   }
   @media (prefers-reduced-motion: reduce){
