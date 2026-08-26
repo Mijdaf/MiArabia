@@ -688,26 +688,28 @@
     min-width:168px;
     justify-content:center;
   }
+  .about-kicker-sub .spec-pill-label{font-size:19px;}
   @media (max-width:900px){
     .about .wrap{flex-direction:column; align-items:stretch; gap:24px;}
     .about-copy{order:2;}
     .about-kicker--stacked{align-items:center; margin-top:0; margin-bottom:36px; gap:48px; order:1; width:100%;}
     .about-kicker-sub{gap:8px; flex-wrap:nowrap; width:100%; justify-content:space-between;}
     .about-kicker-sub .spec-pill{min-width:0; flex:1 1 0; justify-content:center;}
-    .about-kicker--stacked .spec-pill-label{font-size:13px;}
-    .about-kicker--stacked .spec-pill[data-anchor] .spec-pill-label{font-size:17px;}
-    .about-kicker--stacked .spec-pill-icon{width:22px; height:22px;}
-    .about-kicker--stacked .spec-pill-icon svg{width:11px; height:11px;}
+    .about-kicker--stacked .spec-pill-label{font-size:16px;}
+    .about-kicker--stacked .spec-pill[data-anchor] .spec-pill-label{font-size:25px;}
+    .about-kicker--stacked .spec-pill-icon{width:24px; height:24px;}
+    .about-kicker--stacked .spec-pill-icon svg{width:12px; height:12px;}
     .about-kicker--stacked .spec-pill[data-anchor] .spec-pill-icon{width:28px; height:28px;}
     .about-kicker--stacked .spec-pill[data-anchor] .spec-pill-icon svg{width:14px; height:14px;}
-    .about-kicker-sub .spec-pill{padding-block:6px; padding-inline:12px 5px; gap:6px; flex-shrink:0;}
+    .about-kicker-sub .spec-pill{padding-block:5px; padding-inline:8px 4px; gap:5px; flex-shrink:0;}
     .about{padding-bottom:0;}
     .why{padding-top:0;}
   }
   @media (max-width:380px){
-    .about-kicker-sub{gap:12px;}
-    .about-kicker--stacked .spec-pill-label{font-size:11.5px;}
-    .about-kicker-sub .spec-pill{padding-inline:9px 4px;}
+    .about-kicker-sub{gap:8px;}
+    .about-kicker--stacked .spec-pill-label{font-size:14px;}
+    .about-kicker--stacked .spec-pill[data-anchor] .spec-pill-label{font-size:22px;}
+    .about-kicker-sub .spec-pill{padding-inline:6px 3px;}
   }
   .kicker-lines{
     position:absolute;
@@ -884,7 +886,7 @@
   }
   .spec-pill[data-anchor] .spec-pill-icon svg{width:17px; height:17px;}
   .spec-pill[data-anchor] .spec-pill-label{
-    font-size:20px;
+    font-size:26px;
     font-weight:800;
     letter-spacing:.01em;
     color:#000;
