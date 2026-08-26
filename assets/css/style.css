@@ -688,7 +688,7 @@
     .about .wrap{flex-direction:column; align-items:stretch; gap:24px;}
     .about-copy{order:2;}
     .about-kicker--stacked{align-items:center; margin-top:0; margin-bottom:4px; gap:48px; order:1;}
-    .about-kicker-sub{gap:20px;}
+    .about-kicker-sub{gap:40px;}
     .about-kicker--stacked .spec-pill-label{font-size:15px;}
     .about-kicker--stacked .spec-pill[data-anchor] .spec-pill-label{font-size:17px;}
     .about-kicker--stacked .spec-pill-icon{width:26px; height:26px;}
@@ -1510,7 +1510,8 @@
   }
 
   /* ---------- how we work (process) ---------- */
-  .process{background:transparent;}
+  .process{background:color-mix(in srgb, var(--surface-2) 45%, transparent);}
+  html[data-theme="dark"] .process{background:color-mix(in srgb, var(--surface-2) 25%, transparent);}
 
   .process-timeline{
     position:relative;
@@ -1685,7 +1686,7 @@
     .process-step-body{padding-bottom:32px;}
     .process-step-head h4{font-size:19px;}
     .process-step-body p{font-size:16px;}
-    .process-flow{margin-top:44px; padding:16px 18px; font-size:13.5px;}
+    .process-flow{margin-top:44px; padding:18px 20px; font-size:13.5px; border-radius:26px; gap:8px 10px;}
     .process-closing{margin-top:40px; padding-top:26px;}
   }
   @media (prefers-reduced-motion: reduce){
