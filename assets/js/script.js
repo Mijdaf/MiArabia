@@ -1052,7 +1052,7 @@
     const host = kicker.getBoundingClientRect();
     const a = anchor.getBoundingClientRect();
     const x0 = (a.left + a.right) / 2 - host.left;
-    const y0 = a.bottom - host.top;
+    const y0 = a.bottom - host.top + 6;
 
     let markup = '';
     Array.from(container.children).forEach(pill => {

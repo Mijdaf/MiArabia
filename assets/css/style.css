@@ -218,7 +218,7 @@
     flex-shrink:0;
   }
   .eyebrow-brand{
-    font-size:20px;
+    font-size:14px;
     font-weight:800;
     letter-spacing:.12em;
     color:var(--steel);
@@ -684,11 +684,16 @@
     justify-content:center;
     gap:56px;
   }
+  .about-kicker-sub .spec-pill{
+    min-width:168px;
+    justify-content:center;
+  }
   @media (max-width:900px){
     .about .wrap{flex-direction:column; align-items:stretch; gap:24px;}
     .about-copy{order:2;}
     .about-kicker--stacked{align-items:center; margin-top:0; margin-bottom:36px; gap:48px; order:1; width:100%;}
     .about-kicker-sub{gap:8px; flex-wrap:nowrap; width:100%; justify-content:space-between;}
+    .about-kicker-sub .spec-pill{min-width:0; flex:1 1 0; justify-content:center;}
     .about-kicker--stacked .spec-pill-label{font-size:13px;}
     .about-kicker--stacked .spec-pill[data-anchor] .spec-pill-label{font-size:17px;}
     .about-kicker--stacked .spec-pill-icon{width:22px; height:22px;}
@@ -859,9 +864,9 @@
   }
   @keyframes anchorBounce{
     0%{transform:translateY(0);}
-    5%{transform:translateY(-22px);}
+    5%{transform:translateY(-38px);}
     11%{transform:translateY(0);}
-    14%{transform:translateY(-8px);}
+    14%{transform:translateY(-14px);}
     17%{transform:translateY(0);}
     100%{transform:translateY(0);}
   }
@@ -1628,11 +1633,11 @@
     gap:10px 12px;
     text-align:center;
     margin:64px auto 0;
-    padding:20px 26px;
+    padding:0;
     max-width:820px;
-    border-radius:999px;
-    background:color-mix(in srgb, var(--orange) 7%, transparent);
-    border:1px solid color-mix(in srgb, var(--orange) 20%, transparent);
+    border-radius:0;
+    background:none;
+    border:none;
     font-family:var(--font-display);
     font-weight:800;
     font-size:clamp(14px,1.6vw,16px);
@@ -1696,9 +1701,11 @@
     .process-step-body p{font-size:16px;}
     .process-flow{
       margin:44px auto 0;
-      padding:16px 22px;
+      padding:0;
       font-size:14.5px;
-      border-radius:999px;
+      border-radius:0;
+      background:none;
+      border:none;
       gap:6px 8px;
       flex-wrap:nowrap;
       overflow-x:auto;
