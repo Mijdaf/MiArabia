@@ -109,9 +109,54 @@
     pointer-events:none;
     opacity:0.95;
   }
+  /* Ambient "nebula" glow: large, soft, blurred brand-colored blobs
+     sitting furthest back of all — the broad wash of light behind
+     the pinpoint glow-dots and pipe-rack layers. Barely visible in
+     light mode, reads as a soft cosmic wash once dark mode is on. */
+  #ambientGlow{
+    position:fixed;
+    inset:0;
+    width:100vw;
+    height:100vh;
+    z-index:-3;
+    pointer-events:none;
+    opacity:0.5;
+    background:
+      radial-gradient(680px 520px at 88% 8%, rgba(253,87,43,0.16), transparent 70%),
+      radial-gradient(720px 560px at 6% 92%, rgba(22,77,204,0.14), transparent 70%);
+  }
+  html[data-theme="dark"] #ambientGlow{
+    opacity:0.9;
+    background:
+      radial-gradient(680px 520px at 88% 8%, rgba(253,87,43,0.22), transparent 70%),
+      radial-gradient(720px 560px at 6% 92%, rgba(22,77,204,0.2), transparent 70%);
+  }
+  @media (prefers-reduced-motion: reduce){
+    #ambientGlow{ opacity:0.4; }
+  }
+
   html[data-theme="dark"] #pipeRackCanvas{ opacity:1; }
   @media (prefers-reduced-motion: reduce){
     #pipeRackCanvas{ display:none; }
+  }
+
+  /* Ambient glow-dots background: soft twinkling brand-colored dots,
+     sitting between the pipe-rack (further back) and sparks (in
+     front) layers. Barely-there in light mode, more visible once
+     the page goes dark — echoes the reference site's starfield feel
+     without leaning on it visually. */
+  #glowDotsCanvas{
+    position:fixed;
+    inset:0;
+    width:100vw;
+    height:100vh;
+    z-index:-2;
+    pointer-events:none;
+    opacity:0.35;
+  }
+  html[data-theme="dark"] #glowDotsCanvas{ opacity:0.9; }
+  @media (prefers-reduced-motion: reduce){
+    #glowDotsCanvas{ display:none; }
   }
 
   /* Ambient welding-sparks background: fixed behind every section, full
@@ -657,18 +702,47 @@
     line-height:1.8;
   }
   .focus-highlight{
-    margin-top:28px !important;
-    padding:16px 22px;
-    border-radius:14px;
+    margin-top:32px !important;
+    padding:20px 26px;
+    border-radius:16px;
+    display:flex;
+    align-items:center;
+    gap:16px;
+    position:relative;
+    overflow:hidden;
     background:rgba(253,87,43,0.08);
-    border:1px solid rgba(253,87,43,0.22);
+    border:1px solid rgba(253,87,43,0.25);
+    box-shadow:0 12px 28px -14px rgba(253,87,43,0.35);
     color:var(--heading) !important;
     font-size:17.5px !important;
     font-weight:700;
     line-height:1.6 !important;
+    transition:transform .35s var(--ease), box-shadow .35s var(--ease);
   }
+  .focus-highlight::before{
+    content:"";
+    position:absolute;
+    inset-inline-start:0;
+    top:0; bottom:0;
+    width:4px;
+    background:linear-gradient(180deg, var(--orange), var(--steel));
+  }
+  .focus-highlight:hover{
+    transform:translateY(-2px);
+    box-shadow:0 16px 34px -14px rgba(253,87,43,0.45);
+  }
+  .focus-highlight-icon{
+    flex-shrink:0;
+    width:36px; height:36px;
+    display:flex; align-items:center; justify-content:center;
+    border-radius:50%;
+    background:rgba(253,87,43,0.14);
+    color:var(--orange);
+  }
+  .focus-highlight-icon svg{width:18px; height:18px;}
   html[data-theme="dark"] .focus-highlight{
     background:rgba(253,87,43,0.12);
+    border-color:rgba(253,87,43,0.32);
   }
 
   /* animated "camera autofocus" graphic: corner brackets breathing
@@ -1379,7 +1453,8 @@
   .service-back-hint{margin-top:auto; padding-top:14px;}
 
   /* ---------- gallery / our work (bento) ---------- */
-  .gallery{position:relative; overflow:hidden;}
+  .gallery{position:relative; overflow:hidden; background:color-mix(in srgb, var(--surface-2) 82%, transparent);}
+  html[data-theme="dark"] .gallery{background:color-mix(in srgb, var(--surface-2) 40%, transparent);}
   .gallery-grid{
     display:grid;
     grid-template-columns:repeat(4, 1fr);
@@ -2644,7 +2719,9 @@
     .spec-view-icon svg{width:21px; height:21px;}
     .spec-view h4{font-size:19px;}
     .spec-view > p{font-size:16px;}
-    .service-card-inner{height:420px;}
+    .service-card-inner{height:340px;}
+    .service-card-front .service-card-body{justify-content:center;}
+    .service-card-front .service-expand-hint{margin-top:22px; padding-top:0;}
     .services-grid{grid-template-columns:1fr;}
     .form-row{grid-template-columns:1fr;}
     footer .wrap{grid-template-columns:1fr 1fr; gap:28px 20px;}

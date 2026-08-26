@@ -24,7 +24,9 @@
 </head>
 <body>
 
+<div id="ambientGlow" aria-hidden="true"></div>
 <canvas id="pipeRackCanvas" aria-hidden="true"></canvas>
+<canvas id="glowDotsCanvas" aria-hidden="true"></canvas>
 <canvas id="sparksCanvas" aria-hidden="true"></canvas>
 
 <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
@@ -462,10 +464,15 @@
       <div class="focus-copy reveal stagger-children">
         <div class="eyebrow" data-en="Our Focus">تركيزنا</div>
         <h2 data-en="Focus makes the difference.">التركيز يصنع الفرق.</h2>
-        <p data-en="We chose to start with Piping, Welding &amp; Fabrication because we want to build real capability around clear areas.">اخترنا أن نبدأ من Piping, Welding &amp; Fabrication لأننا نريد أن نبني قدرات حقيقية حول مجالات واضحة.</p>
+        <p data-en="We chose to start with Piping &amp; Welding &amp; Fabrication because we want to build real capability around clear areas.">اخترنا أن نبدأ من Piping &amp; Welding &amp; Fabrication لأننا نريد أن نبني قدرات حقيقية حول مجالات واضحة.</p>
         <p data-en="We don't want to be a company that claims to do everything.">لا نريد أن نكون جهة تقول إنها تفعل كل شيء.</p>
         <p data-en="We want to know what we do, grow our ability in it, then widen our scope as our expertise and resources grow.">نريد أن نعرف ما نفعله، ونطوّر قدرتنا عليه، ثم نوسع نطاقنا مع نمو خبرتنا ومواردنا.</p>
-        <p class="focus-highlight" data-en="We start with clear focus. And grow with real capability.">نبدأ بتركيز واضح وننمو بقدرة حقيقية.</p>
+        <p class="focus-highlight">
+          <span class="focus-highlight-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="3"/></svg>
+          </span>
+          <span data-en="We start with clear focus. And grow with real capability.">نبدأ بتركيز واضح وننمو بقدرة حقيقية.</span>
+        </p>
       </div>
       <div class="focus-visual reveal" aria-hidden="true">
         <div class="focus-frame">
@@ -837,6 +844,7 @@
 <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
 
 <script src="assets/js/script.js?v=9"></script>
+<script src="assets/js/glow-dots-bg.js?v=1"></script>
 <script src="assets/js/sparks-bg.js?v=1"></script>
 <script type="module" src="assets/js/pipe-rack-bg.js?v=1"></script>
 </body>
