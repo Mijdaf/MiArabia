@@ -692,8 +692,8 @@
     .about .wrap{flex-direction:column; align-items:stretch; gap:24px;}
     .about-copy{order:2;}
     .about-kicker--stacked{align-items:center; margin-top:0; margin-bottom:36px; gap:48px; order:1; width:100%;}
-    .about-kicker-sub{gap:14px; flex-wrap:nowrap; width:100%; justify-content:center;}
-    .about-kicker-sub .spec-pill{flex:0 0 auto; justify-content:center;}
+    .about-kicker-sub{gap:10px; flex-wrap:nowrap; width:100%; justify-content:space-between;}
+    .about-kicker-sub .spec-pill{flex:1 1 0; min-width:0; justify-content:center;}
     .about-kicker--stacked .spec-pill-label{font-size:16px;}
     .about-kicker--stacked .spec-pill[data-anchor] .spec-pill-label{font-size:25px;}
     .about-kicker--stacked .spec-pill-icon{width:24px; height:24px;}
@@ -1190,7 +1190,20 @@
     text-transform:uppercase;
     color:var(--orange);
   }
+  .service-name-lg{
+    font-size:26px;
+    font-weight:800;
+    letter-spacing:.04em;
+    line-height:1.2;
+  }
   .service-card h3{font-size:20px;color:var(--heading);line-height:1.35; margin-top:4px;}
+  .service-card h3.service-subtitle{
+    font-size:16px;
+    font-weight:600;
+    color:var(--heading);
+    line-height:1.5;
+    margin-top:-4px;
+  }
   .service-card p{font-size:16px;color:var(--text-soft);line-height:1.7;}
   html[data-theme="dark"] .service-tag{color:rgba(255,255,255,0.06);}
   html[data-theme="dark"] .service-card-back .service-tag{color:rgba(255,255,255,0.5);}
