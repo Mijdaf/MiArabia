@@ -303,6 +303,47 @@
   }, { threshold: 0.15 });
   revealEls.forEach(el => revealObs.observe(el));
 
+  // Values (Quality/Capabilities/Journey/Ambition): same staggered reveal +
+  // icon line-draw + touch "sheen" replay pattern used for the why-us rows,
+  // so this section flows like the rest of the site instead of a card grid.
+  const valueItems = document.querySelectorAll('.value-reveal');
+  const valueIsTouchDevice = window.matchMedia('(hover:none), (pointer:coarse)').matches;
+  const valueObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(!entry.isIntersecting) return;
+      const el = entry.target;
+      const idx = parseInt(el.style.getPropertyValue('--i')) || 0;
+      const delay = idx * 110;
+
+      setTimeout(() => {
+        el.classList.add('in');
+
+        const shapes = el.querySelectorAll('.value-icon svg path, .value-icon svg circle, .value-icon svg polygon, .value-icon svg line');
+        shapes.forEach((shape, i) => {
+          if (typeof shape.getTotalLength !== 'function') return;
+          const len = shape.getTotalLength();
+          shape.style.transition = 'none';
+          shape.style.strokeDasharray = len;
+          shape.style.strokeDashoffset = len;
+          requestAnimationFrame(() => {
+            shape.style.transition = `stroke-dashoffset 1s cubic-bezier(.16,.84,.44,1) ${i * 0.15}s`;
+            shape.style.strokeDashoffset = '0';
+          });
+        });
+
+        if (valueIsTouchDevice) {
+          setTimeout(() => {
+            el.classList.add('is-active');
+            setTimeout(() => el.classList.remove('is-active'), 1000);
+          }, 250);
+        }
+      }, delay);
+
+      valueObs.unobserve(el);
+    });
+  }, { threshold: 0.25 });
+  valueItems.forEach(el => valueObs.observe(el));
+
   // ---------- 3D pointer tilt for cards (desktop / precise-pointer only) ----------
   // Skips entirely on touch devices and when the user prefers reduced motion,
   // so mobile never pays for mousemove listeners it can't use.
