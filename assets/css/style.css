@@ -309,6 +309,7 @@
     align-items:center;
     perspective:600px;
     flex-shrink:0;
+    position:relative;
   }
   .logo-img{
     height:42px;
@@ -320,6 +321,108 @@
   }
   .logo:hover .logo-img{
     transform:rotateY(-14deg) rotateX(4deg) translateZ(4px);
+  }
+
+  /* ---------- logo shake easter egg ---------- */
+  .logo-shake-hint{
+    position:absolute;
+    top:calc(100% + 10px);
+    inset-inline-start:50%;
+    transform:translateX(-50%);
+    font-family:var(--font-body);
+    font-size:12px;
+    font-weight:700;
+    white-space:nowrap;
+    color:var(--orange);
+    background:color-mix(in srgb, var(--navy-deep) 88%, transparent);
+    border:1px solid rgba(253,87,43,0.35);
+    padding:4px 10px;
+    border-radius:999px;
+    pointer-events:none;
+    opacity:0;
+    animation:logoHintPulse 2.6s ease-in-out .8s infinite;
+    transition:opacity .3s var(--ease);
+  }
+  html[dir="rtl"] .logo-shake-hint{
+    transform:translateX(50%);
+  }
+  .logo-shake-hint::before{
+    content:"";
+    position:absolute;
+    top:-5px;
+    inset-inline-start:50%;
+    transform:translateX(-50%) rotate(45deg);
+    width:8px;height:8px;
+    background:inherit;
+    border-inline-start:1px solid rgba(253,87,43,0.35);
+    border-block-start:1px solid rgba(253,87,43,0.35);
+  }
+  .logo-shakeable.hint-dismissed .logo-shake-hint{
+    opacity:0 !important;
+    animation:none;
+  }
+  @keyframes logoHintPulse{
+    0%, 100%{opacity:0; transform:translateX(-50%) translateY(0);}
+    15%, 40%{opacity:1; transform:translateX(-50%) translateY(2px);}
+    55%{opacity:0; transform:translateX(-50%) translateY(0);}
+  }
+  html[dir="rtl"] .logo-shake-hint{
+    animation-name:logoHintPulseRTL;
+  }
+  @keyframes logoHintPulseRTL{
+    0%, 100%{opacity:0; transform:translateX(50%) translateY(0);}
+    15%, 40%{opacity:1; transform:translateX(50%) translateY(2px);}
+    55%{opacity:0; transform:translateX(50%) translateY(0);}
+  }
+
+  .logo-img.is-shaking{
+    animation:logoShakeAnim .6s cubic-bezier(.36,.07,.19,.97) both;
+  }
+  @keyframes logoShakeAnim{
+    0%,100%{transform:translateX(0) rotate(0);}
+    10%{transform:translateX(-6px) rotate(-9deg);}
+    20%{transform:translateX(5px) rotate(8deg);}
+    30%{transform:translateX(-5px) rotate(-7deg);}
+    40%{transform:translateX(4px) rotate(6deg);}
+    50%{transform:translateX(-4px) rotate(-5deg);}
+    60%{transform:translateX(3px) rotate(4deg);}
+    70%{transform:translateX(-2px) rotate(-2deg);}
+    80%{transform:translateX(2px) rotate(1deg);}
+    90%{transform:translateX(-1px) rotate(0);}
+  }
+
+  .logo-emoji-burst{
+    position:absolute;
+    top:50%;
+    inset-inline-start:50%;
+    width:0;
+    height:0;
+    pointer-events:none;
+    z-index:5;
+  }
+  .logo-emoji{
+    position:absolute;
+    top:0;
+    left:0;
+    font-size:18px;
+    line-height:1;
+    transform:translate(-50%,-50%) scale(.4);
+    opacity:0;
+    animation:logoEmojiBurst .9s cubic-bezier(.2,.7,.3,1) forwards;
+    will-change:transform, opacity;
+  }
+  @keyframes logoEmojiBurst{
+    0%{ transform:translate(-50%,-50%) scale(.3) rotate(0deg); opacity:0; }
+    18%{ transform:translate(-50%,-50%) scale(1) rotate(var(--rot,0deg)); opacity:1; }
+    100%{
+      transform:translate(calc(-50% + var(--tx,0px)), calc(-50% + var(--ty,0px))) scale(.7) rotate(var(--rot,0deg));
+      opacity:0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .logo-img.is-shaking{ animation:none; }
+    .logo-emoji{ animation:none; display:none; }
+    .logo-shake-hint{ animation:none; opacity:.9; }
   }
 
   nav.primary{

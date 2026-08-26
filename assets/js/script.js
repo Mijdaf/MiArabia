@@ -1203,3 +1203,58 @@
 
   setInterval(reorder, 3000);
 })();
+
+/* ---------- logo shake easter egg ---------- */
+(function(){
+  const logoLink = document.getElementById('logoShake');
+  const logoImg  = document.getElementById('logoImg');
+  if(!logoLink || !logoImg) return;
+
+  const EMOJIS = ['🛠️','🔧','⚙️','🏗️','👷','🔩','✨','🎉'];
+  let shaking = false;
+
+  function spawnEmojis(){
+    const burst = document.createElement('div');
+    burst.className = 'logo-emoji-burst';
+    logoLink.appendChild(burst);
+
+    const count = 8;
+    for(let i = 0; i < count; i++){
+      const span = document.createElement('span');
+      span.className = 'logo-emoji';
+      span.textContent = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
+
+      const angle = (Math.PI * 2 * i) / count + (Math.random() * 0.5 - 0.25);
+      const distance = 46 + Math.random() * 34;
+      const tx = Math.cos(angle) * distance;
+      const ty = Math.sin(angle) * distance - 10;
+      const rot = (Math.random() * 140 - 70) + 'deg';
+
+      span.style.setProperty('--tx', tx.toFixed(1) + 'px');
+      span.style.setProperty('--ty', ty.toFixed(1) + 'px');
+      span.style.setProperty('--rot', rot);
+      span.style.animationDelay = (Math.random() * 80) + 'ms';
+
+      burst.appendChild(span);
+    }
+
+    window.setTimeout(() => burst.remove(), 1100);
+  }
+
+  logoLink.addEventListener('click', (e) => {
+    // Let the anchor still jump to #top, we just layer the fun on top.
+    if(shaking) return;
+    shaking = true;
+
+    logoLink.classList.add('hint-dismissed');
+    logoImg.classList.remove('is-shaking');
+    void logoImg.offsetWidth; // restart animation if clicked again quickly
+    logoImg.classList.add('is-shaking');
+    spawnEmojis();
+
+    window.setTimeout(() => {
+      logoImg.classList.remove('is-shaking');
+      shaking = false;
+    }, 620);
+  });
+})();
