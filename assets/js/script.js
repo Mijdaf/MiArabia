@@ -1031,3 +1031,134 @@
     dodges = 0;
   });
 })();
+
+// About section: capability pills swap places every 3 seconds (FLIP animation)
+// "مقاولات عامة" is the anchor pill, centered above; these three shuffle beneath it.
+// Connector lines are drawn from the anchor down to each child, and stay glued
+// to them (like workflow-diagram links) even while they animate into new spots.
+(function(){
+  const kicker = document.querySelector('[data-kicker]');
+  const anchor = document.querySelector('.spec-pill[data-anchor]');
+  const container = document.querySelector('[data-kicker-sub]');
+  const svg = document.querySelector('[data-kicker-lines]');
+  if(!kicker || !anchor || !container) return;
+
+  let pills = Array.from(container.children);
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---- connector lines (anchor -> each child) ----
+  const drawLines = () => {
+    if(!svg) return;
+    const host = kicker.getBoundingClientRect();
+    const a = anchor.getBoundingClientRect();
+    const x0 = (a.left + a.right) / 2 - host.left;
+    const y0 = a.bottom - host.top;
+
+    let markup = '';
+    Array.from(container.children).forEach(pill => {
+      const c = pill.getBoundingClientRect();
+      const x1 = (c.left + c.right) / 2 - host.left;
+      const y1 = c.top - host.top;
+      const midY = y0 + (y1 - y0) / 2;
+      markup += `<path d="M ${x0} ${y0} C ${x0} ${midY}, ${x1} ${midY}, ${x1} ${y1}"/>`;
+      markup += `<circle cx="${x0}" cy="${y0}" r="4"/><circle cx="${x1}" cy="${y1}" r="4"/>`;
+    });
+    svg.innerHTML = markup;
+  };
+
+  const syncSvgBox = () => {
+    if(!svg) return;
+    const host = kicker.getBoundingClientRect();
+    svg.setAttribute('viewBox', `0 0 ${host.width} ${host.height}`);
+    drawLines();
+  };
+
+  // Keep the lines glued to the pills for the whole ~650ms FLIP transition
+  let rafId = null;
+  const followDuringAnimation = (durationMs) => {
+    const start = performance.now();
+    const step = (now) => {
+      drawLines();
+      if(now - start < durationMs){
+        rafId = requestAnimationFrame(step);
+      } else {
+        rafId = null;
+      }
+    };
+    cancelAnimationFrame(rafId);
+    rafId = requestAnimationFrame(step);
+  };
+
+  window.addEventListener('resize', syncSvgBox);
+  window.addEventListener('load', syncSvgBox);
+  if(document.fonts && document.fonts.ready){
+    document.fonts.ready.then(syncSvgBox).catch(() => {});
+  }
+  syncSvgBox();
+  // Re-check shortly after paint in case web fonts/layout shifted things
+  setTimeout(syncSvgBox, 300);
+
+  // Keep the lines glued to the pills while the section's own fade/rise-in plays
+  const revealWatcher = new MutationObserver(() => {
+    if(kicker.classList.contains('in')) followDuringAnimation(850);
+  });
+  revealWatcher.observe(kicker, { attributes:true, attributeFilter:['class'] });
+
+  if(reduceMotion || pills.length < 2){
+    return; // keep static lines, skip the shuffling below
+  }
+
+  const shuffle = (arr) => {
+    const a = arr.slice();
+    for(let i = a.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  };
+
+  const reorder = () => {
+    if(document.hidden) return;
+
+    // FIRST: record current positions
+    const first = new Map();
+    pills.forEach(pill => first.set(pill, pill.getBoundingClientRect()));
+
+    // Pick a new order guaranteed to differ from the current one
+    let newOrder = shuffle(pills);
+    let attempts = 0;
+    while(newOrder.every((pill, i) => pill === pills[i]) && attempts < 5){
+      newOrder = shuffle(pills);
+      attempts++;
+    }
+
+    // LAST: reflow the DOM into the new order, right after the anchor pill
+    newOrder.forEach(pill => container.appendChild(pill));
+    pills = newOrder;
+
+    // INVERT + PLAY: animate each pill from its old spot to its new one
+    newOrder.forEach(pill => {
+      const last = pill.getBoundingClientRect();
+      const firstRect = first.get(pill);
+      const dx = firstRect.left - last.left;
+      const dy = firstRect.top - last.top;
+      if(!dx && !dy) return;
+
+      window.clearTimeout(pill._flipTimer);
+      pill.style.transition = 'none';
+      pill.style.transform = `translate(${dx}px, ${dy}px)`;
+      void pill.offsetWidth; // force reflow
+      pill.style.transition = 'transform .6s cubic-bezier(.16,.84,.44,1)';
+      pill.style.transform = 'translate(0, 0)';
+      pill._flipTimer = window.setTimeout(() => {
+        pill.style.transition = '';
+        pill.style.transform = '';
+      }, 620);
+    });
+
+    // Lines follow the pills through the whole transition
+    followDuringAnimation(650);
+  };
+
+  setInterval(reorder, 3000);
+})();
