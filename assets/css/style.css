@@ -312,6 +312,9 @@
   nav.primary a:hover::after,
   nav.primary a.active::after{ right:0; }
 
+  /* "Our Focus" nav entry: mobile menu only, hidden on the desktop bar */
+  nav.primary a.nav-link-mobile-only{display:none;}
+
   .header-actions{display:flex;align-items:center;gap:14px;}
 
   .lang-toggle{
@@ -625,6 +628,113 @@
     will-change:transform, opacity;
   }
   .reveal.in{opacity:1; transform:translateY(0) rotateX(0) translateZ(0);}
+
+  /* ---------- Our Focus ---------- */
+  .focus{
+    background:var(--surface);
+  }
+  html[data-theme="dark"] .focus{
+    background:color-mix(in srgb, var(--surface-2) 40%, transparent);
+  }
+  .focus .wrap{
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:48px;
+  }
+  .focus-copy{max-width:680px; flex:1 1 460px;}
+  .focus-copy h2{
+    font-size:clamp(30px,3.6vw,42px);
+    margin-top:16px;
+    line-height:1.2;
+  }
+  .focus-copy p{
+    margin-top:18px;
+    font-size:18px;
+    color:var(--text-soft);
+    line-height:1.8;
+  }
+  .focus-highlight{
+    margin-top:28px !important;
+    padding:16px 22px;
+    border-radius:14px;
+    background:rgba(253,87,43,0.08);
+    border:1px solid rgba(253,87,43,0.22);
+    color:var(--heading) !important;
+    font-size:17.5px !important;
+    font-weight:700;
+    line-height:1.6 !important;
+  }
+  html[data-theme="dark"] .focus-highlight{
+    background:rgba(253,87,43,0.12);
+  }
+
+  /* animated "camera autofocus" graphic: corner brackets breathing
+     in and out, echoing the section's message — locking in on focus */
+  .focus-visual{
+    flex:0 0 auto;
+    width:240px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .focus-frame{
+    position:relative;
+    width:190px;
+    height:190px;
+  }
+  .focus-corners{
+    position:absolute;
+    inset:0;
+    animation:focusBreathe 3.2s ease-in-out infinite;
+  }
+  .focus-corner{
+    position:absolute;
+    width:38px;
+    height:38px;
+    border:3px solid var(--orange);
+  }
+  .focus-corner-tl{top:0; left:0; border-right:none; border-bottom:none; border-radius:8px 0 0 0;}
+  .focus-corner-tr{top:0; right:0; border-left:none; border-bottom:none; border-radius:0 8px 0 0;}
+  .focus-corner-bl{bottom:0; left:0; border-right:none; border-top:none; border-radius:0 0 0 8px;}
+  .focus-corner-br{bottom:0; right:0; border-left:none; border-top:none; border-radius:0 0 8px 0;}
+  .focus-crosshair-h,.focus-crosshair-v{
+    position:absolute;
+    top:50%; left:50%;
+    background:rgba(253,87,43,0.4);
+    transform:translate(-50%,-50%);
+  }
+  .focus-crosshair-h{width:24px; height:2px;}
+  .focus-crosshair-v{width:2px; height:24px;}
+  .focus-center-dot{
+    position:absolute;
+    top:50%; left:50%;
+    width:10px; height:10px;
+    border-radius:50%;
+    background:var(--orange);
+    transform:translate(-50%,-50%);
+    animation:focusBlink 3.2s ease-in-out infinite;
+  }
+  @keyframes focusBreathe{
+    0%,100%{transform:scale(1);}
+    50%{transform:scale(.82);}
+  }
+  @keyframes focusBlink{
+    0%,100%{opacity:1; box-shadow:0 0 0 6px rgba(253,87,43,0.12);}
+    50%{opacity:.5; box-shadow:0 0 0 10px rgba(253,87,43,0.06);}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .focus-corners,.focus-center-dot{animation:none;}
+  }
+  @media (max-width:900px){
+    .focus .wrap{flex-direction:column-reverse; align-items:stretch; gap:32px;}
+    .focus-visual{width:100%;}
+    .focus-frame{width:140px; height:140px; margin:0 auto;}
+    .focus-corner{width:28px; height:28px;}
+  }
+
 
   /* ---------- nested stagger reveal ----------
      Applies a soft fade+rise to the direct children of a .reveal element,
@@ -1249,6 +1359,19 @@
     justify-content:center;
   }
   .service-card-front .service-expand-hint{
+    align-self:center;
+  }
+
+  /* center the back face content too */
+  .service-card-back{
+    align-items:center;
+    text-align:center;
+  }
+  .service-card-back ul{
+    width:fit-content;
+    margin-inline:auto;
+  }
+  .service-card-back .service-expand-hint{
     align-self:center;
   }
   .service-expand-hint svg{width:14px; height:14px;}
@@ -2490,6 +2613,7 @@
     nav.primary a::after{display:none;}
     nav.primary a:hover,
     nav.primary a.active{color:var(--orange);}
+    nav.primary a.nav-link-mobile-only{display:flex;}
     .nav-icon{color:#8b95c9; flex-shrink:0;}
     .nav-icon svg{width:20px; height:20px;}
     .nav-toggle{display:flex;}
