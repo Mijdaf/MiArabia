@@ -1181,9 +1181,10 @@
     display:flex;
     align-items:center;
     gap:12px;
+    margin-bottom:18px;
   }
   .service-name{
-    font-family:var(--font-mono);
+    font-family:var(--font-body);
     font-size:13px;
     font-weight:700;
     letter-spacing:.14em;
@@ -1237,6 +1238,18 @@
     font-weight:700;
     letter-spacing:.02em;
     color:var(--orange);
+  }
+
+  /* center the front face content only; back face stays as-is */
+  .service-card-front .service-card-body{
+    align-items:center;
+    text-align:center;
+  }
+  .service-card-front .service-card-head{
+    justify-content:center;
+  }
+  .service-card-front .service-expand-hint{
+    align-self:center;
   }
   .service-expand-hint svg{width:14px; height:14px;}
   .service-card-front .service-expand-hint{margin-top:auto; padding-top:14px;}
