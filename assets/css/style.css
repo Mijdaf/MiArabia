@@ -1,4 +1,4 @@
-  @font-face{
+@font-face{
     font-family:'Tajawal';
     src:url('../fonts/Tajawal-Regular.ttf') format('truetype');
     font-weight:400; font-style:normal; font-display:swap;
@@ -287,16 +287,32 @@
     top:0;
     z-index:100;
     padding:18px 0;
+    background:transparent;
+    backdrop-filter:none;
+    -webkit-backdrop-filter:none;
+    border-bottom:1px solid transparent;
+    transition:border-color .3s var(--ease), background .3s var(--ease), padding .3s var(--ease), backdrop-filter .3s var(--ease);
+  }
+  header.scrolled{
     background:var(--header-bg);
     backdrop-filter:blur(14px) saturate(140%);
     -webkit-backdrop-filter:blur(14px) saturate(140%);
-    border-bottom:1px solid transparent;
-    transition:border-color .3s var(--ease), background .3s var(--ease), padding .3s var(--ease);
-  }
-  header.scrolled{
     border-bottom-color:var(--border);
     padding:12px 0;
   }
+
+  /* Over the hero (not yet scrolled) the header is fully transparent, so
+     force light/white text & controls regardless of the light/dark theme,
+     since the hero background underneath is always the same dark navy. */
+  header:not(.scrolled) nav.primary a{ color:#fff; }
+  header:not(.scrolled) .nav-icon{ color:#a9b3dd; }
+  header:not(.scrolled) nav.primary a:hover .nav-icon,
+  header:not(.scrolled) nav.primary a.active .nav-icon{ color:var(--orange); }
+  header:not(.scrolled) .btn-ghost{ color:#fff; border-color:rgba(255,255,255,0.35); }
+  header:not(.scrolled) .btn-ghost:hover{ background:rgba(255,255,255,0.16); color:#fff; border-color:rgba(255,255,255,0.55); }
+  header:not(.scrolled) .nav-toggle{ border-color:rgba(255,255,255,0.35); }
+  header:not(.scrolled) .nav-toggle span{ background:#fff; }
+  header:not(.scrolled) .logo-shake-hint{ color:var(--orange); }
   header .wrap{
     display:flex;
     align-items:center;
@@ -761,9 +777,9 @@
   /* reveal (3D) */
   .reveal{
     opacity:0;
-    transform:translateY(30px) rotateX(-10deg) translateZ(-30px);
+    transform:translateY(48px) rotateX(-16deg) translateZ(-50px);
     transform-origin:top center;
-    transition:opacity .8s var(--ease), transform .8s var(--ease);
+    transition:opacity .95s var(--ease), transform .95s var(--ease);
     will-change:transform, opacity;
   }
   .reveal.in{opacity:1; transform:translateY(0) rotateX(0) translateZ(0);}
@@ -1360,14 +1376,14 @@
   }
   .service-reveal{
     opacity:0;
-    transform:translateY(34px) rotateX(-16deg) scale(.95);
+    transform:translateY(50px) rotateX(-22deg) scale(.9);
     transform-origin:bottom center;
     will-change:transform, opacity;
   }
   .service-reveal.in{
     opacity:1;
     transform:translateY(0) rotateX(0) scale(1);
-    transition:opacity .7s cubic-bezier(.16,.84,.44,1), transform .6s cubic-bezier(.16,.84,.44,1);
+    transition:opacity .85s cubic-bezier(.16,.84,.44,1), transform .75s cubic-bezier(.16,.84,.44,1);
   }
   .service-card{
     position:relative;
@@ -1601,19 +1617,19 @@
   }
   .value-reveal{
     opacity:0;
-    transform:translateY(28px);
+    transform:translateY(44px) scale(.97);
     will-change:transform, opacity;
   }
   .value-reveal.in{
     opacity:1;
-    transform:translateY(0);
+    transform:translateY(0) scale(1);
   }
   .value-row{
     position:relative;
     background:transparent;
     padding:44px 4px;
     border-bottom:1px solid var(--border);
-    transition:opacity .6s cubic-bezier(.16,.84,.44,1), transform .5s cubic-bezier(.16,.84,.44,1), padding-inline-end .35s var(--ease);
+    transition:opacity .85s cubic-bezier(.16,.84,.44,1), transform .75s cubic-bezier(.16,.84,.44,1), padding-inline-end .35s var(--ease);
     overflow:hidden;
   }
   /* Accent panel sweeping in from the trailing edge on hover, matching
@@ -1809,14 +1825,14 @@
 
   .gallery-reveal{
     opacity:0;
-    transform:translateY(30px) rotateX(-12deg) scale(.96);
+    transform:translateY(46px) rotateX(-18deg) scale(.91);
     transform-origin:bottom center;
     will-change:transform, opacity;
   }
   .gallery-reveal.in{
     opacity:1;
     transform:translateY(0) rotateX(0) scale(1);
-    transition:opacity .75s cubic-bezier(.16,.84,.44,1), transform .7s cubic-bezier(.16,.84,.44,1);
+    transition:opacity .9s cubic-bezier(.16,.84,.44,1), transform .85s cubic-bezier(.16,.84,.44,1);
   }
 
   .gallery-item img{
@@ -2107,8 +2123,8 @@
     flex-direction:row-reverse;
     gap:28px;
     opacity:0;
-    transform:translateY(24px);
-    transition:opacity .6s cubic-bezier(.16,.84,.44,1), transform .6s cubic-bezier(.16,.84,.44,1);
+    transform:translateY(40px);
+    transition:opacity .85s cubic-bezier(.16,.84,.44,1), transform .85s cubic-bezier(.16,.84,.44,1);
     transition-delay:calc(var(--i) * .08s);
   }
   .process-step.in{opacity:1; transform:translateY(0);}
@@ -2308,12 +2324,12 @@
   }
   .why-reveal{
     opacity:0;
-    transform:translateY(28px);
+    transform:translateY(44px) scale(.97);
     will-change:transform, opacity;
   }
   .why-reveal.in{
     opacity:1;
-    transform:translateY(0);
+    transform:translateY(0) scale(1);
   }
   .why-row{
     position:relative;
@@ -2323,7 +2339,7 @@
     gap:28px;
     padding:34px 4px;
     border-bottom:1px solid var(--border);
-    transition:opacity .6s cubic-bezier(.16,.84,.44,1), transform .5s cubic-bezier(.16,.84,.44,1), padding-inline-end .35s var(--ease);
+    transition:opacity .85s cubic-bezier(.16,.84,.44,1), transform .75s cubic-bezier(.16,.84,.44,1), padding-inline-end .35s var(--ease);
     overflow:hidden;
   }
   /* Accent panel that sweeps in from the trailing (start) edge on hover —
@@ -3097,9 +3113,12 @@
     .hero-actions .btn svg{display:none;}
 
     /* Lighter 3D on small screens: keep the effect, cut the GPU cost */
-    .reveal{transform:translateY(22px) rotateX(-6deg) translateZ(0);}
-    .service-reveal{transform:translateY(24px) rotateX(-8deg) scale(.96);}
-    .why-reveal{transform:translateY(28px) rotateX(-10deg) scale(.95);}
+    .reveal{transform:translateY(34px) rotateX(-8deg) translateZ(0);}
+    .service-reveal{transform:translateY(38px) rotateX(-10deg) scale(.93);}
+    .why-reveal{transform:translateY(40px) rotateX(-12deg) scale(.93);}
+    .gallery-reveal{transform:translateY(36px) rotateX(-10deg) scale(.93);}
+    .value-reveal{transform:translateY(36px) scale(.95);}
+    .process-step{transform:translateY(30px);}
     .hero-content{will-change:auto;}
   }
   @media (hover:none), (pointer:coarse){
