@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
 <script>
   // Always start in dark mode by default. If the visitor has explicitly
@@ -249,85 +249,66 @@
         <p data-en="Every project begins with a clear understanding and ends with a clear delivery.">كل مشروع يبدأ بفهم واضح، وينتهي بتسليم واضح.</p>
       </div>
 
-      <div class="process-timeline">
-        <div class="process-step reveal" style="--i:0">
-          <div class="process-step-rail" aria-hidden="true">
-            <span class="process-step-node">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.5-4.5"/></svg>
-            </span>
-            <span class="process-step-connector"></span>
-          </div>
-          <div class="process-step-body">
-            <div class="process-step-head">
-              <span class="process-step-num">01</span>
-              <h4 data-en="Understand">نفهم</h4>
-            </div>
-            <p data-en="We review the scope of work, drawings, specifications, and technical requirements.">نراجع نطاق العمل والرسومات والمواصفات والمتطلبات الفنية.</p>
-          </div>
-        </div>
+      <div class="process-circles">
+        <button type="button" class="process-circle reveal" style="--i:0" data-process-circle
+          data-num="01"
+          data-title-ar="نفهم" data-title-en="Understand"
+          data-text-ar="نراجع نطاق العمل والرسومات والمواصفات والمتطلبات الفنية." data-text-en="We review the scope of work, drawings, specifications, and technical requirements."
+          aria-haspopup="dialog">
+          <span class="process-circle-ring">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.5-4.5"/></svg>
+          </span>
+          <span class="process-circle-num">01</span>
+          <span class="process-circle-label" data-en="Understand">نفهم</span>
+        </button>
 
-        <div class="process-step reveal" style="--i:1">
-          <div class="process-step-rail" aria-hidden="true">
-            <span class="process-step-node">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3h6v3H9zM8 11h8M8 15h5"/></svg>
-            </span>
-            <span class="process-step-connector"></span>
-          </div>
-          <div class="process-step-body">
-            <div class="process-step-head">
-              <span class="process-step-num">02</span>
-              <h4 data-en="Plan">نخطط</h4>
-            </div>
-            <p data-en="We define the execution methodology, resources, safety requirements, and quality standards.">نحدد منهجية التنفيذ والموارد ومتطلبات السلامة والجودة.</p>
-          </div>
-        </div>
+        <button type="button" class="process-circle reveal" style="--i:1" data-process-circle
+          data-num="02"
+          data-title-ar="نخطط" data-title-en="Plan"
+          data-text-ar="نحدد منهجية التنفيذ والموارد ومتطلبات السلامة والجودة." data-text-en="We define the execution methodology, resources, safety requirements, and quality standards."
+          aria-haspopup="dialog">
+          <span class="process-circle-ring">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3h6v3H9zM8 11h8M8 15h5"/></svg>
+          </span>
+          <span class="process-circle-num">02</span>
+          <span class="process-circle-label" data-en="Plan">نخطط</span>
+        </button>
 
-        <div class="process-step reveal" style="--i:2">
-          <div class="process-step-rail" aria-hidden="true">
-            <span class="process-step-node">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M19.4 13a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1.04 1.56V19a2 2 0 1 1-4 0v-.09A1.7 1.7 0 0 0 8.96 17.7a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 13a1.7 1.7 0 0 0-1.56-1.04H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.6 6.96a1.7 1.7 0 0 0-.34-1.87l-.06-.06A2 2 0 1 1 7.03 2.2l.06.06A1.7 1.7 0 0 0 8.96 2.6a1.7 1.7 0 0 0 1.04-1.56V1a2 2 0 1 1 4 0v.09A1.7 1.7 0 0 0 15.04 2.6a1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V7a1.7 1.7 0 0 0 1.56 1.04H21a2 2 0 1 1 0 4h-.09A1.7 1.7 0 0 0 19.4 13z"/></svg>
-            </span>
-            <span class="process-step-connector"></span>
-          </div>
-          <div class="process-step-body">
-            <div class="process-step-head">
-              <span class="process-step-num">03</span>
-              <h4 data-en="Execute">ننفذ</h4>
-            </div>
-            <p data-en="We turn the plan into organized work, in accordance with the approved requirements.">نحوّل الخطة إلى عمل منظم وفق المتطلبات المعتمدة.</p>
-          </div>
-        </div>
+        <button type="button" class="process-circle reveal" style="--i:2" data-process-circle
+          data-num="03"
+          data-title-ar="ننفذ" data-title-en="Execute"
+          data-text-ar="نحوّل الخطة إلى عمل منظم وفق المتطلبات المعتمدة." data-text-en="We turn the plan into organized work, in accordance with the approved requirements."
+          aria-haspopup="dialog">
+          <span class="process-circle-ring">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M19.4 13a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1.04 1.56V19a2 2 0 1 1-4 0v-.09A1.7 1.7 0 0 0 8.96 17.7a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 13a1.7 1.7 0 0 0-1.56-1.04H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.6 6.96a1.7 1.7 0 0 0-.34-1.87l-.06-.06A2 2 0 1 1 7.03 2.2l.06.06A1.7 1.7 0 0 0 8.96 2.6a1.7 1.7 0 0 0 1.04-1.56V1a2 2 0 1 1 4 0v.09A1.7 1.7 0 0 0 15.04 2.6a1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V7a1.7 1.7 0 0 0 1.56 1.04H21a2 2 0 1 1 0 4h-.09A1.7 1.7 0 0 0 19.4 13z"/></svg>
+          </span>
+          <span class="process-circle-num">03</span>
+          <span class="process-circle-label" data-en="Execute">ننفذ</span>
+        </button>
 
-        <div class="process-step reveal" style="--i:3">
-          <div class="process-step-rail" aria-hidden="true">
-            <span class="process-step-node">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 11l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
-            </span>
-            <span class="process-step-connector"></span>
-          </div>
-          <div class="process-step-body">
-            <div class="process-step-head">
-              <span class="process-step-num">04</span>
-              <h4 data-en="Inspect">نفحص</h4>
-            </div>
-            <p data-en="We verify the quality of the work, its compliance with requirements, and all relevant testing procedures.">نتحقق من جودة الأعمال ومطابقتها للمتطلبات والاختبارات ذات العلاقة.</p>
-          </div>
-        </div>
+        <button type="button" class="process-circle reveal" style="--i:3" data-process-circle
+          data-num="04"
+          data-title-ar="نفحص" data-title-en="Inspect"
+          data-text-ar="نتحقق من جودة الأعمال ومطابقتها للمتطلبات والاختبارات ذات العلاقة." data-text-en="We verify the quality of the work, its compliance with requirements, and all relevant testing procedures."
+          aria-haspopup="dialog">
+          <span class="process-circle-ring">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 11l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+          </span>
+          <span class="process-circle-num">04</span>
+          <span class="process-circle-label" data-en="Inspect">نفحص</span>
+        </button>
 
-        <div class="process-step reveal" style="--i:4">
-          <div class="process-step-rail" aria-hidden="true">
-            <span class="process-step-node">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8M12 13v8"/></svg>
-            </span>
-          </div>
-          <div class="process-step-body">
-            <div class="process-step-head">
-              <span class="process-step-num">05</span>
-              <h4 data-en="Deliver">نسلّم</h4>
-            </div>
-            <p data-en="We complete the works and all handover requirements in accordance with the project scope.">نستكمل الأعمال ومتطلبات التسليم وفق نطاق المشروع.</p>
-          </div>
-        </div>
+        <button type="button" class="process-circle reveal" style="--i:4" data-process-circle
+          data-num="05"
+          data-title-ar="نسلّم" data-title-en="Deliver"
+          data-text-ar="نستكمل الأعمال ومتطلبات التسليم وفق نطاق المشروع." data-text-en="We complete the works and all handover requirements in accordance with the project scope."
+          aria-haspopup="dialog">
+          <span class="process-circle-ring">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8M12 13v8"/></svg>
+          </span>
+          <span class="process-circle-num">05</span>
+          <span class="process-circle-label" data-en="Deliver">نسلّم</span>
+        </button>
       </div>
 
       <div class="process-flow reveal">
@@ -618,90 +599,118 @@
 
         <!-- Quality & Safety -->
         <div class="value-row value-reveal" style="--i:0">
-          <div class="value-head">
-            <span class="value-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2l8 4v6c0 5-3.4 8.4-8 10-4.6-1.6-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg>
+          <button type="button" class="value-head" data-value-toggle aria-expanded="false" aria-controls="value-body-0">
+            <span class="value-head-main">
+              <span class="value-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2l8 4v6c0 5-3.4 8.4-8 10-4.6-1.6-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg>
+              </span>
+              <h3 data-en="Quality &amp; Safety">الجودة والسلامة</h3>
             </span>
-            <h3 data-en="Quality &amp; Safety">الجودة والسلامة</h3>
-          </div>
-          <div class="value-body">
-            <p class="value-lead" data-en="Part of the work, not a stage after it.">جزء من العمل، وليست مرحلة بعده.</p>
-            <p data-en="We treat quality and safety as part of how we execute, from planning through to handover.">نتعامل مع الجودة والسلامة كجزء من طريقة التنفيذ، من التخطيط وحتى التسليم.</p>
-            <ul class="value-checklist">
-              <li data-en="Safety in planning.">السلامة في التخطيط.</li>
-              <li data-en="Precision in execution.">الدقة في التنفيذ.</li>
-              <li data-en="Inspection during the work.">الفحص أثناء العمل.</li>
-              <li data-en="Verification before handover.">التأكد قبل التسليم.</li>
-            </ul>
-            <p data-en="We follow project requirements and relevant work procedures, in line with the nature and scope of each project.">نلتزم بمتطلبات المشروع وإجراءات العمل ذات العلاقة، وبما يتناسب مع طبيعة كل مشروع ونطاقه.</p>
-            <p class="value-note" data-en="Because work done right shows in the details.">لأن العمل المتقن يظهر في التفاصيل.</p>
+            <span class="value-chevron" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            </span>
+          </button>
+          <div class="value-body-collapse" id="value-body-0">
+            <div class="value-body">
+              <p class="value-lead" data-en="Part of the work, not a stage after it.">جزء من العمل، وليست مرحلة بعده.</p>
+              <p data-en="We treat quality and safety as part of how we execute, from planning through to handover.">نتعامل مع الجودة والسلامة كجزء من طريقة التنفيذ، من التخطيط وحتى التسليم.</p>
+              <ul class="value-checklist">
+                <li data-en="Safety in planning.">السلامة في التخطيط.</li>
+                <li data-en="Precision in execution.">الدقة في التنفيذ.</li>
+                <li data-en="Inspection during the work.">الفحص أثناء العمل.</li>
+                <li data-en="Verification before handover.">التأكد قبل التسليم.</li>
+              </ul>
+              <p data-en="We follow project requirements and relevant work procedures, in line with the nature and scope of each project.">نلتزم بمتطلبات المشروع وإجراءات العمل ذات العلاقة، وبما يتناسب مع طبيعة كل مشروع ونطاقه.</p>
+              <p class="value-note" data-en="Because work done right shows in the details.">لأن العمل المتقن يظهر في التفاصيل.</p>
+            </div>
           </div>
         </div>
 
         <!-- Capabilities -->
         <div class="value-row value-reveal" style="--i:1">
-          <div class="value-head">
-            <span class="value-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          <button type="button" class="value-head" data-value-toggle aria-expanded="false" aria-controls="value-body-1">
+            <span class="value-head-main">
+              <span class="value-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+              </span>
+              <h3 data-en="Our Capabilities">قدراتنا</h3>
             </span>
-            <h3 data-en="Our Capabilities">قدراتنا</h3>
-          </div>
-          <div class="value-body">
-            <p class="value-lead" data-en="We build our capabilities around the work.">نبني قدراتنا حول العمل.</p>
-            <p data-en="We focus on developing our technical and operational capabilities in:">نركز على تطوير قدراتنا الفنية والتشغيلية في:</p>
-            <div class="value-pills">
-              <span class="value-pill">Piping &amp; Pipe Fitting</span>
-              <span class="value-pill">Welding</span>
-              <span class="value-pill">Fabrication</span>
-              <span class="value-pill">Site Execution</span>
-              <span class="value-pill">Quality &amp; Inspection</span>
-              <span class="value-pill">HSE</span>
-              <span class="value-pill">Workforce &amp; Resources</span>
+            <span class="value-chevron" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            </span>
+          </button>
+          <div class="value-body-collapse" id="value-body-1">
+            <div class="value-body">
+              <p class="value-lead" data-en="We build our capabilities around the work.">نبني قدراتنا حول العمل.</p>
+              <p data-en="We focus on developing our technical and operational capabilities in:">نركز على تطوير قدراتنا الفنية والتشغيلية في:</p>
+              <div class="value-pills">
+                <span class="value-pill">Piping &amp; Pipe Fitting</span>
+                <span class="value-pill">Welding</span>
+                <span class="value-pill">Fabrication</span>
+                <span class="value-pill">Site Execution</span>
+                <span class="value-pill">Quality &amp; Inspection</span>
+                <span class="value-pill">HSE</span>
+                <span class="value-pill">Workforce &amp; Resources</span>
+              </div>
+              <p data-en="As our operations grow, we work on developing and expanding these capabilities in line with project requirements.">ومع نمو أعمالنا، نعمل على تطوير هذه القدرات وتوسيعها بما يتناسب مع متطلبات المشاريع.</p>
             </div>
-            <p data-en="As our operations grow, we work on developing and expanding these capabilities in line with project requirements.">ومع نمو أعمالنا، نعمل على تطوير هذه القدرات وتوسيعها بما يتناسب مع متطلبات المشاريع.</p>
           </div>
         </div>
 
         <!-- Journey -->
         <div class="value-row value-reveal" style="--i:2">
-          <div class="value-head">
-            <span class="value-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+          <button type="button" class="value-head" data-value-toggle aria-expanded="false" aria-controls="value-body-2">
+            <span class="value-head-main">
+              <span class="value-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+              </span>
+              <h3 data-en="Our Journey">رحلتنا</h3>
             </span>
-            <h3 data-en="Our Journey">رحلتنا</h3>
-          </div>
-          <div class="value-body">
-            <p class="value-lead" data-en="We are at the beginning.">نحن في البداية.</p>
-            <p data-en="Mi Arabia is a young company, and for us, this beginning is an opportunity to build the foundation the right way.">Mi Arabia مؤسسة ناشئة، وهذه البداية بالنسبة لنا فرصة لبناء الأساس بالشكل الصحيح.</p>
-            <ul class="value-checklist">
-              <li data-en="Building our team.">نبني فريقنا.</li>
-              <li data-en="Developing our capabilities.">نطور قدراتنا.</li>
-              <li data-en="Establishing our systems.">نؤسس أنظمتنا.</li>
-              <li data-en="Growing our relationships.">نبني علاقاتنا.</li>
-            </ul>
-            <p data-en="We don't want to grow just to grow. We want our capability to grow before our name does.">لا نريد أن نكبر لمجرد أن نكبر. نريد أن تنمو قدرتنا قبل أن يكبر اسمنا.</p>
+            <span class="value-chevron" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            </span>
+          </button>
+          <div class="value-body-collapse" id="value-body-2">
+            <div class="value-body">
+              <p class="value-lead" data-en="We are at the beginning.">نحن في البداية.</p>
+              <p data-en="Mi Arabia is a young company, and for us, this beginning is an opportunity to build the foundation the right way.">Mi Arabia مؤسسة ناشئة، وهذه البداية بالنسبة لنا فرصة لبناء الأساس بالشكل الصحيح.</p>
+              <ul class="value-checklist">
+                <li data-en="Building our team.">نبني فريقنا.</li>
+                <li data-en="Developing our capabilities.">نطور قدراتنا.</li>
+                <li data-en="Establishing our systems.">نؤسس أنظمتنا.</li>
+                <li data-en="Growing our relationships.">نبني علاقاتنا.</li>
+              </ul>
+              <p data-en="We don't want to grow just to grow. We want our capability to grow before our name does.">لا نريد أن نكبر لمجرد أن نكبر. نريد أن تنمو قدرتنا قبل أن يكبر اسمنا.</p>
+            </div>
           </div>
         </div>
 
         <!-- Ambition -->
         <div class="value-row value-reveal" style="--i:3">
-          <div class="value-head">
-            <span class="value-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
-            </span>
-            <h3 data-en="Our Ambition">طموحنا</h3>
-          </div>
-          <div class="value-body">
-            <p class="value-lead" data-en="For the name to grow as much as the capability does.">أن يكبر الاسم بقدر ما تكبر القدرة.</p>
-            <p data-en="Our ambition is to grow Mi Arabia into an establishment with trusted execution capability in the contracting sector.">طموحنا هو تطوير Mi Arabia لتصبح مؤسسة ذات قدرة تنفيذية موثوقة في قطاع المقاولات.</p>
-            <p data-en="We start with Piping, Welding &amp; Fabrication, and build on it step by step as our expertise, team and resources grow.">نبدأ من Piping, Welding &amp; Fabrication، ونبني عليها خطوة بخطوة مع تطور خبرتنا وفريقنا ومواردنا.</p>
-            <p data-en="We don't measure our progress by size alone, but by what we're able to execute better at every stage.">لا نقيس تقدمنا بالحجم فقط، بل بما نستطيع تنفيذه بشكل أفضل في كل مرحلة.</p>
-            <p class="focus-highlight">
-              <span class="focus-highlight-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+          <button type="button" class="value-head" data-value-toggle aria-expanded="false" aria-controls="value-body-3">
+            <span class="value-head-main">
+              <span class="value-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
               </span>
-              <span data-en="Ambition isn't reaching fast. Ambition is reaching there while deserving to be there.">الطموح ليس أن تصل بسرعة. الطموح أن تصل وأنت مستحق للمكان.</span>
-            </p>
+              <h3 data-en="Our Ambition">طموحنا</h3>
+            </span>
+            <span class="value-chevron" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            </span>
+          </button>
+          <div class="value-body-collapse" id="value-body-3">
+            <div class="value-body">
+              <p class="value-lead" data-en="For the name to grow as much as the capability does.">أن يكبر الاسم بقدر ما تكبر القدرة.</p>
+              <p data-en="Our ambition is to grow Mi Arabia into an establishment with trusted execution capability in the contracting sector.">طموحنا هو تطوير Mi Arabia لتصبح مؤسسة ذات قدرة تنفيذية موثوقة في قطاع المقاولات.</p>
+              <p data-en="We start with Piping, Welding &amp; Fabrication, and build on it step by step as our expertise, team and resources grow.">نبدأ من Piping, Welding &amp; Fabrication، ونبني عليها خطوة بخطوة مع تطور خبرتنا وفريقنا ومواردنا.</p>
+              <p data-en="We don't measure our progress by size alone, but by what we're able to execute better at every stage.">لا نقيس تقدمنا بالحجم فقط، بل بما نستطيع تنفيذه بشكل أفضل في كل مرحلة.</p>
+              <p class="focus-highlight">
+                <span class="focus-highlight-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+                </span>
+                <span data-en="Ambition isn't reaching fast. Ambition is reaching there while deserving to be there.">الطموح ليس أن تصل بسرعة. الطموح أن تصل وأنت مستحق للمكان.</span>
+              </p>
+            </div>
           </div>
         </div>
 
@@ -852,6 +861,21 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
       </span>
     </button>
+  </div>
+</div>
+
+<!-- PROCESS STEP MODAL (opened from the "How We Work" circles) -->
+<div class="modal-overlay process-modal-overlay" id="processModalOverlay">
+  <div class="modal-box process-modal-box" role="dialog" aria-modal="true" aria-labelledby="processModalTitle">
+    <button type="button" class="modal-close" data-close-modal aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <div class="process-modal-head">
+      <span class="process-modal-icon" id="processModalIcon" aria-hidden="true"></span>
+      <span class="process-modal-num" id="processModalNum"></span>
+    </div>
+    <h3 id="processModalTitle"></h3>
+    <p id="processModalText"></p>
   </div>
 </div>
 

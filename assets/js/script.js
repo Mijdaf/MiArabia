@@ -303,6 +303,26 @@
   }, { threshold: 0.15 });
   revealEls.forEach(el => revealObs.observe(el));
 
+  // ---------- Whole-screen slide transition (left/right, repeats on every scroll) ----------
+  // Every full section (except the hero, which is already on screen on load)
+  // slides in from the right or left, alternating, and slides back out the
+  // same way when scrolled past — so it replays every time, not just once.
+  // Runs identically on phone and desktop; respects prefers-reduced-motion
+  // via the CSS (.screen-slide under that media query disables the transform).
+  (function(){
+    const screens = Array.from(document.querySelectorAll('main > section'))
+      .filter(el => !el.classList.contains('hero'));
+    screens.forEach((el, i) => {
+      el.classList.add('screen-slide', i % 2 === 0 ? 'dir-r' : 'dir-l');
+    });
+    const screenObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        entry.target.classList.toggle('in', entry.isIntersecting);
+      });
+    }, { threshold: 0.16, rootMargin: '0px 0px -10% 0px' });
+    screens.forEach(el => screenObs.observe(el));
+  })();
+
   // Values (Quality/Capabilities/Journey/Ambition): same staggered reveal +
   // icon line-draw + touch "sheen" replay pattern used for the why-us rows,
   // so this section flows like the rest of the site instead of a card grid.
@@ -343,6 +363,52 @@
     });
   }, { threshold: 0.25 });
   valueItems.forEach(el => valueObs.observe(el));
+
+  // Values accordion: each row (Quality & Safety / Capabilities / Journey /
+  // Ambition) opens on click to reveal its body, closing any other open row
+  // first — a single-open-at-a-time accordion rather than a static list.
+  (function(){
+    const rows = Array.from(document.querySelectorAll('.value-row'));
+    if(!rows.length) return;
+
+    function closeRow(row){
+      const btn = row.querySelector('[data-value-toggle]');
+      const collapse = row.querySelector('.value-body-collapse');
+      row.classList.remove('is-open');
+      if(btn) btn.setAttribute('aria-expanded', 'false');
+      if(collapse) collapse.style.maxHeight = '0px';
+    }
+
+    function openRow(row){
+      const btn = row.querySelector('[data-value-toggle]');
+      const collapse = row.querySelector('.value-body-collapse');
+      row.classList.add('is-open');
+      if(btn) btn.setAttribute('aria-expanded', 'true');
+      if(collapse) collapse.style.maxHeight = collapse.scrollHeight + 'px';
+    }
+
+    rows.forEach(row => {
+      const btn = row.querySelector('[data-value-toggle]');
+      if(!btn) return;
+      btn.addEventListener('click', () => {
+        const wasOpen = row.classList.contains('is-open');
+        rows.forEach(r => { if(r !== row) closeRow(r); });
+        wasOpen ? closeRow(row) : openRow(row);
+      });
+    });
+
+    // Recompute the open panel's height on resize and expose a manual
+    // refresh hook so the language switch (which changes text length) can
+    // keep the currently open panel sized correctly.
+    function refreshOpenRow(){
+      const openRowEl = rows.find(r => r.classList.contains('is-open'));
+      if(!openRowEl) return;
+      const collapse = openRowEl.querySelector('.value-body-collapse');
+      if(collapse) collapse.style.maxHeight = collapse.scrollHeight + 'px';
+    }
+    window.addEventListener('resize', refreshOpenRow);
+    window.__refreshOpenValueRow = refreshOpenRow;
+  })();
 
   // ---------- 3D pointer tilt for cards (desktop / precise-pointer only) ----------
   // Skips entirely on touch devices and when the user prefers reduced motion,
@@ -734,6 +800,11 @@
       labelEls.forEach(l => { l.textContent = lang === 'ar' ? 'English' : 'العربية'; });
 
       try { localStorage.setItem('mijdaf-lang', lang); } catch(e) {}
+
+      if (typeof window.__refreshOpenValueRow === 'function') {
+        // Wait a tick for the text swap above to reflow before measuring.
+        requestAnimationFrame(window.__refreshOpenValueRow);
+      }
     }
 
     document.querySelectorAll('.lang-toggle').forEach(btn => {
@@ -955,6 +1026,61 @@
     });
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && overlay.classList.contains('open')) closeLightbox();
+    });
+  })();
+
+  // Process circles: click a step's icon circle to open a popup with its content
+  (function(){
+    const circles = Array.from(document.querySelectorAll('[data-process-circle]'));
+    const overlay = document.getElementById('processModalOverlay');
+    if (!circles.length || !overlay) return;
+
+    const iconEl = document.getElementById('processModalIcon');
+    const numEl = document.getElementById('processModalNum');
+    const titleEl = document.getElementById('processModalTitle');
+    const textEl = document.getElementById('processModalText');
+    const closeBtn = overlay.querySelector('.modal-close');
+    let lastFocused = null;
+
+    const isEnglish = () => document.documentElement.getAttribute('lang') === 'en';
+
+    function openProcessModal(circle){
+      lastFocused = document.activeElement;
+
+      const svg = circle.querySelector('.process-circle-ring svg');
+      iconEl.innerHTML = svg ? svg.outerHTML : '';
+      numEl.textContent = circle.getAttribute('data-num') || '';
+
+      const titleAr = circle.getAttribute('data-title-ar') || '';
+      const titleEn = circle.getAttribute('data-title-en') || titleAr;
+      const textAr = circle.getAttribute('data-text-ar') || '';
+      const textEn = circle.getAttribute('data-text-en') || textAr;
+      titleEl.textContent = isEnglish() ? titleEn : titleAr;
+      textEl.textContent = isEnglish() ? textEn : textAr;
+
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      setTimeout(() => closeBtn && closeBtn.focus(), 250);
+    }
+
+    function closeProcessModal(){
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+      if (lastFocused) lastFocused.focus();
+    }
+
+    circles.forEach(circle => {
+      circle.addEventListener('click', () => openProcessModal(circle));
+    });
+
+    overlay.querySelectorAll('[data-close-modal]').forEach(btn => {
+      btn.addEventListener('click', closeProcessModal);
+    });
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) closeProcessModal();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && overlay.classList.contains('open')) closeProcessModal();
     });
   })();
 
