@@ -2459,11 +2459,37 @@
   .process-modal-box p{font-size:16px; line-height:1.75; color:var(--text-soft); margin:0;}
 
   @media (max-width:520px){
-    .process-circles{ gap:26px 22px; }
-    .process-circle{ width:104px; }
-    .process-circle-ring{ width:72px; height:72px; }
+    .process-circles{
+      flex-wrap:nowrap;
+      justify-content:flex-start;
+      overflow-x:auto;
+      overflow-y:visible;
+      scroll-snap-type:x proximity;
+      -webkit-overflow-scrolling:touch;
+      scrollbar-width:none;
+      gap:22px;
+      padding-inline:6px;
+      padding-block:14px 12px;
+    }
+    .process-circles::-webkit-scrollbar{display:none;}
+    .process-circle{ width:104px; flex:0 0 auto; scroll-snap-align:center; }
+    .process-circle-ring{ width:72px; height:72px; animation:processCircleWobble 3.2s ease-in-out infinite; animation-delay:calc(var(--i) * .18s); }
     .process-circle-ring svg{ width:24px; height:24px; }
     .process-circle-label{ font-size:14px; }
+    .process-circle:hover .process-circle-ring,
+    .process-circle:focus-visible .process-circle-ring{ transform:none; }
+  }
+
+  @keyframes processCircleWobble{
+    0%, 100%{ transform:rotate(0deg); }
+    20%{ transform:rotate(-6deg); }
+    40%{ transform:rotate(5deg); }
+    60%{ transform:rotate(-3deg); }
+    80%{ transform:rotate(2deg); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .process-circle-ring{ animation:none !important; }
   }
 
   .process-flow{
