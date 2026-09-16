@@ -4,16 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>دخول الأدمن — مي أرابيا</title>
+<title>تسجيل دخول المشرف — مي أرابيا</title>
 <link rel="icon" href="../assets/icon-192.png">
-<link rel="stylesheet" href="dashboard.css?v=4">
+<link rel="stylesheet" href="dashboard.css?v=8">
 </head>
 <body>
 
   <div class="screen" id="screenLogin">
     <div class="panel panel-narrow">
       <img class="brand-mark" src="../assets/mijdaf-mark-orange.png" alt="مي أرابيا">
-      <h1>دخول الأدمن</h1>
+      <h1>تسجيل دخول المشرف</h1>
       <form id="loginForm" class="stack">
         <label>البريد الإلكتروني
           <input type="email" id="loginEmail" required autocomplete="username">
@@ -21,15 +21,30 @@
         <label>كلمة المرور
           <input type="password" id="loginPassword" required autocomplete="current-password">
         </label>
+
+        <!--
+          كابتشا (Google reCAPTCHA) — مجانية تمامًا:
+          1) روح على https://www.google.com/recaptcha/admin/create
+          2) اختار "reCAPTCHA v2" -> "I'm not a robot" Checkbox
+          3) حط دومين موقعك (mijdaf.com مثلاً) في خانة Domains
+          4) هتاخد "Site key" و "Secret key" — انت محتاج بس "Site key" هنا
+          5) استبدل النص PASTE_SITE_KEY_HERE تحت بالمفتاح اللي هتاخده
+          لو سيبت النص PASTE_SITE_KEY_HERE كما هو، الكابتشا هتفضل مخفية والدخول هيشتغل عادي من غيرها.
+        -->
+        <div class="captcha-wrap">
+          <div class="g-recaptcha" data-sitekey="6LcztL4tAAAAAJA6iukHqCFrs9bpw8Z2ubeepjUJ"></div>
+        </div>
+
         <p class="error" id="loginError" hidden></p>
-        <button type="submit" class="btn-primary">دخول</button>
+        <button type="submit" class="btn-primary">تسجيل الدخول</button>
       </form>
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="../assets/js/supabase-config.js?v=4"></script>
-  <script src="../assets/js/data-service.js?v=4"></script>
-  <script src="login.js?v=4"></script>
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  <script src="../assets/js/supabase-config.js?v=7"></script>
+  <script src="../assets/js/data-service.js?v=7"></script>
+  <script src="login.js?v=7"></script>
 </body>
 </html>

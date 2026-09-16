@@ -30,6 +30,7 @@
   --ink-soft:#4d5680;
   --line:rgba(10,13,31,0.12);
   --danger:#c0392b;
+  --success:#1fa855;
 }
 
 *{ box-sizing:border-box; }
@@ -115,6 +116,8 @@ h3{ font-size:18px; font-weight:700; color:var(--navy-deep); margin:0 0 16px; }
 .btn-ghost.small{ padding:6px 12px; }
 
 .error{ color:var(--danger); font-size:13px; font-weight:600; margin:0; }
+.captcha-wrap{ display:flex; justify-content:center; transform:scale(0.92); transform-origin:center; }
+@media (max-width:360px){ .captcha-wrap{ transform:scale(0.8); } }
 
 /* Topbar + tabs */
 .topbar{
@@ -128,6 +131,12 @@ h3{ font-size:18px; font-weight:700; color:var(--navy-deep); margin:0 0 16px; }
 .topbar-actions{ display:flex; gap:10px; }
 .topbar-actions .btn-ghost{ color:var(--white); border-color:rgba(255,255,255,0.25); }
 .topbar-actions .btn-ghost:hover{ background:rgba(255,255,255,0.1); }
+.topbar-actions .btn-ghost.is-on{
+  background:var(--success);
+  border-color:var(--success);
+  color:var(--white);
+}
+.topbar-actions .btn-ghost.is-on:hover{ background:#188f48; }
 
 .tabs{
   display:flex; gap:4px;

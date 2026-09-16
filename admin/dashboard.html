@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>لوحة تحكم مي أرابيا</title>
 <link rel="icon" href="../assets/icon-192.png">
-<link rel="stylesheet" href="dashboard.css?v=4">
+<link rel="stylesheet" href="dashboard.css?v=8">
 </head>
 <body>
 
@@ -24,21 +24,21 @@
 
     <nav class="tabs" role="tablist">
       <button class="tab is-active" data-tab="messages" role="tab" aria-selected="true">
-        الرسايل <span class="badge" id="unreadBadge" hidden>0</span>
+        الرسائل <span class="badge" id="unreadBadge" hidden>0</span>
       </button>
       <button class="tab" data-tab="images" role="tab" aria-selected="false">الصور</button>
     </nav>
 
     <main class="content">
 
-      <!-- تاب الرسايل -->
+      <!-- تاب الرسائل -->
       <section id="tabMessages" class="tab-panel is-active">
         <div class="panel-head">
-          <h2>رسايل الفورم</h2>
+          <h2>الرسائل الواردة</h2>
           <button id="refreshMessagesBtn" class="btn-ghost small" type="button">تحديث</button>
         </div>
         <div id="messagesList" class="messages-list"></div>
-        <p id="messagesEmpty" class="muted center" hidden>لسه مفيش رسايل.</p>
+        <p id="messagesEmpty" class="muted center" hidden>لا توجد رسائل حتى الآن.</p>
       </section>
 
       <!-- تاب الصور -->
@@ -48,7 +48,7 @@
           <button id="addImageBtn" class="btn-primary small" type="button">+ إضافة صورة</button>
         </div>
         <div id="imagesGrid" class="images-grid"></div>
-        <p id="imagesEmpty" class="muted center" hidden>لسه مفيش صور مضافة — الموقع بيعرض الصور الافتراضية.</p>
+        <p id="imagesEmpty" class="muted center" hidden>لا توجد صور مضافة حتى الآن — يعرض الموقع الصور الافتراضية.</p>
       </section>
 
     </main>
@@ -63,8 +63,8 @@
         <label>اختر صورة من جهازك
           <input type="file" id="imgFile" accept="image/*">
         </label>
-        <p class="muted small">أو بدّل واحط رابط صورة جاهز:</p>
-        <label>رابط صورة (اختياري بدل الرفع)
+        <p class="muted small">أو أدخل رابط صورة جاهز بدلاً من ذلك:</p>
+        <label>رابط الصورة (اختياري، بدلاً من الرفع)
           <input type="url" id="imgUrl" placeholder="https://...">
         </label>
         <label>العنوان (عربي)
@@ -93,8 +93,8 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="../assets/js/supabase-config.js?v=4"></script>
-  <script src="../assets/js/data-service.js?v=4"></script>
-  <script src="dashboard.js?v=4"></script>
+  <script src="../assets/js/supabase-config.js?v=6"></script>
+  <script src="../assets/js/data-service.js?v=6"></script>
+  <script src="dashboard.js?v=8"></script>
 </body>
 </html>

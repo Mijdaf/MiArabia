@@ -1,7 +1,7 @@
 (function () {
   console.log('[mijdaf-dashboard] dashboard.js v4 loaded');
   const SOURCE_LABELS = {
-    contact: 'فورم التواصل',
+    contact: 'نموذج التواصل',
     quick_request: 'طلب سريع',
     quick_inquiry: 'استفسار سريع',
   };
@@ -75,7 +75,8 @@
   }
 
   function updateNotifyBtn(btn) {
-    btn.textContent = notificationsEnabled ? '🔔 الإشعارات مفعّلة' : '🔔 تفعيل الإشعارات';
+    btn.classList.toggle('is-on', notificationsEnabled);
+    btn.textContent = notificationsEnabled ? '🔔 الإشعارات مفعّلة' : '🔕 تفعيل الإشعارات';
   }
 
   function playBeep() {
@@ -171,7 +172,7 @@
           </dl>
           ${row.message ? `<p>${escapeHtml(row.message)}</p>` : ''}
           <div class="message-card-actions">
-            ${row.status === 'new' ? '<button class="btn-ghost small" data-action="read">تعليم كمقروء</button>' : ''}
+            ${row.status === 'new' ? '<button class="btn-ghost small" data-action="read">تحديد كمقروءة</button>' : ''}
             <button class="link-danger" data-action="delete">حذف</button>
           </div>
         </div>`;
@@ -190,7 +191,7 @@
 
       card.querySelector('[data-action="delete"]').addEventListener('click', async (e) => {
         e.stopPropagation();
-        if (!confirm('حذف الرسالة دي؟')) return;
+        if (!confirm('هل تريد حذف هذه الرسالة؟')) return;
         await window.mijdafData.deleteMessage(row.id);
         allMessages = allMessages.filter((m) => m.id !== row.id);
         renderMessages();
@@ -239,7 +240,7 @@
           </div>
         </div>`;
       card.querySelector('[data-action="delete"]').addEventListener('click', async () => {
-        if (!confirm('حذف الصورة دي من المعرض؟')) return;
+        if (!confirm('هل تريد حذف هذه الصورة من المعرض؟')) return;
         await window.mijdafData.deleteImage(img.id, img.storagePath);
         allImages = allImages.filter((i) => i.id !== img.id);
         renderImages();
@@ -274,7 +275,7 @@
     };
 
     if (!file && !url) {
-      errorEl.textContent = 'اختار صورة من جهازك أو حط رابط صورة.';
+      errorEl.textContent = 'يرجى اختيار صورة من جهازك أو إدخال رابط صورة.';
       errorEl.hidden = false;
       return;
     }
@@ -288,7 +289,7 @@
       closeImageModal();
       await loadImages();
     } catch (err) {
-      errorEl.textContent = 'حصل خطأ أثناء الحفظ، جرب تاني.';
+      errorEl.textContent = 'حدث خطأ أثناء الحفظ، يرجى المحاولة مرة أخرى.';
       errorEl.hidden = false;
       console.error(err);
     }
