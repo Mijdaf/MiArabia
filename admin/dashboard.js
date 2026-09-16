@@ -64,12 +64,31 @@
       btn.hidden = true;
       return;
     }
-    notificationsEnabled = Notification.permission === 'granted';
+    // نبدأ بالإشعارات متوقفة دايمًا، والمستخدم هو اللي يفعّلها بالزرار
+    notificationsEnabled = false;
     updateNotifyBtn(btn);
 
     btn.addEventListener('click', async () => {
-      const permission = await Notification.requestPermission();
-      notificationsEnabled = permission === 'granted';
+      // لو شغالة، دوسة واحدة تكفي لإيقافها فورًا (مش محتاجين إذن المتصفح لإيقافها)
+      if (notificationsEnabled) {
+        notificationsEnabled = false;
+        updateNotifyBtn(btn);
+        return;
+      }
+
+      // لو مقفولة، نتأكد من إذن المتصفح الأول
+      let permission = Notification.permission;
+      if (permission === 'default') {
+        permission = await Notification.requestPermission();
+      }
+
+      if (permission === 'granted') {
+        notificationsEnabled = true;
+      } else {
+        // المستخدم رافض الإذن من إعدادات المتصفح نفسها؛ لازم يفعّله من هناك أولاً
+        alert('الإشعارات محظورة من إعدادات المتصفح لهذا الموقع. يرجى تفعيلها من إعدادات الموقع في المتصفح (أيقونة القفل بجانب الرابط) أولاً.');
+        notificationsEnabled = false;
+      }
       updateNotifyBtn(btn);
     });
   }
@@ -95,13 +114,12 @@
   }
 
   function notifyNewMessage(row) {
-    playBeep();
-    if (notificationsEnabled) {
-      const title = 'رسالة جديدة من الموقع';
-      const body = `${SOURCE_LABELS[row.source] || row.source} — ${row.name || row.phone || ''}`;
-      new Notification(title, { body, icon: '../assets/icon-192.png' });
-    }
     bumpTitleBadge();
+    if (!notificationsEnabled) return;
+    playBeep();
+    const title = 'رسالة جديدة من الموقع';
+    const body = `${SOURCE_LABELS[row.source] || row.source} — ${row.name || row.phone || ''}`;
+    new Notification(title, { body, icon: '../assets/icon-192.png' });
   }
 
   let unreadTitleCount = 0;
