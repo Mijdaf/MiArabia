@@ -6,30 +6,9 @@
 <meta name="robots" content="noindex, nofollow">
 <title>لوحة تحكم مي أرابيا</title>
 <link rel="icon" href="../assets/icon-192.png">
-<link rel="stylesheet" href="dashboard.css?v=2">
+<link rel="stylesheet" href="dashboard.css?v=3">
 </head>
 <body>
-
-  <!-- شاشة: Supabase غير متصل بعد -->
-  <div class="screen" id="screenSetup" hidden>
-    <div class="panel panel-narrow">
-      <img class="brand-mark" src="../assets/mijdaf-mark-orange.png" alt="مي أرابيا">
-      <h1>لوحة التحكم لسه غير متصلة</h1>
-      <p class="muted">
-        الداشبورد والفورم والصور جاهزين في الكود، بس محتاجين مشروع Supabase عشان يشتغلوا فعليًا.
-        الموقع نفسه شغال عادي دلوقت (الفورم بيروح واتساب، والصور ثابتة) — مش هيتأثر لحد ما توصّل Supabase.
-      </p>
-      <ol class="setup-steps">
-        <li>اعمل مشروع مجاني على <strong>supabase.com</strong></li>
-        <li>شغّل ملف <code>supabase/schema.sql</code> من مجلد المشروع في SQL Editor</li>
-        <li>اعمل Storage bucket اسمه <code>gallery</code> وخليه Public</li>
-        <li>اعمل مستخدم أدمن واحد من Authentication &gt; Users</li>
-        <li>هات Project URL و anon key من Settings &gt; API وحطهم في <code>assets/js/supabase-config.js</code></li>
-      </ol>
-      <p class="muted small">التفاصيل الكاملة خطوة بخطوة في ملف <code>supabase/التعليمات.md</code>.</p>
-      <p class="error" id="setupDiagnosis" style="margin-top:14px;"></p>
-    </div>
-  </div>
 
   <!-- شاشة: تسجيل الدخول -->
   <div class="screen" id="screenLogin" hidden>
@@ -133,8 +112,8 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="../assets/js/supabase-config.js?v=2"></script>
-  <script src="../assets/js/data-service.js?v=2"></script>
-  <script src="dashboard.js?v=2"></script>
+  <script src="../assets/js/supabase-config.js?v=3"></script>
+  <script src="../assets/js/data-service.js?v=3"></script>
+  <script src="dashboard.js?v=3"></script>
 </body>
 </html>

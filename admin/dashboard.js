@@ -1,5 +1,5 @@
 (function () {
-  console.log('[mijdaf-dashboard] dashboard.js v2 loaded');
+  console.log('[mijdaf-dashboard] dashboard.js v3 loaded');
   const SOURCE_LABELS = {
     contact: 'فورم التواصل',
     quick_request: 'طلب سريع',
@@ -7,7 +7,6 @@
   };
 
   const screens = {
-    setup: document.getElementById('screenSetup'),
     login: document.getElementById('screenLogin'),
     dashboard: document.getElementById('screenDashboard'),
   };
@@ -19,26 +18,10 @@
   }
 
   // ---------------- إعدادات / تسجيل الدخول ----------------
-  function diagnoseSetup() {
-    const el = document.getElementById('setupDiagnosis');
-    let reason = '';
-    if (!window.isSupabaseConfigured || !window.isSupabaseConfigured()) {
-      reason = 'السبب المكتشف: ملف assets/js/supabase-config.js لسه فاضي أو غير محمّل — تأكد إن الرابط والمفتاح موجودين فيه على السيرفر.';
-    } else if (!window.supabase) {
-      reason = 'السبب المكتشف: مكتبة Supabase (من cdn.jsdelivr.net) ما اتحمّلتش. جرب تفتح الصفحة من غير VPN/أداة حظر إعلانات، أو تأكد إن السيرفر بتاعك ميحظرش الاتصال بـ cdn.jsdelivr.net.';
-    } else if (!window.mijdafData) {
-      reason = 'السبب المكتشف: ملف assets/js/data-service.js ما اتحمّلش صح — تأكد من مساره على السيرفر.';
-    } else {
-      reason = '(لا يوجد سبب مكتشف — تأكد من رسالة الخطأ في Console)';
-    }
-    console.log('[mijdaf-dashboard] diagnosis:', reason);
-    if (el) el.textContent = reason;
-  }
-
   async function boot() {
     if (!window.mijdafData || !window.mijdafData.isReady()) {
-      diagnoseSetup();
-      showScreen('setup');
+      console.error('[mijdaf-dashboard] Supabase غير جاهز — تأكد من ملف supabase-config.js ومن اتصال cdn.jsdelivr.net');
+      showScreen('login');
       return;
     }
     const session = await window.mijdafData.getSession();
@@ -353,8 +336,6 @@
 
   boot().catch((err) => {
     console.error('[mijdaf-dashboard] boot() failed:', err);
-    const el = document.getElementById('setupDiagnosis');
-    if (el) el.textContent = 'حصل خطأ غير متوقع: ' + (err && err.message ? err.message : String(err));
-    showScreen('setup');
+    showScreen('login');
   });
 })();
