@@ -1,68 +1,35 @@
 (function () {
-  console.log('[mijdaf-dashboard] dashboard.js v3 loaded');
+  console.log('[mijdaf-dashboard] dashboard.js v4 loaded');
   const SOURCE_LABELS = {
     contact: 'فورم التواصل',
     quick_request: 'طلب سريع',
     quick_inquiry: 'استفسار سريع',
   };
 
-  const screens = {
-    login: document.getElementById('screenLogin'),
-    dashboard: document.getElementById('screenDashboard'),
-  };
-
-  function showScreen(name) {
-    Object.entries(screens).forEach(([key, el]) => {
-      el.hidden = key !== name;
-    });
-  }
-
-  // ---------------- إعدادات / تسجيل الدخول ----------------
+  // ---------------- تسجيل الدخول / الحماية ----------------
   async function boot() {
     if (!window.mijdafData || !window.mijdafData.isReady()) {
       console.error('[mijdaf-dashboard] Supabase غير جاهز — تأكد من ملف supabase-config.js ومن اتصال cdn.jsdelivr.net');
-      showScreen('login');
+      location.replace('index.html');
       return;
     }
     const session = await window.mijdafData.getSession();
-    if (session) {
-      showScreen('dashboard');
-      initDashboard();
-    } else {
-      showScreen('login');
+    if (!session) {
+      location.replace('index.html');
+      return;
     }
+    initDashboard();
   }
-
-  const loginForm = document.getElementById('loginForm');
-  const loginError = document.getElementById('loginError');
-  loginForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    loginError.hidden = true;
-    const email = document.getElementById('loginEmail').value.trim();
-    const password = document.getElementById('loginPassword').value;
-    try {
-      await window.mijdafData.login(email, password);
-      showScreen('dashboard');
-      initDashboard();
-    } catch (err) {
-      loginError.textContent = 'بيانات الدخول غير صحيحة.';
-      loginError.hidden = false;
-    }
-  });
 
   document.getElementById('logoutBtn').addEventListener('click', async () => {
     await window.mijdafData.logout();
-    location.reload();
+    location.replace('index.html');
   });
 
   // ---------------- الداشبورد ----------------
-  let dashboardStarted = false;
   let unsubscribeRealtime = null;
 
   function initDashboard() {
-    if (dashboardStarted) return;
-    dashboardStarted = true;
-
     setupTabs();
     setupNotifications();
     setupMessages();
@@ -336,6 +303,6 @@
 
   boot().catch((err) => {
     console.error('[mijdaf-dashboard] boot() failed:', err);
-    showScreen('login');
+    location.replace('index.html');
   });
 })();

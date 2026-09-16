@@ -4,14 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>لوحة تحكم مي أرابيا</title>
+<title>دخول الأدمن — مي أرابيا</title>
 <link rel="icon" href="../assets/icon-192.png">
-<link rel="stylesheet" href="dashboard.css?v=3">
+<link rel="stylesheet" href="dashboard.css?v=4">
 </head>
 <body>
 
-  <!-- شاشة: تسجيل الدخول -->
-  <div class="screen" id="screenLogin" hidden>
+  <div class="screen" id="screenLogin">
     <div class="panel panel-narrow">
       <img class="brand-mark" src="../assets/mijdaf-mark-orange.png" alt="مي أرابيا">
       <h1>دخول الأدمن</h1>
@@ -28,92 +27,9 @@
     </div>
   </div>
 
-  <!-- شاشة: الداشبورد -->
-  <div class="screen" id="screenDashboard" hidden>
-    <header class="topbar">
-      <div class="topbar-brand">
-        <img src="../assets/mijdaf-mark-orange.png" alt="مي أرابيا">
-        <span>لوحة تحكم مي أرابيا</span>
-      </div>
-      <div class="topbar-actions">
-        <button id="notifyBtn" class="btn-ghost" type="button">🔔 تفعيل الإشعارات</button>
-        <button id="logoutBtn" class="btn-ghost" type="button">تسجيل خروج</button>
-      </div>
-    </header>
-
-    <nav class="tabs" role="tablist">
-      <button class="tab is-active" data-tab="messages" role="tab" aria-selected="true">
-        الرسايل <span class="badge" id="unreadBadge" hidden>0</span>
-      </button>
-      <button class="tab" data-tab="images" role="tab" aria-selected="false">الصور</button>
-    </nav>
-
-    <main class="content">
-
-      <!-- تاب الرسايل -->
-      <section id="tabMessages" class="tab-panel is-active">
-        <div class="panel-head">
-          <h2>رسايل الفورم</h2>
-          <button id="refreshMessagesBtn" class="btn-ghost small" type="button">تحديث</button>
-        </div>
-        <div id="messagesList" class="messages-list"></div>
-        <p id="messagesEmpty" class="muted center" hidden>لسه مفيش رسايل.</p>
-      </section>
-
-      <!-- تاب الصور -->
-      <section id="tabImages" class="tab-panel">
-        <div class="panel-head">
-          <h2>صور المعرض</h2>
-          <button id="addImageBtn" class="btn-primary small" type="button">+ إضافة صورة</button>
-        </div>
-        <div id="imagesGrid" class="images-grid"></div>
-        <p id="imagesEmpty" class="muted center" hidden>لسه مفيش صور مضافة — الموقع بيعرض الصور الافتراضية.</p>
-      </section>
-
-    </main>
-  </div>
-
-  <!-- مودال: إضافة/تعديل صورة -->
-  <div class="overlay" id="imageModalOverlay">
-    <div class="modal">
-      <button class="modal-close" id="imageModalClose" type="button">×</button>
-      <h3>إضافة صورة للمعرض</h3>
-      <form id="imageForm" class="stack">
-        <label>اختر صورة من جهازك
-          <input type="file" id="imgFile" accept="image/*">
-        </label>
-        <p class="muted small">أو بدّل واحط رابط صورة جاهز:</p>
-        <label>رابط صورة (اختياري بدل الرفع)
-          <input type="url" id="imgUrl" placeholder="https://...">
-        </label>
-        <label>العنوان (عربي)
-          <input type="text" id="imgTitleAr" required>
-        </label>
-        <label>العنوان (إنجليزي)
-          <input type="text" id="imgTitleEn">
-        </label>
-        <label>الوصف (عربي)
-          <textarea id="imgTextAr" rows="2"></textarea>
-        </label>
-        <label>الوصف (إنجليزي)
-          <textarea id="imgTextEn" rows="2"></textarea>
-        </label>
-        <label>حجم الصورة في الشبكة
-          <select id="imgSize">
-            <option value="normal">عادي</option>
-            <option value="wide">عريض</option>
-            <option value="big">كبير</option>
-          </select>
-        </label>
-        <p class="error" id="imageFormError" hidden></p>
-        <button type="submit" class="btn-primary">حفظ الصورة</button>
-      </form>
-    </div>
-  </div>
-
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="../assets/js/supabase-config.js?v=3"></script>
-  <script src="../assets/js/data-service.js?v=3"></script>
-  <script src="dashboard.js?v=3"></script>
+  <script src="../assets/js/supabase-config.js?v=4"></script>
+  <script src="../assets/js/data-service.js?v=4"></script>
+  <script src="login.js?v=4"></script>
 </body>
 </html>

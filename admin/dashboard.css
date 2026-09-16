@@ -50,8 +50,7 @@ input, textarea, select{ font-family:inherit; }
   justify-content:center;
   padding:24px;
 }
-#screenDashboard{ display:block; min-height:auto; padding:0; }
-#screenDashboard[hidden]{ display:none; }
+
 
 .panel{
   background:var(--white);
