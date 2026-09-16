@@ -819,6 +819,15 @@
     if (saved === 'en') setLanguage('en');
   })();
 
+  // Forward a submitted form to the admin dashboard (no-op until Supabase is connected)
+  function sendToDashboard(payload){
+    try {
+      if (window.mijdafData && window.mijdafData.isReady()) {
+        window.mijdafData.submitMessage(payload);
+      }
+    } catch (e) { console.error('sendToDashboard failed', e); }
+  }
+
   // Contact form -> WhatsApp handoff (same number as the quick-action popups)
   const form = document.getElementById('contactForm');
   const success = document.getElementById('formSuccess');
@@ -843,6 +852,12 @@
 
     const url = `https://wa.me/${CONTACT_WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
     window.open(url, '_blank');
+
+    sendToDashboard({
+      source: 'contact',
+      name, company, email, phone, phone2,
+      service, message: details,
+    });
 
     success.classList.add('show');
     form.querySelectorAll('input, textarea').forEach(el => el.value = '');
@@ -891,7 +906,7 @@
       window.open(url, '_blank');
     }
 
-    function setupModal({ openBtnId, overlayId, formId, successId, buildMessage }){
+    function setupModal({ openBtnId, overlayId, formId, successId, buildMessage, buildPayload }){
       const openBtn = document.getElementById(openBtnId);
       const overlay = document.getElementById(overlayId);
       const modalForm = document.getElementById(formId);
@@ -919,6 +934,8 @@
         const message = buildMessage(modalForm);
         openWhatsApp(message);
 
+        if (buildPayload) sendToDashboard(buildPayload(modalForm));
+
         modalForm.querySelectorAll('input, textarea').forEach(el => el.value = '');
         setTimeout(() => closeModal(overlay), 1400);
         setTimeout(() => { if (successEl) successEl.classList.remove('show'); }, 1800);
@@ -939,7 +956,14 @@
         if (company) msg += `\n*الشركة:* ${company}`;
         msg += `\n*رقم الجوال:* ${phone}\n*الخدمة المطلوبة:* ${service}`;
         return msg;
-      }
+      },
+      buildPayload: (form) => ({
+        source: 'quick_request',
+        name: form.querySelector('#qrName').value.trim(),
+        company: form.querySelector('#qrCompany').value.trim(),
+        phone: form.querySelector('#qrPhone').value.trim(),
+        service: form.querySelector('#qrService').value,
+      })
     });
 
     setupModal({
@@ -951,28 +975,67 @@
         const message = form.querySelector('#qiMessage').value.trim();
         const phone = form.querySelector('#qiPhone').value.trim();
         return `استفسار جديد من موقع مي أرابيا:\n\n*الاستفسار:* ${message}\n*رقم التواصل:* ${phone}`;
-      }
+      },
+      buildPayload: (form) => ({
+        source: 'quick_inquiry',
+        message: form.querySelector('#qiMessage').value.trim(),
+        phone: form.querySelector('#qiPhone').value.trim(),
+      })
     });
   })();
 
-  // Gallery: staggered bento reveal on scroll
-  (function(){
+  // Gallery: load from Supabase when connected, otherwise keep the built-in images.
+  // Then wire up the scroll reveal + lightbox on whichever items end up in the DOM.
+  (async function(){
+    const grid = document.getElementById('galleryGrid');
+    if (grid && window.mijdafData && window.mijdafData.isReady()) {
+      try {
+        const images = await window.mijdafData.listImages();
+        if (images.length) {
+          grid.innerHTML = images.map((img, i) => {
+            const sizeClass = img.size === 'wide' ? 'g-wide' : img.size === 'big' ? 'g-big' : '';
+            const tag = String(i + 1).padStart(2, '0');
+            return `
+              <figure class="gallery-item gallery-reveal ${sizeClass}" style="--i:${i}" data-gallery-item tabindex="0" role="button" aria-haspopup="dialog"
+                data-caption-title="${img.titleAr}" data-caption-title-en="${img.titleEn || img.titleAr}"
+                data-caption-text="${img.textAr}" data-caption-text-en="${img.textEn || img.textAr}">
+                <img src="${img.url}" alt="${img.titleAr}" loading="lazy">
+                <span class="gallery-expand" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                </span>
+                <figcaption class="gallery-caption">
+                  <span class="gallery-tag">${tag}</span>
+                  <h4 data-en="${img.titleEn || img.titleAr}">${img.titleAr}</h4>
+                  <p data-en="${img.textEn || img.textAr}">${img.textAr}</p>
+                </figcaption>
+              </figure>`;
+          }).join('');
+        }
+      } catch (e) {
+        console.error('gallery load failed, showing default images', e);
+      }
+    }
+
+    // Staggered bento reveal on scroll
     const galleryItems = document.querySelectorAll('.gallery-reveal');
-    if (!galleryItems.length) return;
-    const galleryObs = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        const el = entry.target;
-        const idx = parseInt(el.style.getPropertyValue('--i')) || 0;
-        setTimeout(() => el.classList.add('in'), idx * 90);
-        galleryObs.unobserve(el);
-      });
-    }, { threshold: 0.15 });
-    galleryItems.forEach(el => galleryObs.observe(el));
+    if (galleryItems.length) {
+      const galleryObs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          const el = entry.target;
+          const idx = parseInt(el.style.getPropertyValue('--i')) || 0;
+          setTimeout(() => el.classList.add('in'), idx * 90);
+          galleryObs.unobserve(el);
+        });
+      }, { threshold: 0.15 });
+      galleryItems.forEach(el => galleryObs.observe(el));
+    }
+
+    setupGalleryLightbox();
   })();
 
   // Gallery: click-to-expand lightbox
-  (function(){
+  function setupGalleryLightbox(){
     const items = Array.from(document.querySelectorAll('[data-gallery-item]'));
     const overlay = document.getElementById('lightboxOverlay');
     if (!items.length || !overlay) return;
@@ -1027,7 +1090,7 @@
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && overlay.classList.contains('open')) closeLightbox();
     });
-  })();
+  }
 
   // Process circles: click a step's icon circle to open a popup with its content
   (function(){
