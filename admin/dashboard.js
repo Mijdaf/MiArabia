@@ -18,8 +18,23 @@
   }
 
   // ---------------- إعدادات / تسجيل الدخول ----------------
+  function diagnoseSetup() {
+    const el = document.getElementById('setupDiagnosis');
+    if (!el) return;
+    if (!window.isSupabaseConfigured || !window.isSupabaseConfigured()) {
+      el.textContent = 'السبب المكتشف: ملف assets/js/supabase-config.js لسه فاضي أو غير محمّل — تأكد إن الرابط والمفتاح موجودين فيه على السيرفر.';
+    } else if (!window.supabase) {
+      el.textContent = 'السبب المكتشف: مكتبة Supabase (من cdn.jsdelivr.net) ما اتحمّلتش. جرب تفتح الصفحة من غير VPN/أداة حظر إعلانات، أو تأكد إن السيرفر بتاعك ميحظرش الاتصال بـ cdn.jsdelivr.net.';
+    } else if (!window.mijdafData) {
+      el.textContent = 'السبب المكتشف: ملف assets/js/data-service.js ما اتحمّلش صح — تأكد من مساره على السيرفر.';
+    } else {
+      el.textContent = '';
+    }
+  }
+
   async function boot() {
     if (!window.mijdafData || !window.mijdafData.isReady()) {
+      diagnoseSetup();
       showScreen('setup');
       return;
     }
