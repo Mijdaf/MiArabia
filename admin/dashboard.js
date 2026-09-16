@@ -1,4 +1,5 @@
 (function () {
+  console.log('[mijdaf-dashboard] dashboard.js v2 loaded');
   const SOURCE_LABELS = {
     contact: 'فورم التواصل',
     quick_request: 'طلب سريع',
@@ -20,16 +21,18 @@
   // ---------------- إعدادات / تسجيل الدخول ----------------
   function diagnoseSetup() {
     const el = document.getElementById('setupDiagnosis');
-    if (!el) return;
+    let reason = '';
     if (!window.isSupabaseConfigured || !window.isSupabaseConfigured()) {
-      el.textContent = 'السبب المكتشف: ملف assets/js/supabase-config.js لسه فاضي أو غير محمّل — تأكد إن الرابط والمفتاح موجودين فيه على السيرفر.';
+      reason = 'السبب المكتشف: ملف assets/js/supabase-config.js لسه فاضي أو غير محمّل — تأكد إن الرابط والمفتاح موجودين فيه على السيرفر.';
     } else if (!window.supabase) {
-      el.textContent = 'السبب المكتشف: مكتبة Supabase (من cdn.jsdelivr.net) ما اتحمّلتش. جرب تفتح الصفحة من غير VPN/أداة حظر إعلانات، أو تأكد إن السيرفر بتاعك ميحظرش الاتصال بـ cdn.jsdelivr.net.';
+      reason = 'السبب المكتشف: مكتبة Supabase (من cdn.jsdelivr.net) ما اتحمّلتش. جرب تفتح الصفحة من غير VPN/أداة حظر إعلانات، أو تأكد إن السيرفر بتاعك ميحظرش الاتصال بـ cdn.jsdelivr.net.';
     } else if (!window.mijdafData) {
-      el.textContent = 'السبب المكتشف: ملف assets/js/data-service.js ما اتحمّلش صح — تأكد من مساره على السيرفر.';
+      reason = 'السبب المكتشف: ملف assets/js/data-service.js ما اتحمّلش صح — تأكد من مساره على السيرفر.';
     } else {
-      el.textContent = '';
+      reason = '(لا يوجد سبب مكتشف — تأكد من رسالة الخطأ في Console)';
     }
+    console.log('[mijdaf-dashboard] diagnosis:', reason);
+    if (el) el.textContent = reason;
   }
 
   async function boot() {
@@ -348,5 +351,10 @@
     }[c]));
   }
 
-  boot();
+  boot().catch((err) => {
+    console.error('[mijdaf-dashboard] boot() failed:', err);
+    const el = document.getElementById('setupDiagnosis');
+    if (el) el.textContent = 'حصل خطأ غير متوقع: ' + (err && err.message ? err.message : String(err));
+    showScreen('setup');
+  });
 })();
