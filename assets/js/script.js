@@ -1447,3 +1447,72 @@
     }, 620);
   });
 })();
+
+// ---------- Typewriter effect for screen titles (hero h1 + section h2) ----------
+// Types out the heading's own markup (so inline tags like <em> stay intact)
+// character-by-character with a blinking cursor at the caret. Runs once per
+// element the first time it's on screen, then leaves the finished text in
+// place. Skipped entirely for prefers-reduced-motion.
+(function(){
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const titles = Array.from(document.querySelectorAll('main h1, main h2'));
+  if(!titles.length || prefersReducedMotion) return;
+
+  const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+  function typeWriter(root, speed){
+    return new Promise(resolve => {
+      const original = root.cloneNode(true);
+      root.innerHTML = '';
+      root.classList.add('tw-typing');
+      const cursor = document.createElement('span');
+      cursor.className = 'tw-cursor';
+      root.appendChild(cursor);
+
+      async function typeText(textNode, text){
+        for(let i = 0; i < text.length; i++){
+          textNode.textContent += text[i];
+          await sleep(speed);
+        }
+      }
+      async function walk(srcNode, destParent, isRoot){
+        for(const child of Array.from(srcNode.childNodes)){
+          if(child.nodeType === Node.TEXT_NODE){
+            const tn = document.createTextNode('');
+            destParent.insertBefore(tn, isRoot ? cursor : null);
+            await typeText(tn, child.textContent);
+          } else if(child.nodeType === Node.ELEMENT_NODE){
+            const clone = child.cloneNode(false);
+            destParent.insertBefore(clone, isRoot ? cursor : null);
+            await walk(child, clone, false);
+          }
+        }
+      }
+      walk(original, root, true).then(() => {
+        cursor.remove();
+        root.classList.remove('tw-typing');
+        resolve();
+      });
+    });
+  }
+
+  const heroTitle = document.querySelector('.hero h1');
+  const sectionTitles = titles.filter(el => el !== heroTitle);
+
+  // Hero title: it's already on screen at load, so play it shortly after
+  // the page paints rather than waiting on a scroll trigger.
+  if(heroTitle){
+    window.setTimeout(() => typeWriter(heroTitle, 48), 350);
+  }
+
+  // Every other section title: type out once it scrolls into view.
+  const titleObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        typeWriter(entry.target, 48);
+        titleObs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.4 });
+  sectionTitles.forEach(el => titleObs.observe(el));
+})();
