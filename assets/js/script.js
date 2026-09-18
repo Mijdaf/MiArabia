@@ -246,6 +246,33 @@
   onScroll();
   window.addEventListener('scroll', onScroll, { passive:true });
 
+  // ---------- header auto-hide (phones) ----------
+  // Scrolling down tucks the bar away to give the content the full screen;
+  // any upward scroll brings it straight back. Desktop keeps it pinned.
+  (function(){
+    const mq = window.matchMedia('(max-width:760px)');
+    const HIDE_AFTER = 140;   // don't tuck while still near the top
+    const DELTA = 6;          // ignore scroll jitter
+    let lastY = window.scrollY;
+
+    const update = () => {
+      const y = window.scrollY;
+      const diff = y - lastY;
+      if(Math.abs(diff) < DELTA) return;
+      lastY = y;
+
+      // never hide on desktop, while the drawer is open, or near the top
+      if(!mq.matches || document.body.classList.contains('nav-open') || y < HIDE_AFTER){
+        header.classList.remove('nav-tucked');
+        return;
+      }
+      header.classList.toggle('nav-tucked', diff > 0);
+    };
+
+    window.addEventListener('scroll', update, { passive:true });
+    mq.addEventListener('change', () => header.classList.remove('nav-tucked'));
+  })();
+
   // Mobile nav
   const navToggle = document.getElementById('navToggle');
   const navClose = document.getElementById('navClose');
@@ -256,16 +283,52 @@
     primaryNav.classList.toggle('open', open);
     navToggle.classList.toggle('open', open);
     navToggle.setAttribute('aria-expanded', open);
+    document.body.classList.toggle('nav-open', open);
     if(open){
+      header.classList.remove('nav-tucked');
       navOverlay.hidden = false;
       requestAnimationFrame(() => navOverlay.classList.add('open'));
       document.body.style.overflow = 'hidden';
+      // move focus into the drawer so keyboard/screen-reader users land there
+      window.setTimeout(() => navClose.focus({ preventScroll:true }), 60);
     } else {
       navOverlay.classList.remove('open');
       document.body.style.overflow = '';
+      if(primaryNav.contains(document.activeElement)) navToggle.focus({ preventScroll:true });
       window.setTimeout(() => { if(!primaryNav.classList.contains('open')) navOverlay.hidden = true; }, 350);
     }
+    syncNavReachability();
   };
+
+  // Off-screen drawer links shouldn't be tabbable on phones; on desktop the
+  // same <nav> is the visible bar, so it must stay fully reachable.
+  const mobileNavMQ = window.matchMedia('(max-width:760px)');
+  function syncNavReachability(){
+    const drawerMode = mobileNavMQ.matches;
+    const hidden = drawerMode && !primaryNav.classList.contains('open');
+    primaryNav.querySelectorAll('a, button').forEach(el => {
+      if(hidden) el.setAttribute('tabindex', '-1');
+      else el.removeAttribute('tabindex');
+    });
+    primaryNav.setAttribute('aria-hidden', hidden ? 'true' : 'false');
+    navToggle.setAttribute('aria-controls', 'primaryNav');
+  }
+  syncNavReachability();
+  mobileNavMQ.addEventListener('change', () => {
+    if(!mobileNavMQ.matches && primaryNav.classList.contains('open')) setNavOpen(false);
+    else syncNavReachability();
+  });
+
+  // Keep Tab inside the open drawer
+  document.addEventListener('keydown', (e) => {
+    if(e.key !== 'Tab' || !primaryNav.classList.contains('open')) return;
+    const items = Array.from(primaryNav.querySelectorAll('a, button'))
+      .filter(el => el.offsetParent !== null);
+    if(!items.length) return;
+    const first = items[0], last = items[items.length - 1];
+    if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+  });
 
   navToggle.addEventListener('click', () => setNavOpen(!primaryNav.classList.contains('open')));
   navClose.addEventListener('click', () => setNavOpen(false));
@@ -275,18 +338,63 @@
   });
   primaryNav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setNavOpen(false)));
 
-  // Active nav link on scroll
-  const sections = ['about','services','gallery','why','contact'].map(id => document.getElementById(id));
-  const navLinks = Array.from(primaryNav.querySelectorAll('a'));
+  // ---------- Active nav link on scroll ----------
+  // Watches exactly the sections the nav links point at (the old list didn't
+  // match the links, so some items never lit up) and picks whichever section
+  // covers the most of the viewport.
+  const navLinks = Array.from(primaryNav.querySelectorAll('a[href^="#"]'))
+    .filter(a => !a.classList.contains('nav-drawer-cta'));
+  const navTargets = navLinks
+    .map(a => ({ link:a, el:document.getElementById(a.getAttribute('href').slice(1)) }))
+    .filter(t => t.el);
+
+  const navPill = document.getElementById('navPill');
+  const deskNavMQ = window.matchMedia('(min-width:761px)');
+
+  function movePillTo(link){
+    if(!navPill || !deskNavMQ.matches) return;
+    if(!link){ navPill.classList.remove('on'); return; }
+    navPill.style.setProperty('--nav-pill-x', link.offsetLeft + 'px');
+    navPill.style.setProperty('--nav-pill-w', link.offsetWidth + 'px');
+    navPill.classList.add('on');
+  }
+  const activeLink = () => navLinks.find(l => l.classList.contains('active')) || null;
+  const parkPill = () => movePillTo(activeLink());
+
+  navLinks.forEach(link => {
+    link.addEventListener('mouseenter', () => movePillTo(link));
+    link.addEventListener('focus', () => movePillTo(link));
+  });
+  primaryNav.addEventListener('mouseleave', parkPill);
+  primaryNav.addEventListener('focusout', () => {
+    if(!primaryNav.contains(document.relatedTarget)) parkPill();
+  });
+  window.addEventListener('resize', parkPill);
+  deskNavMQ.addEventListener('change', parkPill);
+  // the language toggle rewrites the labels, so widths change
+  document.getElementById('langToggle')?.addEventListener('click', () => {
+    window.setTimeout(parkPill, 120);
+  });
+
+  const setActive = (link) => {
+    if(link && link.classList.contains('active')) return;
+    navLinks.forEach(l => l.classList.toggle('active', l === link));
+    parkPill();
+  };
+
+  const visibility = new Map();
   const spy = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-      if(entry.isIntersecting){
-        const id = entry.target.id;
-        navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#'+id));
-      }
+      visibility.set(entry.target.id, entry.isIntersecting ? entry.intersectionRatio : 0);
     });
-  }, { rootMargin: '-45% 0px -50% 0px' });
-  sections.forEach(s => s && spy.observe(s));
+    let best = null, bestRatio = 0;
+    navTargets.forEach(t => {
+      const ratio = visibility.get(t.el.id) || 0;
+      if(ratio > bestRatio){ bestRatio = ratio; best = t.link; }
+    });
+    setActive(bestRatio > 0.06 ? best : null);
+  }, { threshold:[0, 0.06, 0.25, 0.5, 0.75, 1], rootMargin:'-72px 0px -20% 0px' });
+  navTargets.forEach(t => spy.observe(t.el));
 
   // Reveal on scroll (3D) — one-shot, GPU-only (transform/opacity), will-change cleared after use
   const revealEls = document.querySelectorAll('.reveal');

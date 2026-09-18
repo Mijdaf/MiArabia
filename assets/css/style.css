@@ -314,7 +314,12 @@
     backdrop-filter:none;
     -webkit-backdrop-filter:none;
     border-bottom:1px solid transparent;
-    transition:border-color .3s var(--ease), background .3s var(--ease), padding .3s var(--ease), backdrop-filter .3s var(--ease);
+    transition:border-color .3s var(--ease), background .3s var(--ease), padding .3s var(--ease), backdrop-filter .3s var(--ease), transform .35s var(--ease);
+  }
+  /* Auto-hide on scroll-down / reveal on scroll-up (phones only — set by JS) */
+  header.nav-tucked{transform:translateY(-104%);}
+  @media (prefers-reduced-motion: reduce){
+    header.nav-tucked{transform:none;}
   }
   header.scrolled{
     background:var(--header-bg);
@@ -492,6 +497,51 @@
 
   /* "Our Focus" nav entry: mobile menu only, hidden on the desktop bar */
   nav.primary a.nav-link-mobile-only{display:none;}
+
+  /* Drawer-only extras (CTA + phone) — hidden on the desktop bar */
+  nav.primary a.nav-drawer-cta,
+  nav.primary a.nav-drawer-phone{display:none;}
+
+  /* ---------- desktop nav: gliding indicator pill ----------
+     A single pill glides between links following hover/focus, and parks on
+     the active section when the pointer leaves. Position is driven from JS
+     via --nav-pill-x / --nav-pill-w. */
+  @media (min-width:761px){
+    nav.primary{position:relative; gap:6px;}
+    nav.primary a{
+      padding:9px 14px;
+      border-radius:999px;
+      position:relative;
+      z-index:1;
+      transition:color .25s var(--ease);
+    }
+    nav.primary a::after{display:none;}
+    nav.primary a.active{color:var(--orange);}
+    header:not(.scrolled) nav.primary a.active{color:#fff;}
+
+    .nav-pill{
+      position:absolute;
+      left:0;
+      top:50%;
+      width:var(--nav-pill-w, 0px);
+      height:38px;
+      border-radius:999px;
+      background:rgba(253,87,43,0.11);
+      border:1px solid rgba(253,87,43,0.26);
+      transform:translate(var(--nav-pill-x, 0px), -50%) scale(.96);
+      opacity:0;
+      pointer-events:none;
+      transition:transform .4s var(--ease), width .4s var(--ease), opacity .25s ease, background .25s ease, border-color .25s ease;
+    }
+    .nav-pill.on{opacity:1; transform:translate(var(--nav-pill-x, 0px), -50%) scale(1);}
+    header:not(.scrolled) .nav-pill{
+      background:rgba(255,255,255,0.13);
+      border-color:rgba(255,255,255,0.22);
+    }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .nav-pill{transition:opacity .2s linear;}
+  }
 
   .header-actions{display:flex;align-items:center;gap:14px;}
 
@@ -2792,6 +2842,45 @@
     border-color:rgba(253,87,43,0.5);
     box-shadow:0 24px 54px -28px rgba(253,87,43,0.28);
   }
+  /* ---------- Contact form: drops in from above ----------
+     The global .reveal rises from below; here we flip it so the form
+     descends into place. Declared after .contact-form so its transition
+     (and transform) wins over the shorter hover/focus one above. */
+  .contact-form.reveal{
+    transform:translateY(-90px) rotateX(14deg) translateZ(-40px);
+    transform-origin:bottom center;
+    transition:opacity .8s var(--ease), transform .95s cubic-bezier(.22,1.15,.36,1);
+  }
+  .contact-form.reveal.in{
+    transform:translateY(0) rotateX(0) translateZ(0);
+  }
+  /* Rows / button / note drop in one after another, after the panel lands */
+  .contact-form.reveal > *{
+    opacity:0;
+    transform:translateY(-26px);
+    transition:opacity .5s var(--ease), transform .6s cubic-bezier(.22,1.12,.36,1);
+  }
+  .contact-form.reveal.in > *{
+    opacity:1;
+    transform:translateY(0);
+  }
+  .contact-form.reveal.in > *:nth-child(1){transition-delay:.34s;}
+  .contact-form.reveal.in > *:nth-child(2){transition-delay:.42s;}
+  .contact-form.reveal.in > *:nth-child(3){transition-delay:.50s;}
+  .contact-form.reveal.in > *:nth-child(4){transition-delay:.58s;}
+  .contact-form.reveal.in > *:nth-child(5){transition-delay:.66s;}
+  .contact-form.reveal.in > *:nth-child(6){transition-delay:.74s;}
+  .contact-form.reveal.in > *:nth-child(7){transition-delay:.82s;}
+  .contact-form.reveal.in > *:nth-child(8){transition-delay:.90s;}
+  /* the ::before accent bar sits on the panel, not a child — untouched */
+
+  @media (prefers-reduced-motion: reduce){
+    .contact-form.reveal,
+    .contact-form.reveal.in{transform:none; transition:opacity .3s linear;}
+    .contact-form.reveal > *,
+    .contact-form.reveal.in > *{opacity:1; transform:none; transition:none; transition-delay:0s;}
+  }
+
   .form-row{display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-bottom:18px;}
   .field{display:flex; flex-direction:column; gap:8px;}
   .field.full{grid-column:1 / -1;}
@@ -3247,6 +3336,77 @@
     nav.primary a:hover,
     nav.primary a.active{color:var(--orange);}
     nav.primary a.nav-link-mobile-only{display:flex;}
+    .nav-pill{display:none;}
+
+    /* Safe areas (notch / home bar) so the drawer fits real phone chrome */
+    nav.primary{
+      padding-top:calc(22px + env(safe-area-inset-top));
+      padding-bottom:calc(32px + env(safe-area-inset-bottom));
+    }
+
+    /* Links slide in one after another once the drawer opens */
+    nav.primary a{
+      opacity:0;
+      transform:translateX(26px);
+      transition:opacity .35s var(--ease), transform .4s var(--ease), color .2s ease;
+    }
+    nav.primary.open a{opacity:1; transform:translateX(0);}
+    nav.primary.open a:nth-of-type(1){transition-delay:.10s;}
+    nav.primary.open a:nth-of-type(2){transition-delay:.16s;}
+    nav.primary.open a:nth-of-type(3){transition-delay:.22s;}
+    nav.primary.open a:nth-of-type(4){transition-delay:.28s;}
+    nav.primary.open a:nth-of-type(5){transition-delay:.34s;}
+    nav.primary.open a:nth-of-type(6){transition-delay:.40s;}
+    nav.primary.open a:nth-of-type(7){transition-delay:.46s;}
+    nav.primary.open a:nth-of-type(8){transition-delay:.52s;}
+
+    /* Active link gets a filled lane instead of just orange text */
+    nav.primary a.active{
+      background:linear-gradient(90deg, rgba(253,87,43,0.16), rgba(253,87,43,0));
+      box-shadow:inset 3px 0 0 var(--orange);
+      border-radius:0 10px 10px 0;
+    }
+    html[dir="rtl"] nav.primary a.active{
+      background:linear-gradient(270deg, rgba(253,87,43,0.16), rgba(253,87,43,0));
+      box-shadow:inset -3px 0 0 var(--orange);
+      border-radius:10px 0 0 10px;
+    }
+
+    /* The primary CTA lives inside the drawer on phones */
+    nav.primary a.nav-drawer-cta{
+      display:flex;
+      flex-direction:row;
+      justify-content:center;
+      margin-top:auto;
+      margin-bottom:10px;
+      border-bottom:0;
+      border-radius:999px;
+      color:var(--white);
+      font-size:16px;
+      padding:15px 20px;
+    }
+    nav.primary a.nav-drawer-phone{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:9px;
+      border-bottom:0;
+      padding:10px 6px;
+      font-family:var(--font-mono);
+      font-size:14px;
+      color:rgba(255,255,255,0.72);
+      flex-shrink:0;
+    }
+    nav.primary a.nav-drawer-phone svg{width:16px;height:16px;}
+    nav.primary a.nav-drawer-phone:hover{color:var(--orange);}
+
+    /* Hamburger: slightly bigger tap target */
+    .nav-toggle{width:42px;height:42px;}
+
+    @media (prefers-reduced-motion: reduce){
+      nav.primary a,
+      nav.primary.open a{opacity:1; transform:none; transition:none; transition-delay:0s;}
+    }
     .nav-icon{color:#8b95c9; flex-shrink:0;}
     .nav-icon svg{width:20px; height:20px;}
     .nav-toggle{display:flex;}
