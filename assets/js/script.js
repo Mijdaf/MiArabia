@@ -710,6 +710,124 @@
     });
   }
 
+  // Why-us rows: the icon next to each heading is now the accordion
+  // trigger — tapping it opens/closes that row's hidden description.
+  // Rows are independent (opening one doesn't close the others).
+  document.querySelectorAll('.why-row').forEach(row => {
+    const btn = row.querySelector('.why-icon');
+    if (!btn) return;
+
+    const toggle = () => {
+      const isOpen = row.classList.toggle('is-open');
+      btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    };
+
+    // The icon stays the real button (keyboard + screen readers use it),
+    // and it stops propagation so the row handler below doesn't undo it.
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggle();
+    });
+
+    // Anywhere else on the row works too.
+    row.addEventListener('click', (e) => {
+      // Don't hijack a link, or a click that was really a text selection.
+      if (e.target.closest('a, button')) return;
+      const sel = window.getSelection();
+      if (sel && String(sel).length > 0) return;
+      toggle();
+    });
+  });
+
+  // Why-us rows: type the description out character by character when the
+  // row opens. The real <p> keeps the text (so it stays selectable, stays
+  // readable by screen readers, and stays the element the AR/EN switcher
+  // rewrites); it's just faded while an overlay span types the same string
+  // over it. We type with slice() rather than one <span> per letter so
+  // Arabic letters keep their joined forms while the line builds up.
+  (function whyTypewriter(){
+    const rows = document.querySelectorAll('.why-row');
+    if (!rows.length) return;
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const SPEED = 24;        // ms per character
+    const START_DELAY = 200; // let the row finish expanding first
+
+    rows.forEach(row => {
+      const p = row.querySelector('.why-row-details > p');
+      if (!p) return;
+
+      const out = document.createElement('span');
+      out.className = 'why-typed-out';
+      out.setAttribute('aria-hidden', 'true');
+      p.parentNode.appendChild(out);
+
+      let timer = null;
+
+      const stop = () => {
+        window.clearTimeout(timer);
+        timer = null;
+        row.classList.remove('is-typing');
+        out.classList.remove('is-done');
+        out.textContent = '';
+      };
+
+      const play = () => {
+        stop();
+        if (reduceMotion.matches) return;
+
+        const text = (p.textContent || '').trim();
+        if (!text) return;
+
+        row.classList.add('is-typing');
+        let i = 0;
+
+        const step = () => {
+          i++;
+          out.textContent = text.slice(0, i);
+          if (i < text.length) {
+            // A touch of jitter so it reads like typing, not a machine.
+            const ch = text.charAt(i - 1);
+            const pause = /[.،,؛;:!؟?]/.test(ch) ? SPEED * 7 : SPEED + Math.random() * 18;
+            timer = window.setTimeout(step, pause);
+            return;
+          }
+          // Done: fade the caret, then hand the line back to the real <p>.
+          out.classList.add('is-done');
+          timer = window.setTimeout(() => {
+            row.classList.remove('is-typing');
+            out.textContent = '';
+            out.classList.remove('is-done');
+          }, 520);
+        };
+
+        timer = window.setTimeout(step, START_DELAY);
+      };
+
+      // Drive off the .is-open class so any way of opening the row (the
+      // icon button, or anything we add later) triggers the same effect.
+      // Only react to the open state actually flipping — the class list
+      // also changes when we add/remove .is-typing ourselves.
+      let wasOpen = row.classList.contains('is-open');
+      new MutationObserver(() => {
+        const isOpen = row.classList.contains('is-open');
+        if (isOpen === wasOpen) return;
+        wasOpen = isOpen;
+        isOpen ? play() : stop();
+      }).observe(row, { attributes: true, attributeFilter: ['class'] });
+      if (wasOpen) play();
+
+      // Language switch while a row is open: retype in the new language.
+      new MutationObserver(() => {
+        if (row.classList.contains('is-open')) play();
+      }).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+
+      if (typeof reduceMotion.addEventListener === 'function') {
+        reduceMotion.addEventListener('change', () => { if (reduceMotion.matches) stop(); });
+      }
+    });
+  })();
+
   // Services cards: staggered reveal + icon line-draw
   const serviceItems = document.querySelectorAll('.service-reveal');
   const serviceObs = new IntersectionObserver((entries) => {
