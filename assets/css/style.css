@@ -267,7 +267,7 @@
   .eyebrow-brand{
     font-family:var(--font-body);
     font-size:18px;
-    font-weight:800;
+    font-weight:500;
     letter-spacing:.12em;
     color:var(--steel);
   }
@@ -298,10 +298,13 @@
 
   h1,h2,h3,h4{
     font-family:var(--font-display);
-    font-weight:800;
+    font-weight:500;
     letter-spacing:-0.01em;
     color:var(--heading);
   }
+  /* Section titles (h2) use the same weight as the hero titles */
+  h2{ font-weight:400; }
+  h5,h6,strong,b,th{ font-weight:500; }
 
   /* ---------- header ---------- */
   header{
@@ -376,7 +379,7 @@
     transform:none;
     font-family:var(--font-body);
     font-size:12px;
-    font-weight:700;
+    font-weight:500;
     white-space:nowrap;
     color:var(--orange);
     background:color-mix(in srgb, var(--navy-deep) 88%, transparent);
@@ -470,7 +473,7 @@
     gap:8px;
     font-family:var(--font-body);
     font-size:16.5px;
-    font-weight:700;
+    font-weight:500;
     color:var(--text);
     position:relative;
     padding:4px 0;
@@ -579,7 +582,7 @@
     padding:12px 22px;
     border-radius:999px;
     font-size:16px;
-    font-weight:600;
+    font-weight:500;
     font-family:var(--font-body);
     transition:transform .25s var(--ease), box-shadow .25s var(--ease), background .25s var(--ease), color .25s var(--ease);
     white-space:nowrap;
@@ -735,7 +738,7 @@
     align-items:center;
     gap:10px;
     margin-bottom:22px;
-    font-weight:700;
+    font-weight:500;
     white-space:nowrap;
     width:max-content;
     max-width:none;
@@ -1040,7 +1043,7 @@
     box-shadow:0 12px 28px -14px rgba(253,87,43,0.35);
     color:var(--heading) !important;
     font-size:17.5px !important;
-    font-weight:700;
+    font-weight:500;
     line-height:1.6 !important;
     transition:transform .35s var(--ease), box-shadow .35s var(--ease);
   }
@@ -1245,7 +1248,7 @@
     transition:background .35s ease, color .35s ease;
   }
   .spec-pill-icon svg{width:16px; height:16px;}
-  .spec-pill-label{font-size:16.5px; font-weight:700; white-space:nowrap; line-height:1.4;}
+  .spec-pill-label{font-size:16.5px; font-weight:500; white-space:nowrap; line-height:1.4;}
   .spec-pill:hover{border-color:rgba(253,87,43,0.4); color:var(--heading);}
   .spec-pill:hover .spec-pill-icon{background:rgba(253,87,43,0.18);}
   .spec-pill:active{transform:scale(.95);}
@@ -1336,7 +1339,7 @@
   .spec-pill[data-anchor] .spec-pill-icon svg{width:17px; height:17px;}
   .spec-pill[data-anchor] .spec-pill-label{
     font-size:26px;
-    font-weight:800;
+    font-weight:500;
     letter-spacing:.01em;
     line-height:1.4;
     color:#000;
@@ -1440,13 +1443,13 @@
   .spec-tag{
     font-family:var(--font-mono);
     font-size:13px;
-    font-weight:600;
+    font-weight:500;
     color:var(--text-soft);
     letter-spacing:.06em;
     display:block;
     margin-bottom:4px;
   }
-  .spec-view h4{font-size:22px;color:var(--heading);font-family:var(--font-body);font-weight:700;}
+  .spec-view h4{font-size:22px;color:var(--heading);font-family:var(--font-body);font-weight:500;}
   .spec-view > p{font-size:17.5px;color:var(--text-soft);line-height:1.8; max-width:640px;}
 
   .spec-view-list{list-style:none; margin:22px 0 0; padding:0; display:flex; flex-direction:column; gap:12px;}
@@ -1551,7 +1554,7 @@
     inset-inline-end:22px; top:24px;
     font-family:var(--font-mono);
     font-size:34px;
-    font-weight:700;
+    font-weight:500;
     color:var(--tint-2);
     z-index:0;
     transition:color .35s ease;
@@ -1635,21 +1638,21 @@
   .service-name{
     font-family:var(--font-body);
     font-size:13px;
-    font-weight:700;
+    font-weight:500;
     letter-spacing:.14em;
     text-transform:uppercase;
     color:var(--orange);
   }
   .service-name-lg{
     font-size:26px;
-    font-weight:800;
+    font-weight:500;
     letter-spacing:.04em;
     line-height:1.2;
   }
   .service-card h3{font-size:20px;color:var(--heading);line-height:1.35; margin-top:4px;}
   .service-card h3.service-subtitle{
     font-size:16px;
-    font-weight:600;
+    font-weight:500;
     color:var(--heading);
     line-height:1.5;
     margin-top:-4px;
@@ -1684,7 +1687,7 @@
     margin-top:14px;
     font-family:var(--font-body);
     font-size:13px;
-    font-weight:700;
+    font-weight:500;
     letter-spacing:.02em;
     color:var(--orange);
   }
@@ -1835,7 +1838,7 @@
   .value-index{
     font-family:var(--font-display);
     font-size:44px;
-    font-weight:800;
+    font-weight:500;
     line-height:1;
     color:transparent;
     -webkit-text-stroke:1.4px var(--border-strong);
@@ -1867,7 +1870,7 @@
   }
   .value-lead{
     font-size:19.5px;
-    font-weight:700;
+    font-weight:500;
     color:var(--heading) !important;
   }
   .value-body > p{font-size:17.5px; color:var(--text-soft); line-height:1.8; margin:0;}
@@ -1885,7 +1888,7 @@
     position:relative;
     padding-inline-start:24px;
     font-size:17px;
-    font-weight:600;
+    font-weight:500;
     color:var(--heading);
     line-height:1.6;
   }
@@ -1915,7 +1918,7 @@
   .value-pill{
     font-family:var(--font-mono);
     font-size:14.5px;
-    font-weight:600;
+    font-weight:500;
     letter-spacing:.01em;
     color:var(--heading);
     background:rgba(253,87,43,0.08);
@@ -2374,7 +2377,7 @@
   .why-caption{
     color:var(--heading);
     font-size:clamp(19px,1.9vw,22px);
-    font-weight:800;
+    font-weight:500;
     line-height:1.6;
     margin-top:8px;
     margin-bottom:40px;
@@ -2384,7 +2387,7 @@
   .why-closing{
     color:var(--heading);
     font-size:clamp(22px,2.2vw,28px);
-    font-weight:800;
+    font-weight:500;
     line-height:1.5;
     letter-spacing:-.01em;
     text-align:center;
@@ -2504,12 +2507,12 @@
   }
   .process-step-num{
     font-family:var(--font-display);
-    font-weight:800;
+    font-weight:500;
     font-size:15px;
     color:var(--orange);
     letter-spacing:.02em;
   }
-  .process-step-head h4{font-size:22px; font-weight:800; color:var(--heading); letter-spacing:-.01em;}
+  .process-step-head h4{font-size:22px; font-weight:500; color:var(--heading); letter-spacing:-.01em;}
   .process-step-body p{color:var(--text-soft); font-size:17px; line-height:1.75; max-width:620px; margin:0;}
 
   /* ---------- process circles (icon buttons -> popup) ---------- */
@@ -2571,14 +2574,14 @@
     background:var(--orange);
     color:var(--white, #fff);
     font-family:var(--font-display);
-    font-weight:800;
+    font-weight:500;
     font-size:12px;
     display:flex; align-items:center; justify-content:center;
     box-shadow:0 2px 6px rgba(0,0,0,.25);
   }
   .process-circle-label{
     font-size:15px;
-    font-weight:700;
+    font-weight:500;
     color:var(--heading);
     text-align:center;
   }
@@ -2612,7 +2615,7 @@
   .process-modal-icon svg{width:26px; height:26px;}
   .process-modal-num{
     font-family:var(--font-display);
-    font-weight:800;
+    font-weight:500;
     font-size:13px;
     letter-spacing:.06em;
     color:var(--orange);
@@ -2668,7 +2671,7 @@
     background:none;
     border:none;
     font-family:var(--font-display);
-    font-weight:800;
+    font-weight:500;
     font-size:clamp(14px,1.6vw,16px);
     color:var(--heading);
     letter-spacing:-.01em;
@@ -2700,7 +2703,7 @@
   .process-closing{
     color:var(--heading);
     font-size:clamp(22px,2.2vw,28px);
-    font-weight:800;
+    font-weight:500;
     line-height:1.5;
     letter-spacing:-.01em;
     text-align:center;
@@ -2826,7 +2829,7 @@
   .why-index{
     font-family:var(--font-display);
     font-size:38px;
-    font-weight:800;
+    font-weight:500;
     line-height:1;
     letter-spacing:0;
     color:transparent;
@@ -2848,7 +2851,7 @@
      clean, and its DOM position won't need to jump around per icon),
      but visually it should read before the heading, not after it. */
   .why-row-head .why-icon{order:-1;}
-  .why-row h4{color:var(--heading); font-size:21px; font-weight:800; letter-spacing:-.01em; margin:0;}
+  .why-row h4{color:var(--heading); font-size:21px; font-weight:500; letter-spacing:-.01em; margin:0;}
   .why-row p,
   .why-row .why-typed-out{color:var(--text-soft); font-size:17px; font-weight:400; line-height:1.75; margin:0; padding-top:10px; overflow:hidden;}
   /* Icon is now the accordion trigger: a real <button>, same visual
@@ -3029,7 +3032,7 @@
     font-size:14.5px;
   }
   .contact-highlight svg{width:17px;height:17px;flex:none;color:var(--orange);}
-  .contact-highlight strong{color:var(--orange); font-weight:800;}
+  .contact-highlight strong{color:var(--orange); font-weight:500;}
 
   .contact-list{margin-top:30px; display:flex; flex-direction:column; gap:10px;}
   .contact-list .row{
@@ -3054,7 +3057,7 @@
      opposite side of the row. */
   .contact-list .row div{display:flex;flex-direction:column; flex:1; min-width:0;}
   .contact-list .row span.lbl{font-family:var(--font-mono); font-size:12.5px; letter-spacing:.06em; color:var(--steel); text-transform:uppercase; text-align:right;}
-  .contact-list .row span.val{font-size:17px; color:var(--heading); font-weight:600; margin-top:2px; transition:color .3s ease; text-align:right;}
+  .contact-list .row span.val{font-size:17px; color:var(--heading); font-weight:500; margin-top:2px; transition:color .3s ease; text-align:right;}
   html[dir="ltr"] .contact-list .row span.lbl,
   html[dir="ltr"] .contact-list .row span.val{text-align:left;}
   .contact-list .row-arrow{
@@ -3172,7 +3175,7 @@
     margin-bottom:18px;
     font-size:16px;
     color:var(--heading);
-    font-weight:600;
+    font-weight:500;
   }
   .form-success.show{display:flex;}
   .form-success svg{width:20px;height:20px;stroke:var(--orange); flex:none;}
@@ -3217,7 +3220,7 @@
     box-shadow:0 14px 30px -12px rgba(10,13,31,0.28);
     font-family:var(--font-body);
     font-size:14.5px;
-    font-weight:800;
+    font-weight:500;
     color:var(--text);
     transition:transform .35s cubic-bezier(.16,.84,.44,1), opacity .3s ease, box-shadow .25s ease, background .25s ease;
     transform-style:preserve-3d;
@@ -3349,7 +3352,7 @@
     color:var(--heading);
     font-family:var(--font-body);
     font-size:13.5px;
-    font-weight:800;
+    font-weight:500;
     padding:9px 16px;
     border-radius:20px;
     border:1px solid var(--qa-item-border);
@@ -4029,7 +4032,7 @@ header .logo{ cursor: pointer; }
   }
 
   .splash-tag{
-    margin:22px 0 0; font-family:var(--font-body); font-weight:700; font-size:15px;
+    margin:22px 0 0; font-family:var(--font-body); font-weight:500; font-size:15px;
     color:#b7bcd6; opacity:0; animation:spFade .6s ease 3.5s forwards;
   }
   @keyframes spFade{ from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:none; } }

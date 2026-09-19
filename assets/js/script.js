@@ -2064,6 +2064,15 @@
   prevBtn && prevBtn.addEventListener('click', () => go(idx - 1, true));
   nextBtn && nextBtn.addEventListener('click', () => go(idx + 1, true));
 
+  // click / tap on the video area (anywhere in the hero that isn't a link,
+  // button or control) moves to the next slide
+  hero.addEventListener('click', (e) => {
+    if (e.target.closest('a, button, input, select, textarea, label, .hero-controls')) return;
+    const sel = window.getSelection && window.getSelection();
+    if (sel && String(sel).length) return;   // user was selecting text
+    go(idx + 1, true);
+  });
+
   function setAutoplay(on){
     autoplay = on;
     pauseBtn && pauseBtn.classList.toggle('is-paused', !on);
