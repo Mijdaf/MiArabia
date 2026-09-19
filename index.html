@@ -230,7 +230,6 @@
   <div class="wrap">
     <a href="#top" class="logo logo-shakeable" id="logoShake">
       <img src="assets/mijdaf-header-lockup-new.png" alt="MiArabia" class="logo-img" id="logoImg">
-      <span class="logo-shake-hint" id="logoShakeHint" dir="ltr">Shake me</span>
     </a>
     <nav class="primary" id="primaryNav">
       <span class="nav-pill" id="navPill" aria-hidden="true"></span>
@@ -303,24 +302,29 @@
   <!-- HERO SLIDER — video slides (label + headline + one CTA per slide) -->
   <section class="hero" id="heroSlider" data-tone="brand" aria-roledescription="carousel" aria-label="مي أرابيا">
     <div class="hero-bg-wrap">
-    <div class="hero-slide is-active" data-tone="brand" role="group" aria-roledescription="slide" aria-label="1 / 4">
+    <div class="hero-slide is-active" data-tone="brand" role="group" aria-roledescription="slide" aria-label="1 / 5">
       <video class="hero-bg" autoplay muted loop playsinline preload="auto" poster="assets/mijdaf-hero-poster.jpg">
         <source src="assets/video/mijdaf-hero.mp4" type="video/mp4">
       </video>
     </div>
-    <div class="hero-slide" data-tone="site" role="group" aria-roledescription="slide" aria-label="2 / 4">
+    <div class="hero-slide" data-tone="site" role="group" aria-roledescription="slide" aria-label="2 / 5">
       <video class="hero-bg" muted playsinline preload="none" data-poster="assets/video/worker-1-poster.jpg">
         <source data-src="assets/video/worker-1.mp4" type="video/mp4">
       </video>
     </div>
-    <div class="hero-slide" data-tone="site" role="group" aria-roledescription="slide" aria-label="3 / 4">
+    <div class="hero-slide" data-tone="site" role="group" aria-roledescription="slide" aria-label="3 / 5">
       <video class="hero-bg" muted playsinline preload="none" data-poster="assets/video/worker-2-poster.jpg">
         <source data-src="assets/video/worker-2.mp4" type="video/mp4">
       </video>
     </div>
-    <div class="hero-slide" data-tone="site" role="group" aria-roledescription="slide" aria-label="4 / 4">
+    <div class="hero-slide" data-tone="site" role="group" aria-roledescription="slide" aria-label="4 / 5">
       <video class="hero-bg" muted playsinline preload="none" data-poster="assets/video/worker-3-poster.jpg">
         <source data-src="assets/video/worker-3.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="hero-slide" data-tone="site" role="group" aria-roledescription="slide" aria-label="5 / 5">
+      <video class="hero-bg" muted playsinline preload="none" data-poster="assets/video/worker-4-poster.jpg">
+        <source data-src="assets/video/worker-4.mp4" type="video/mp4">
       </video>
     </div>
     </div>
@@ -368,15 +372,26 @@
           </a>
         </div>
       </div>
+      <div class="hero-caption" data-slide="4">
+        <div class="hero-eyebrow" data-en="Planning &amp; Coordination">التخطيط والتنسيق</div>
+        <p class="hero-title" role="heading" aria-level="2" data-en="A clear plan before every step.">خطة واضحة قبل كل خطوة.</p>
+        <p class="lede" data-en="The team meets on site to review the drawings and assign tasks before work begins, so execution runs precisely and without surprises.">يجتمع الفريق في الموقع لمراجعة المخططات وتوزيع المهام قبل البدء، ليسير التنفيذ بدقة ومن دون مفاجآت.</p>
+        <div class="hero-actions">
+          <a href="#gallery" class="btn btn-primary" data-magnetic data-ripple><span data-en="See our work">شاهد أعمالنا</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </div>
         </div>
       </div>
     </div>
     <div class="hero-controls" role="group" aria-label="التحكم في الشرائح">
       <div class="hero-segs">
-      <button type="button" class="hero-seg is-active" data-i="0" aria-label="1 / 4"><i></i></button>
-      <button type="button" class="hero-seg" data-i="1" aria-label="2 / 4"><i></i></button>
-      <button type="button" class="hero-seg" data-i="2" aria-label="3 / 4"><i></i></button>
-      <button type="button" class="hero-seg" data-i="3" aria-label="4 / 4"><i></i></button>
+      <button type="button" class="hero-seg is-active" data-i="0" aria-label="1 / 5"><i></i></button>
+      <button type="button" class="hero-seg" data-i="1" aria-label="2 / 5"><i></i></button>
+      <button type="button" class="hero-seg" data-i="2" aria-label="3 / 5"><i></i></button>
+      <button type="button" class="hero-seg" data-i="3" aria-label="4 / 5"><i></i></button>
+      <button type="button" class="hero-seg" data-i="4" aria-label="5 / 5"><i></i></button>
       </div>
       <button type="button" class="hero-ctl hero-pause" aria-label="إيقاف التبديل التلقائي" aria-pressed="false">
         <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>

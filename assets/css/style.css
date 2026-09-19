@@ -760,7 +760,7 @@
   }
   .hero p.lede{
     margin-top:22px;
-    font-size:20px;
+    font-size:22px;
     line-height:1.7;
     color:#cbd7f6;
     max-width:46ch;
@@ -925,7 +925,7 @@
   }
   .section-head p{
     margin-top:16px;
-    font-size:20.5px;
+    font-size:23px;
     color:var(--text-soft);
     line-height:1.75;
   }
@@ -1025,7 +1025,7 @@
   }
   .focus-copy p{
     margin-top:18px;
-    font-size:18px;
+    font-size:20.5px;
     color:var(--text-soft);
     line-height:1.8;
   }
@@ -3005,7 +3005,7 @@
     perspective:1400px;
   }
   .contact-info h2{font-size:clamp(32px,3.8vw,44px); line-height:1.15;}
-  .contact-info p{margin-top:16px; color:var(--text-soft); font-size:19px; line-height:1.75; max-width:42ch;}
+  .contact-info p{margin-top:16px; color:var(--text-soft); font-size:21.5px; line-height:1.75; max-width:42ch;}
 
   .contact-signature{
     margin-top:20px;
@@ -3749,6 +3749,14 @@
       text-align:center;
     }
     .hero-actions .btn svg{display:none;}
+    /* phones: pin each slide's button to the bottom of the caption block, so it sits low and in the same spot on every slide */
+    .hero-caption{display:flex; flex-direction:column;}
+    .hero-caption .hero-actions{margin-top:auto; padding-top:34px;}
+    /* phones: screen subtitles get a smaller bump */
+    .hero p.lede{font-size:21px;}
+    .section-head p{font-size:21.5px;}
+    .focus-copy p{font-size:19.5px;}
+    .contact-info p{font-size:20px;}
 
     /* Lighter 3D on small screens: keep the effect, cut the GPU cost */
     .reveal{transform:translateY(34px) rotateX(-8deg) translateZ(0);}
