@@ -4143,6 +4143,80 @@ header .logo{ cursor: pointer; }
   }
   @keyframes spFade{ from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:none; } }
 
+  /* ---------- splash backdrop: twinkling brand-colored dots (echoes the site's glow-dots layer) ---------- */
+  .splash-dots{ position:absolute; inset:0; overflow:hidden; }
+  .splash-dots i{
+    position:absolute; top:var(--y); left:var(--x);
+    width:var(--sz); height:var(--sz); border-radius:50%;
+    background:rgba(var(--c),.95);
+    box-shadow:0 0 6px 1.5px rgba(var(--c),.7), 0 0 14px 4px rgba(var(--c),.25);
+    opacity:0;
+    animation:spDotTwinkle var(--t) ease-in-out var(--d) infinite;
+    will-change:opacity, transform;
+  }
+  @keyframes spDotTwinkle{
+    0%,100%{ opacity:0;   transform:scale(.5); }
+    50%    { opacity:1;   transform:scale(1); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .splash-dots i{ animation:none; opacity:.55; transform:scale(1); }
+  }
+
+  /* ---------- splash: welding pass that traces the full outline of the M mark ---------- */
+  .splash-weld{
+    position:absolute; inset:0;
+    overflow:visible; pointer-events:none;
+  }
+  /* the molten bead: drawn progressively all the way around the letter's edge,
+     in sync with the traveling torch head (pathLength=1 lets us animate the
+     dash offset from 0-1 regardless of the path's real geometric length) */
+  .splash-weld-bead{
+    stroke:#ffb84a;
+    stroke-width:3.4;
+    stroke-linecap:round; stroke-linejoin:round;
+    stroke-dasharray:1; stroke-dashoffset:1;
+    filter:drop-shadow(0 0 2.5px rgba(255,214,140,.95)) drop-shadow(0 0 7px rgba(253,87,43,.75));
+    animation:spWeldDraw 1.7s var(--spw-ease) .3s forwards;
+  }
+  @keyframes spWeldDraw{ from{ stroke-dashoffset:1; } to{ stroke-dashoffset:0; } }
+  /* the bright torch head traveling along the outline */
+  .splash-weld-head{
+    fill:#fff6d8;
+    filter:drop-shadow(0 0 3px #fff6d8) drop-shadow(0 0 9px rgba(253,87,43,.95));
+    opacity:0;
+    animation:spWeldHeadShow 1.7s steps(1,end) .3s forwards, spWeldFlicker .12s steps(1,end) infinite;
+    transform-box:fill-box; transform-origin:center;
+  }
+  @keyframes spWeldHeadShow{
+    0%  { opacity:0; }
+    3%  { opacity:1; }
+    93% { opacity:1; }
+    100%{ opacity:0; }
+  }
+  @keyframes spWeldFlicker{
+    0%,100%{ transform:scale(1); }
+    50%    { transform:scale(1.32); }
+  }
+  /* sparks trail the head as it travels around the edge */
+  .splash-weld-sparks{
+    opacity:0;
+    animation:spWeldHeadShow 1.7s steps(1,end) .3s forwards;
+  }
+  .splash-weld-sp{
+    fill:#ffd24a;
+    filter:drop-shadow(0 0 2px rgba(255,180,60,.9));
+    transform-box:fill-box; transform-origin:center;
+    animation:spWeldSparkJit var(--t) ease-out var(--d) infinite;
+  }
+  @keyframes spWeldSparkJit{
+    0%  { transform:translate(0,0);                                     opacity:1; }
+    60% { transform:translate(var(--dx), calc(var(--up) * -1));          opacity:1; }
+    100%{ transform:translate(calc(var(--dx) * 1.15), 3px);              opacity:0; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .splash-weld{ display:none; }
+  }
+
   @media (prefers-reduced-motion: reduce){
     .splash *{ animation:none !important; }
     .splash-logo{ clip-path:none; }
