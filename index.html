@@ -25,7 +25,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=12">
+<link rel="stylesheet" href="assets/css/style.css?v=14">
 </head>
 <body>
 
@@ -36,10 +36,18 @@
     <div class="splash-smoke splash-smoke-front"><i style="--x:10%;--s:420px;--t:8s;--d:-2s;--o:0.18;--dx:120px;--r0:15deg;--r1:-30deg"></i><i style="--x:34%;--s:360px;--t:7.5s;--d:-5s;--o:0.15;--dx:-50px;--r0:-5deg;--r1:35deg"></i><i style="--x:74%;--s:440px;--t:8.5s;--d:-3.2s;--o:0.18;--dx:70px;--r0:25deg;--r1:-20deg"></i><i style="--x:92%;--s:380px;--t:7s;--d:-6s;--o:0.15;--dx:-80px;--r0:-15deg;--r1:20deg"></i></div>
   </div>
   <div class="splash-stage">
-    <div class="splash-logo-wrap">
-      <div class="splash-logo"><img src="assets/mijdaf-logo-full-t.png" alt="مي أرابيا — مجداف العربية للمقاولات العامة" width="900" height="439"></div>
+    <div class="splash-mark-wrap">
+      <div class="splash-mark">
+        <img src="assets/mijdaf-mark-white.png" alt="مي أرابيا" width="233" height="236">
+      </div>
+      <div class="splash-mark-sheen" aria-hidden="true"></div>
+      <div class="splash-arrow-track" aria-hidden="true">
+        <svg class="splash-arrow-runner splash-arrow-runner-3" viewBox="0 0 24 24"><path d="M2 12 L18 5 L18 19 Z" fill="#ffffff" stroke="#0a0a2a" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        <svg class="splash-arrow-runner splash-arrow-runner-2" viewBox="0 0 24 24"><path d="M2 12 L18 5 L18 19 Z" fill="#ffffff" stroke="#0a0a2a" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        <svg class="splash-arrow-runner splash-arrow-runner-1" viewBox="0 0 24 24"><path d="M2 12 L18 5 L18 19 Z" fill="#ffffff" stroke="#0a0a2a" stroke-width="1.4" stroke-linejoin="round"/></svg>
+      </div>
     </div>
-    <div class="splash-seam" aria-hidden="true">
+    <div class="splash-seam splash-seam-mark" aria-hidden="true">
       <span class="spw-plate"></span>
       <span class="spw-bead"></span>
     </div>
@@ -396,6 +404,23 @@
     </div>
   </section>
 
+
+  <!-- WORKER REEL — fast Unsplash stills cross-fading like a silent video loop; no heading, no captions, purely visual.
+       Sits directly above the "How We Work" screen. -->
+  <section class="worker-reel" id="worker-videos">
+    <div class="wrap">
+      <div class="worker-reel-frame" id="workerReel" aria-hidden="true">
+        <img class="wr-slide" style="--i:0" src="https://images.unsplash.com/photo-1744735973756-b2efa8be24c8?w=1400&q=70&auto=format&fit=crop" alt="" width="1400" height="600" decoding="async" loading="eager">
+        <img class="wr-slide" style="--i:1" src="https://images.unsplash.com/photo-1587582423116-ec07293f0395?w=1400&q=70&auto=format&fit=crop" alt="" width="1400" height="600" decoding="async" loading="lazy">
+        <img class="wr-slide" style="--i:2" src="https://images.unsplash.com/photo-1647586028042-1de4d4a935e6?w=1400&q=70&auto=format&fit=crop" alt="" width="1400" height="600" decoding="async" loading="lazy">
+        <img class="wr-slide" style="--i:3" src="https://images.unsplash.com/photo-1591588582259-e675bd2e6088?w=1400&q=70&auto=format&fit=crop" alt="" width="1400" height="600" decoding="async" loading="lazy">
+        <img class="wr-slide" style="--i:4" src="https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=1400&q=70&auto=format&fit=crop" alt="" width="1400" height="600" decoding="async" loading="lazy">
+        <img class="wr-slide" style="--i:5" src="https://images.unsplash.com/photo-1702388247745-14431714d32f?w=1400&q=70&auto=format&fit=crop" alt="" width="1400" height="600" decoding="async" loading="lazy">
+        <img class="wr-slide" style="--i:6" src="https://images.unsplash.com/photo-1579847188804-ecba0e2ea330?w=1400&q=70&auto=format&fit=crop" alt="" width="1400" height="600" decoding="async" loading="lazy">
+        <img class="wr-slide" style="--i:7" src="https://images.unsplash.com/photo-1626885930974-4b69aa21bbf9?w=1400&q=70&auto=format&fit=crop" alt="" width="1400" height="600" decoding="async" loading="lazy">
+      </div>
+    </div>
+  </section>
 
   <!-- HOW WE WORK -->
   <section class="process dot-field" id="process">
@@ -986,7 +1011,7 @@
   <div class="qa-menu" id="qaMenu">
     <button type="button" class="qa-item qa-request" data-ripple id="openRequestModal" aria-haspopup="dialog">
       <span class="qa-welder" aria-hidden="true">
-          <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" focusable="false">
+          <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" focusable="false" class="wd-svg">
             <defs>
               <radialGradient id="wdArc">
                 <stop offset="0" stop-color="#ffffff"/>
@@ -1005,21 +1030,16 @@
               </linearGradient>
               <clipPath id="wdTorsoClip"><path d="M39 74 L38.5 54 Q38.5 46.5 50 46 Q64 46.5 64 57 L59 73 Q49 78 39 74 Z"/></clipPath>
             </defs>
-
-            <!-- far leg (extended straight behind) -->
-            <path d="M44 71 L30.0 88.0" fill="none" stroke="#0a0d1f" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M44 71 L30.0 88.0" fill="none" stroke="#0f3aa0" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
-            <path transform="translate(32.4 86.0) rotate(10.0) translate(-41.5 -89.5)" d="M37 89.5 L46 89.5 L47 93 Q55 93.5 56 97 L56 98 L36 98 Z" fill="#2a2f55" stroke="#0a0d1f" stroke-width="1.5" stroke-linejoin="round"/>
-            <path transform="translate(32.4 86.0) rotate(10.0) translate(-41.5 -89.5)" d="M36 96.5 H56" stroke="#8a93c9" stroke-width="1.4" stroke-linecap="round"/>
-            
+            <!-- far leg (stands straight when finished, extended behind while welding) -->
+            <path fill="none" stroke="#0a0d1f" stroke-width="13" stroke-linecap="round" stroke-linejoin="round" d="M44 71 L30 88"><animate attributeName="d" values="M44 71 L30 88;M44 71 L30 88;M44 71 L43 90;M44 71 L43 90;M44 71 L30 88;M44 71 L30 88" keyTimes="0;0.48;0.58;0.86;0.96;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="10s" repeatCount="indefinite"/></path>
+            <path fill="none" stroke="#0f3aa0" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" d="M44 71 L30 88"><animate attributeName="d" values="M44 71 L30 88;M44 71 L30 88;M44 71 L43 90;M44 71 L43 90;M44 71 L30 88;M44 71 L30 88" keyTimes="0;0.48;0.58;0.86;0.96;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="10s" repeatCount="indefinite"/></path>
+            <g transform="translate(32.4 86)"><animateTransform attributeName="transform" type="translate" values="32.4 86;32.4 86;43 90.3;43 90.3;32.4 86;32.4 86" keyTimes="0;0.48;0.58;0.86;0.96;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="10s" repeatCount="indefinite"/><g transform="rotate(10)"><animateTransform attributeName="transform" type="rotate" values="10;10;0;0;10;10" keyTimes="0;0.48;0.58;0.86;0.96;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="10s" repeatCount="indefinite"/><g transform="translate(-41.5 -89.5)"><path d="M37 89.5 L46 89.5 L47 93 Q55 93.5 56 97 L56 98 L36 98 Z" fill="#2a2f55" stroke="#0a0d1f" stroke-width="1.5" stroke-linejoin="round"/><path d="M36 96.5 H56" stroke="#8a93c9" stroke-width="1.4" stroke-linecap="round"/></g></g></g>
             <!-- near leg -->
-            <path d="M46 70 L53 90" fill="none" stroke="#0a0d1f" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M46 70 L53 90" fill="none" stroke="#164dcc" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M46 89 L58 89 L59 93 Q68 94 69 97 L69 98 L45 98 Z" fill="#2a2f55" stroke="#0a0d1f" stroke-width="1.5" stroke-linejoin="round"/>
-            <path d="M45 96 H69" stroke="#8a93c9" stroke-width="1.4" stroke-linecap="round"/>
-
-            <g class="wd-upper" transform="translate(0 -6) rotate(34 48 73)">
-<!-- neck -->
+            <path fill="none" stroke="#0a0d1f" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" d="M46 70 L53 90"><animate attributeName="d" values="M46 70 L53 90;M46 70 L53 90;M52 70 L53 90;M52 70 L53 90;M46 70 L53 90;M46 70 L53 90" keyTimes="0;0.48;0.58;0.86;0.96;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="10s" repeatCount="indefinite"/></path>
+            <path fill="none" stroke="#164dcc" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" d="M46 70 L53 90"><animate attributeName="d" values="M46 70 L53 90;M46 70 L53 90;M52 70 L53 90;M52 70 L53 90;M46 70 L53 90;M46 70 L53 90" keyTimes="0;0.48;0.58;0.86;0.96;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="10s" repeatCount="indefinite"/></path>
+            <g transform="translate(0 0)"><animateTransform attributeName="transform" type="translate" values="0 0;0 0;0 0;0 0;0 0;0 0" keyTimes="0;0.48;0.58;0.86;0.96;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="10s" repeatCount="indefinite"/><path d="M46 89 L58 89 L59 93 Q68 94 69 97 L69 98 L45 98 Z" fill="#2a2f55" stroke="#0a0d1f" stroke-width="1.5" stroke-linejoin="round"/><path d="M45 96 H69" stroke="#8a93c9" stroke-width="1.4" stroke-linecap="round"/></g>
+            <g transform="translate(0 -6)"><g transform="rotate(34 48 73)"><animateTransform attributeName="transform" type="rotate" values="34 48 73;34 48 73;0 48 73;0 48 73;34 48 73;34 48 73" keyTimes="0;0.48;0.58;0.86;0.96;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="10s" repeatCount="indefinite"/>
+            <!-- neck -->
             <rect x="47.5" y="38" width="10.5" height="14" rx="3.2" fill="#d99a5b" stroke="#0a0d1f" stroke-width="1.4"/>
             <rect x="48.2" y="38.5" width="9.1" height="7.5" rx="2.6" fill="#a8703a" opacity=".55"/>
             <!-- torso -->
@@ -1030,45 +1050,29 @@
               <path d="M30 77 L66 77" stroke="#c9391a" stroke-width="7" opacity=".5"/>
             </g>
             <path d="M39 74 L38.5 54 Q38.5 46.5 50 46 Q64 46.5 64 57 L59 73 Q49 78 39 74 Z" fill="none" stroke="#0a0d1f" stroke-width="1.6" stroke-linejoin="round"/>
-
-            </g>
-
-            <!-- far arm + torch + gloves -->
-            <path d="M58.7 46.5 L66.9 68.8 L85.0 84.0" fill="none" stroke="#0a0d1f" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M58.7 46.5 L66.9 68.8 L85.0 84.0" fill="none" stroke="#d8431b" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-
-            <!-- torch -->
-            <path d="M75 71 L88 88" stroke="#0a0d1f" stroke-width="8" stroke-linecap="round"/>
-            <path d="M75 71 L88 88" stroke="#3b4278" stroke-width="5.2" stroke-linecap="round"/>
-            <path d="M88 88 L94 95.5" stroke="#0a0d1f" stroke-width="5" stroke-linecap="round"/>
-            <path d="M88 88 L94 95.5" stroke="#cfd6ee" stroke-width="2.6" stroke-linecap="round"/>
-            <circle cx="85.5" cy="84.5" r="5" fill="#b9783a" stroke="#0a0d1f" stroke-width="1.5"/>
-
+            </g></g>
+            <!-- far arm + torch + glove -->
+            <path fill="none" stroke="#0a0d1f" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" d="M58.7 46.5 L66.9 68.8 L85 84"><animate attributeName="d" values="M58.7 46.5 L66.9 68.8 L85 84;M58.7 46.5 L66.9 68.8 L85 84;M52.5 44.5 L55 57.5 L59 68;M52.5 44.5 L55 57.5 L59 68;M58.7 46.5 L66.9 68.8 L85 84;M58.7 46.5 L66.9 68.8 L85 84" keyTimes="0;0.48;0.58;0.86;0.96;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="10s" repeatCount="indefinite"/></path>
+            <path fill="none" stroke="#d8431b" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" d="M58.7 46.5 L66.9 68.8 L85 84"><animate attributeName="d" values="M58.7 46.5 L66.9 68.8 L85 84;M58.7 46.5 L66.9 68.8 L85 84;M52.5 44.5 L55 57.5 L59 68;M52.5 44.5 L55 57.5 L59 68;M58.7 46.5 L66.9 68.8 L85 84;M58.7 46.5 L66.9 68.8 L85 84" keyTimes="0;0.48;0.58;0.86;0.96;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="10s" repeatCount="indefinite"/></path>
+            <g transform="translate(85.5 84.5)"><animateTransform attributeName="transform" type="translate" values="85.5 84.5;85.5 84.5;59.5 68.5;59.5 68.5;85.5 84.5;85.5 84.5" keyTimes="0;0.48;0.58;0.86;0.96;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="10s" repeatCount="indefinite"/><g transform="rotate(0)"><animateTransform attributeName="transform" type="rotate" values="0;0;25;25;0;0" keyTimes="0;0.48;0.58;0.86;0.96;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="10s" repeatCount="indefinite"/><path d="M-10.5 -13.5 L2.5 3.5" stroke="#0a0d1f" stroke-width="8" stroke-linecap="round"/><path d="M-10.5 -13.5 L2.5 3.5" stroke="#3b4278" stroke-width="5.2" stroke-linecap="round"/><path d="M2.5 3.5 L8.5 11" stroke="#0a0d1f" stroke-width="5" stroke-linecap="round"/><path d="M2.5 3.5 L8.5 11" stroke="#cfd6ee" stroke-width="2.6" stroke-linecap="round"/></g></g>
+            <circle r="5" fill="#b9783a" stroke="#0a0d1f" stroke-width="1.5" cx="85.5" cy="84.5"><animate attributeName="cx" values="85.5;85.5;59.5;59.5;85.5;85.5" keyTimes="0;0.48;0.58;0.86;0.96;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="10s" repeatCount="indefinite"/><animate attributeName="cy" values="84.5;84.5;68.5;68.5;84.5;84.5" keyTimes="0;0.48;0.58;0.86;0.96;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="10s" repeatCount="indefinite"/></circle>
             <!-- near arm -->
-            <path d="M58.9 45.6 L64.1 64.9 L80.0 77.0" fill="none" stroke="#0a0d1f" stroke-width="11.5" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M58.9 45.6 L64.1 64.9 L80.0 77.0" fill="none" stroke="#fd572b" stroke-width="8.5" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M60.3 50.9 L63.9 64.0" stroke="#e8edf9" stroke-width="2.6" stroke-linecap="round"/>
-            <circle cx="80.5" cy="78" r="5.4" fill="#d99a5b" stroke="#0a0d1f" stroke-width="1.5"/>
-            <path d="M77.5 76 L83 80.5" stroke="#a8703a" stroke-width="1.3" stroke-linecap="round"/>
-
-            <g class="wd-upper" transform="translate(0 -6) rotate(34 48 73)">
-            <g transform="translate(-8 -10)">
-<!-- head / helmet -->
-            <g class="wd-head">
-              <path d="M50 40 Q49 25 63 24 Q77 24 78 37 L78 46 Q78 50 73 50 L59 50 Q50 49 50 40 Z" fill="#3d4478" stroke="#0a0d1f" stroke-width="1.6" stroke-linejoin="round"/>
+            <path fill="none" stroke="#0a0d1f" stroke-width="11.5" stroke-linecap="round" stroke-linejoin="round" d="M58.9 45.6 L64.1 64.9 L80 77"><animate attributeName="d" values="M58.9 45.6 L64.1 64.9 L80 77;M58.9 45.6 L64.1 64.9 L80 77;M51.5 44 L51 58 L53 69;M51.5 44 L51 58 L53 69;M58.9 45.6 L64.1 64.9 L80 77;M58.9 45.6 L64.1 64.9 L80 77" keyTimes="0;0.48;0.58;0.86;0.96;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="10s" repeatCount="indefinite"/></path>
+            <path fill="none" stroke="#fd572b" stroke-width="8.5" stroke-linecap="round" stroke-linejoin="round" d="M58.9 45.6 L64.1 64.9 L80 77"><animate attributeName="d" values="M58.9 45.6 L64.1 64.9 L80 77;M58.9 45.6 L64.1 64.9 L80 77;M51.5 44 L51 58 L53 69;M51.5 44 L51 58 L53 69;M58.9 45.6 L64.1 64.9 L80 77;M58.9 45.6 L64.1 64.9 L80 77" keyTimes="0;0.48;0.58;0.86;0.96;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="10s" repeatCount="indefinite"/></path>
+            <line stroke="#e8edf9" stroke-width="2.6" stroke-linecap="round" x1="60.3" y1="50.81" x2="63.84" y2="63.94"><animate attributeName="x1" values="60.3;60.3;51.37;51.37;60.3;60.3" keyTimes="0;0.48;0.58;0.86;0.96;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="10s" repeatCount="indefinite"/><animate attributeName="y1" values="50.81;50.81;47.78;47.78;50.81;50.81" keyTimes="0;0.48;0.58;0.86;0.96;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="10s" repeatCount="indefinite"/><animate attributeName="x2" values="63.84;63.84;51.02;51.02;63.84;63.84" keyTimes="0;0.48;0.58;0.86;0.96;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="10s" repeatCount="indefinite"/><animate attributeName="y2" values="63.94;63.94;57.3;57.3;63.94;63.94" keyTimes="0;0.48;0.58;0.86;0.96;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="10s" repeatCount="indefinite"/></line>
+            <circle r="5.4" fill="#d99a5b" stroke="#0a0d1f" stroke-width="1.5" cx="80.5" cy="78"><animate attributeName="cx" values="80.5;80.5;53.5;53.5;80.5;80.5" keyTimes="0;0.48;0.58;0.86;0.96;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="10s" repeatCount="indefinite"/><animate attributeName="cy" values="78;78;70;70;78;78" keyTimes="0;0.48;0.58;0.86;0.96;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="10s" repeatCount="indefinite"/></circle>
+            <line stroke="#a8703a" stroke-width="1.3" stroke-linecap="round" x1="77.5" y1="76" x2="83" y2="80.5"><animate attributeName="x1" values="77.5;77.5;50.5;50.5;77.5;77.5" keyTimes="0;0.48;0.58;0.86;0.96;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="10s" repeatCount="indefinite"/><animate attributeName="y1" values="76;76;68;68;76;76" keyTimes="0;0.48;0.58;0.86;0.96;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="10s" repeatCount="indefinite"/><animate attributeName="x2" values="83;83;56;56;83;83" keyTimes="0;0.48;0.58;0.86;0.96;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="10s" repeatCount="indefinite"/><animate attributeName="y2" values="80.5;80.5;72.5;72.5;80.5;80.5" keyTimes="0;0.48;0.58;0.86;0.96;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="10s" repeatCount="indefinite"/></line>
+            <g transform="translate(0 -6)"><g transform="rotate(34 48 73)"><animateTransform attributeName="transform" type="rotate" values="34 48 73;34 48 73;0 48 73;0 48 73;34 48 73;34 48 73" keyTimes="0;0.48;0.58;0.86;0.96;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="10s" repeatCount="indefinite"/>
+            <g transform="translate(-8 -10)"><animateTransform attributeName="transform" type="translate" values="-8 -10;-8 -10;-12 -7.5;-12 -7.5;-8 -10;-8 -10" keyTimes="0;0.48;0.58;0.86;0.96;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="10s" repeatCount="indefinite"/><g transform="rotate(30 64 46)"><animateTransform attributeName="transform" type="rotate" values="30 64 46;32.5 64 46;29 64 46;32.5 64 46;30 64 46;-2 64 46;-2 64 46;30 64 46;30 64 46" keyTimes="0;0.12;0.24;0.36;0.48;0.58;0.86;0.96;1" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1" dur="10s" repeatCount="indefinite"/><path d="M50 40 Q49 25 63 24 Q77 24 78 37 L78 46 Q78 50 73 50 L59 50 Q50 49 50 40 Z" fill="#3d4478" stroke="#0a0d1f" stroke-width="1.6" stroke-linejoin="round"/>
               <path d="M54 33 Q57 27.5 66 27.5" fill="none" stroke="#8b94d0" stroke-width="2" stroke-linecap="round"/>
               <rect x="64" y="33" width="14" height="11" rx="2.6" fill="#0d2f33" stroke="#0a0d1f" stroke-width="1.4"/>
               <path d="M67 35.6 L72.5 35.6" stroke="#ffffff" stroke-width="1.4" stroke-linecap="round" opacity=".55"/>
-              <circle cx="55.5" cy="40" r="2.2" fill="#8b94d0" stroke="#0a0d1f" stroke-width="1"/>
-            </g>
-            </g>
-            </g>
-
+              <circle cx="55.5" cy="40" r="2.2" fill="#8b94d0" stroke="#0a0d1f" stroke-width="1"/></g></g>
+            </g></g>
             <!-- weld bead on the surface -->
-            <rect x="66" y="96.6" width="30" height="1.8" rx=".9" fill="url(#wdBead)" class="wd-bead"/>
-
-            <!-- arc + sparks -->
-            <g transform="translate(95 96.5)">
+            <g><animate attributeName="opacity" values="1;1;0.35;0.35;1" keyTimes="0;0.47;0.62;0.95;1" calcMode="spline" keySplines="0 0 1 1;0 0 1 1;0 0 1 1;0 0 1 1" dur="10s" repeatCount="indefinite"/><rect x="66" y="96.6" width="30" height="1.8" rx=".9" fill="url(#wdBead)" class="wd-bead"/></g>
+            <!-- arc + sparks: only while welding -->
+            <g><animate attributeName="opacity" values="1;1;0;0;1;1" keyTimes="0;0.47;0.5;0.95;0.97;1" calcMode="spline" keySplines="0 0 1 1;0 0 1 1;0 0 1 1;0 0 1 1;0 0 1 1" dur="10s" repeatCount="indefinite"/><g transform="translate(95 96.5)">
               <g class="wd-arc">
                 <circle r="15" fill="url(#wdHalo)"/>
                 <circle r="6.5" fill="url(#wdArc)"/>
@@ -1084,7 +1088,7 @@
               <g class="wd-sp" style="--dx:-20px;--up:14px;--t:.9s;--d:-.05s"><circle class="wd-spy" r=".9" fill="#ff8a3d"/></g>
               <g class="wd-sp" style="--dx:18px;--up:12px;--t:.75s;--d:-.35s"><circle class="wd-spy" r="1" fill="#fff2a8"/></g>
               <g class="wd-sp" style="--dx:40px;--up:28px;--t:1s;--d:-.65s"><circle class="wd-spy" r="1" fill="#ffd24a"/></g>
-            </g>
+            </g></g>
           </svg>
         </span>
       <span class="qa-item-label" data-en="Request a Quote">قدّم طلبك</span>
@@ -1234,6 +1238,32 @@
       autoplay: true,
       path: 'assets/lottie/construction.json'
     });
+  })();
+</script>
+<script>
+  // Welder mascot loops between "working" and "finished" (SMIL). Respect reduced-motion: hold the working pose.
+  (function(){
+    var svg = document.querySelector('.qa-welder svg');
+    if (svg && window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches && svg.pauseAnimations) svg.pauseAnimations();
+  })();
+</script>
+<script>
+  // Worker reel: run the cross-fade only while it is on screen (saves CPU while the visitor is elsewhere on the page).
+  (function(){
+    var frame = document.getElementById('workerReel');
+    if (!frame) return;
+    if (!('IntersectionObserver' in window)) return; // no observer -> CSS keeps it running
+    // start fetching every still well before the reel scrolls into view, so no slide ever shows up blank
+    var pre = new IntersectionObserver(function(entries){
+      if (!entries[0].isIntersecting) return;
+      frame.querySelectorAll('img[loading="lazy"]').forEach(function(img){ img.loading = 'eager'; });
+      pre.disconnect();
+    }, { rootMargin: '1800px 0px' });
+    pre.observe(frame);
+    frame.classList.add('js-ready');
+    new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ frame.classList.toggle('is-live', e.isIntersecting); });
+    }, { rootMargin: '150px 0px' }).observe(frame);
   })();
 </script>
 </body>
