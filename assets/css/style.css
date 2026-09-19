@@ -3318,7 +3318,9 @@
   /* Always-on attention motion: each pill breathes in its own brand
      color and gives a punchy 3D wobble so both options stay noticeable
      without needing a click. */
-  .qa-request{ animation:qaPulseOrange 2.6s ease-in-out infinite, qaShake3D 3.6s ease-in-out infinite; }
+  .qa-request{ animation:qaPulseOrange 2.6s ease-in-out infinite; }
+  /* the welder lands on the pill -> same 3D shake, played once, starting exactly at its shaking part (62%) */
+  .qa-request.qa-hit{ animation:qaPulseOrange 2.6s ease-in-out infinite, qaShake3D 3.6s ease-in-out -2.2s 1 both; }
   .qa-inquiry{ animation:qaPulseBlue 2.6s ease-in-out .5s infinite, qaShake3D 3.6s ease-in-out .7s infinite; }
   @keyframes qaShake3D{
     0%, 62%, 100%{ transform:translateX(0) translateY(0) rotate(0) rotateX(0) rotateY(0) scale(1); }
@@ -3343,6 +3345,7 @@
   }
   @media (prefers-reduced-motion: reduce){
     .qa-request, .qa-inquiry{ animation:none; }
+    .qa-request.qa-hit{ animation:none; }
   }
 
   /* Open state: menu items pop into place, staggered */
