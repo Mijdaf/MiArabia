@@ -1950,3 +1950,212 @@
   }, true);
   } // end setupCarousel
 })();
+
+// ---------- Hero video slider ----------
+// Four video slides (brand film + three site videos) with a caption and one
+// CTA each. Auto-advances when a video ends (or after FALLBACK_MS if a video
+// can't play, e.g. autoplay blocked / data saver). Only the first video is
+// fetched up front; the next one is preloaded once the current one starts.
+// Controls: progress segments (click to jump), pause/play, prev/next, keyboard
+// arrows and horizontal swipe. Pauses when off-screen or in a background tab.
+(function(){
+  const hero = document.getElementById('heroSlider');
+  if (!hero) return;
+  const slides   = Array.from(hero.querySelectorAll('.hero-slide'));
+  const captions = Array.from(hero.querySelectorAll('.hero-caption'));
+  const segs     = Array.from(hero.querySelectorAll('.hero-seg'));
+  const pauseBtn = hero.querySelector('.hero-pause');
+  const prevBtn  = hero.querySelector('.hero-prev');
+  const nextBtn  = hero.querySelector('.hero-next');
+  const vids     = slides.map(s => s.querySelector('video'));
+  const N = slides.length;
+  if (N < 2) return;
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const FALLBACK_MS = 8000;      // per-slide time when the video can't drive the clock
+  const PENDING_MS  = 5000;      // give a slow video this long to start before using the timer
+
+  let idx = 0;
+  let autoplay = !reduceMotion;  // user (or reduced-motion) pause
+  let inView = true;
+  let mode = 'pending';          // 'pending' | 'video' | 'timer'
+  let t0 = 0, raf = 0, started = false;
+
+  // ---- helpers ----
+  const running = () => autoplay && inView && !document.hidden && started;
+  function setBar(k, p){ segs[k] && segs[k].style.setProperty('--p', String(p)); }
+
+  function prepare(i){
+    const v = vids[i];
+    if (!v || v.dataset.ready) return;
+    v.dataset.ready = '1';
+    if (v.dataset.poster) v.poster = v.dataset.poster;
+    const src = v.querySelector('source[data-src]');
+    if (src){ src.src = src.dataset.src; }
+    v.preload = 'auto';
+    v.load();
+  }
+
+  function playCurrent(){
+    const v = vids[idx];
+    if (!v) { mode = 'timer'; t0 = performance.now(); return; }
+    mode = 'pending'; t0 = performance.now();
+    const p = v.play();
+    if (p && p.then){
+      p.then(() => { if (v === vids[idx] && mode === 'pending') mode = 'video'; })
+       .catch(() => { if (v === vids[idx]) { mode = 'timer'; t0 = performance.now(); } });
+    } else { mode = 'video'; }
+  }
+
+  function tick(now){
+    raf = 0;
+    if (!running()) return;
+    let p = 0;
+    const v = vids[idx];
+    if (mode === 'video' && v && v.duration > 0){
+      p = v.ended ? 1 : v.currentTime / v.duration;
+    } else if (mode === 'timer'){
+      p = (now - t0) / FALLBACK_MS;
+    } else if (now - t0 > PENDING_MS){
+      mode = 'timer'; t0 = now;
+    }
+    setBar(idx, Math.min(p, 1));
+    if (p >= 1){ go(idx + 1); return; }
+    raf = requestAnimationFrame(tick);
+  }
+  function kick(){ if (!raf && running()) raf = requestAnimationFrame(tick); }
+
+  // ---- navigation ----
+  function go(n, fromUser){
+    n = (n + N) % N;
+    const leaving = idx;
+    if (leaving !== n && vids[leaving]) vids[leaving].pause();
+    idx = n;
+
+    slides.forEach((s, k) => s.classList.toggle('is-active', k === n));
+    captions.forEach((c, k) => c.classList.toggle('is-active', k === n));
+    segs.forEach((b, k) => {
+      b.classList.toggle('is-active', k === n);
+      b.setAttribute('aria-current', k === n ? 'true' : 'false');
+      setBar(k, k < n ? 1 : 0);
+    });
+    hero.dataset.tone = slides[n].dataset.tone || 'brand';
+    if (leaving !== n) hero.classList.add('is-slid');
+
+    prepare(n);
+    prepare((n + 1) % N);
+
+    const v = vids[n];
+    if (v){ v.loop = false; try { v.currentTime = 0; } catch(e){} }
+    if (running() || (autoplay && started)) { playCurrent(); }
+    else { mode = 'pending'; }
+    kick();
+  }
+
+  // ---- video events ----
+  vids.forEach((v, i) => {
+    if (!v) return;
+    v.loop = false;
+    v.addEventListener('ended', () => { if (i === idx && running()) go(idx + 1); });
+  });
+
+  // ---- controls ----
+  segs.forEach((b, k) => b.addEventListener('click', () => go(k, true)));
+  prevBtn && prevBtn.addEventListener('click', () => go(idx - 1, true));
+  nextBtn && nextBtn.addEventListener('click', () => go(idx + 1, true));
+
+  function setAutoplay(on){
+    autoplay = on;
+    pauseBtn && pauseBtn.classList.toggle('is-paused', !on);
+    pauseBtn && pauseBtn.setAttribute('aria-pressed', on ? 'false' : 'true');
+    const v = vids[idx];
+    if (!on){
+      if (v) v.pause();
+    } else if (started){
+      // resume from where the current video is (or restart the timer)
+      if (v && v.duration > 0 && !v.ended){
+        const pp = v.play();
+        if (pp && pp.catch) pp.catch(() => { mode = 'timer'; t0 = performance.now(); });
+        mode = 'video';
+      } else { playCurrent(); }
+      kick();
+    }
+  }
+  pauseBtn && pauseBtn.addEventListener('click', () => setAutoplay(!autoplay));
+
+  // keyboard: arrows move between slides while focus is inside the hero
+  hero.addEventListener('keydown', (e) => {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    const rtl = document.documentElement.getAttribute('dir') === 'rtl';
+    const fwd = rtl ? 'ArrowLeft' : 'ArrowRight';
+    go(idx + (e.key === fwd ? 1 : -1), true);
+  });
+
+  // swipe (horizontal) — direction follows reading direction
+  let sx = 0, sy = 0, tracking = false;
+  hero.addEventListener('pointerdown', (e) => {
+    if (e.pointerType === 'mouse' || e.target.closest('.hero-controls, a, button')) return;
+    tracking = true; sx = e.clientX; sy = e.clientY;
+  });
+  hero.addEventListener('pointerup', (e) => {
+    if (!tracking) return; tracking = false;
+    const dx = e.clientX - sx, dy = e.clientY - sy;
+    if (Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+    const rtl = document.documentElement.getAttribute('dir') === 'rtl';
+    const forward = rtl ? dx > 0 : dx < 0;
+    go(idx + (forward ? 1 : -1), true);
+  });
+  hero.addEventListener('pointercancel', () => { tracking = false; });
+
+  // ---- pause when off-screen / tab hidden ----
+  function syncVisibility(){
+    const v = vids[idx];
+    if (running()){
+      if (v && v.paused && !v.ended && mode === 'video'){ const pp = v.play(); if (pp && pp.catch) pp.catch(() => {}); }
+      if (mode === 'timer') t0 = performance.now() - (parseFloat(segs[idx].style.getPropertyValue('--p')) || 0) * FALLBACK_MS;
+      kick();
+    } else if (v && !v.paused){ v.pause(); }
+  }
+  if ('IntersectionObserver' in window){
+    new IntersectionObserver((entries) => {
+      inView = entries[0].isIntersecting;
+      syncVisibility();
+    }, { threshold: 0.2 }).observe(hero);
+  }
+  document.addEventListener('visibilitychange', syncVisibility);
+
+  // ---- control labels follow the page language ----
+  const LABELS = {
+    ar: { hero: 'مي أرابيا', group: 'التحكم في الشرائح', pause: 'إيقاف التبديل التلقائي', prev: 'السابق', next: 'التالي' },
+    en: { hero: 'Mi Arabia', group: 'Slide controls', pause: 'Pause automatic slides', prev: 'Previous slide', next: 'Next slide' }
+  };
+  function applyLabels(){
+    const L = LABELS[document.documentElement.getAttribute('lang') === 'en' ? 'en' : 'ar'];
+    hero.setAttribute('aria-label', L.hero);
+    const grp = hero.querySelector('.hero-controls'); grp && grp.setAttribute('aria-label', L.group);
+    pauseBtn && pauseBtn.setAttribute('aria-label', L.pause);
+    prevBtn && prevBtn.setAttribute('aria-label', L.prev);
+    nextBtn && nextBtn.setAttribute('aria-label', L.next);
+  }
+  new MutationObserver(applyLabels).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+  applyLabels();
+
+  // ---- start: wait for the splash to leave so slide 1 plays from its beginning ----
+  function start(){
+    if (started) return;
+    started = true;
+    setAutoplay(autoplay);       // syncs button state
+    prepare(1);
+    const v = vids[0];
+    if (v){ v.loop = false; try { v.currentTime = 0; } catch(e){} }
+    if (autoplay) playCurrent();
+    kick();
+  }
+  if (reduceMotion){ autoplay = false; pauseBtn && pauseBtn.classList.add('is-paused'); pauseBtn && pauseBtn.setAttribute('aria-pressed', 'true'); }
+  const splash = document.getElementById('splash');
+  if (splash){
+    const mo = new MutationObserver(() => { if (!document.getElementById('splash')){ mo.disconnect(); start(); } });
+    mo.observe(document.body, { childList: true });
+    setTimeout(start, 6500);     // safety net
+  } else { start(); }
+})();

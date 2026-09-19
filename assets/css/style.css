@@ -725,10 +725,6 @@
     animation:heroUp .9s var(--ease) forwards;
     transform-style:preserve-3d;
   }
-  .hero-content > .hero-eyebrow{animation-delay:.05s;}
-  .hero-content > h1{animation-delay:.18s;}
-  .hero-content > p.lede{animation-delay:.34s;}
-  .hero-content > .hero-actions{animation-delay:.5s;}
   .hero-eyebrow{
     font-family:var(--font-body);
     font-size:14px;
@@ -745,14 +741,17 @@
     max-width:none;
   }
   .hero-eyebrow::before{content:"";width:22px;height:1px;background:var(--orange);}
-  .hero h1{
+  .hero h1, .hero .hero-title{
+    margin:0;
+    font-family:var(--font-display);
+    font-weight:400;
     color:var(--white);
     font-size:clamp(44px, 5.6vw, 70px);
     line-height:1.06;
     letter-spacing:-0.02em;
     max-width:15ch;
   }
-  .hero h1 em{
+  .hero h1 em, .hero .hero-title em{
     font-style:normal;
     color:var(--orange);
   }
@@ -770,9 +769,106 @@
     flex-wrap:wrap;
   }
 
+  /* Hero CTA buttons: transparent style, no border, bolder text, arrow on the right in Arabic */
+  .hero-actions .btn.btn-primary{
+    background:rgba(255,255,255,.04);
+    -webkit-backdrop-filter:blur(6px);
+    backdrop-filter:blur(6px);
+    color:var(--white);
+    border:none;
+    box-shadow:none;
+    font-weight:800;
+  }
+  .hero-actions .btn.btn-primary:hover{
+    background:var(--orange);
+    box-shadow:0 14px 26px -10px rgba(253,87,43,0.65);
+  }
+  html[dir="rtl"] .hero-actions .btn{ flex-direction:row-reverse; }
+
   @media (prefers-reduced-motion: reduce){
     .hero-bg{animation:none;}
     .hero-content > *{animation:none; opacity:1; transform:none;}
+  }
+
+  /* ---------- hero video slider (Kiewit-style: label + headline + one CTA per slide) ---------- */
+  .hero{ touch-action:pan-y; }
+  .hero-slide{ position:absolute; inset:0; opacity:0; transition:opacity .9s ease; }
+  .hero-slide.is-active{ opacity:1; }
+  .hero-slide .hero-bg{ animation:none; }
+  .hero-slide.is-active .hero-bg{ animation:heroZoom 24s ease-in-out infinite alternate; }
+
+  /* footage slides get a lighter veil than the dark brand-film slide */
+  .hero-overlay{ transition:opacity .9s ease; }
+  .hero[data-tone="site"] .hero-overlay{ opacity:.68; }
+
+  /* captions are stacked in one grid cell so the hero never changes height between slides */
+  .hero-content > .hero-captions{ display:grid; opacity:1; animation:none; transform-style:preserve-3d; }
+  .hero-caption{
+    grid-area:1 / 1;
+    visibility:hidden; opacity:0; pointer-events:none;
+    transition:opacity .25s ease, visibility 0s .25s;
+  }
+  .hero-caption.is-active{
+    visibility:visible; opacity:1; pointer-events:auto;
+    transition:none;
+  }
+  .hero-caption > *{ transform-style:preserve-3d; }
+  .hero-caption.is-active > *{ animation:heroUp .9s var(--ease) both; }
+  .hero-caption.is-active > :nth-child(1){ animation-delay:calc(.05s + var(--lead,0s)); }
+  .hero-caption.is-active > :nth-child(2){ animation-delay:calc(.18s + var(--lead,0s)); }
+  .hero-caption.is-active > :nth-child(3){ animation-delay:calc(.34s + var(--lead,0s)); }
+  .hero-caption.is-active > :nth-child(4){ animation-delay:calc(.50s + var(--lead,0s)); }
+  .hero.is-slid{ --lead:.25s; }   /* after the first change, wait for the old caption to fade out */
+
+  /* controls: progress segments + pause + prev / next */
+  .hero .hero-controls{
+    position:absolute; z-index:4;
+    inset-inline:0; margin-inline:auto; width:min(1240px, 92%);
+    bottom:30px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .hero-segs{ display:flex; gap:8px; flex:0 1 320px; margin-inline-end:8px; }
+  .hero-seg{
+    flex:1; height:24px; padding:0; border:0; background:none; cursor:pointer;
+    position:relative; -webkit-tap-highlight-color:transparent;
+  }
+  .hero-seg::before, .hero-seg i{
+    content:""; position:absolute; inset-inline:0; top:50%;
+    height:3px; margin-top:-1.5px; border-radius:2px;
+  }
+  .hero-seg::before{ background:rgba(255,255,255,.28); transition:background .25s ease; }
+  .hero-seg:hover::before{ background:rgba(255,255,255,.5); }
+  .hero-seg i{
+    display:block; background:var(--orange);
+    transform:scaleX(var(--p,0)); transform-origin:left center;
+  }
+  html[dir="rtl"] .hero-seg i{ transform-origin:right center; }
+  .hero-seg.is-active i{ transition:transform .2s linear; }
+  .hero-ctl{
+    width:38px; height:38px; padding:0; border-radius:50%; flex:none;
+    display:grid; place-items:center; cursor:pointer;
+    color:#fff; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.3);
+    -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
+    transition:background .25s ease, border-color .25s ease, transform .25s var(--ease);
+  }
+  .hero-ctl:hover{ background:rgba(253,87,43,.85); border-color:transparent; transform:translateY(-1px); }
+  .hero-ctl svg{ width:16px; height:16px; }
+  html[dir="rtl"] .hero-prev svg, html[dir="rtl"] .hero-next svg{ transform:scaleX(-1); }
+  .hero-pause .icon-play{ display:none; }
+  .hero-pause.is-paused .icon-play{ display:block; }
+  .hero-pause.is-paused .icon-pause{ display:none; }
+  .hero-ctl:focus-visible, .hero-seg:focus-visible{ outline:2px solid var(--orange); outline-offset:3px; }
+
+  @media (max-width:760px){
+    .hero-slide.is-active .hero-bg{ animation:none; }
+    .hero .hero-controls{ bottom:22px; gap:8px; }
+    .hero-segs{ flex-basis:auto; flex:1 1 0; margin-inline-end:4px; }
+    .hero-ctl{ width:36px; height:36px; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .hero-slide{ transition:none; }
+    .hero-slide.is-active .hero-bg{ animation:none; }
+    .hero-caption.is-active > *{ animation:none; }
   }
 
   /* ---------- ticker ---------- */
