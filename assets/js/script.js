@@ -1742,3 +1742,211 @@
   }, { threshold: 0.4 });
   sectionTitles.forEach(el => titleObs.observe(el));
 })();
+
+// ---- Worker Videos: one or more standalone cards, plus any horizontal,
+// swipe-between-them groups. There can be several `.video-stack` containers
+// on the page (e.g. one lone video here, a swipeable pair there) — reveal,
+// "has a real file yet" swap, and the play/pause + ambient-pause behaviour
+// apply to every video card on the page; the swipe/drag/dots wiring below
+// only kicks in for a given stack when it actually holds more than one card.
+(function(){
+  const allStacks = Array.from(document.querySelectorAll('.video-stack'));
+  if (!allStacks.length) return;
+  const videoCards = allStacks.flatMap(s => Array.from(s.querySelectorAll('.video-card')));
+  if (!videoCards.length) return;
+
+  // Staggered reveal on scroll (same pattern as the gallery grid).
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+      const idx = parseInt(el.style.getPropertyValue('--i')) || 0;
+      setTimeout(() => el.classList.add('in'), idx * 120);
+      revealObs.unobserve(el);
+    });
+  }, { threshold: 0.15 });
+  videoCards.forEach(el => revealObs.observe(el));
+
+  // Each card starts in an "empty" state (placeholder overlay). Once a real
+  // .mp4 file is uploaded to assets/video/ with the matching filename, the
+  // <video> tag will load metadata successfully and we swap to "has-video".
+  videoCards.forEach(card => {
+    const video = card.querySelector('.video-card-media');
+    if (!video) return;
+    video.addEventListener('loadedmetadata', () => card.classList.add('has-video'));
+    video.addEventListener('error', () => card.classList.remove('has-video'));
+  });
+
+  // Each video plays independently: the centre button toggles play/pause,
+  // and the video pauses itself again once it reaches the end. While any
+  // video is actually playing we tell the ambient background animations
+  // (WebGL pipe-rack scene + 2 canvas layers, all running continuously
+  // behind the page) to pause — decoding video alongside those is what
+  // was causing the stutter.
+  let playingCount = 0;
+  videoCards.forEach(card => {
+    const video = card.querySelector('.video-card-media');
+    const btn = card.querySelector('.video-playpause');
+    if (!video || !btn) return;
+    video.addEventListener('play', () => {
+      card.classList.add('is-playing');
+      playingCount++;
+      if (playingCount === 1) document.dispatchEvent(new CustomEvent('mijdaf:video-play'));
+    });
+    const onStop = () => {
+      if (!card.classList.contains('is-playing')) return;
+      card.classList.remove('is-playing');
+      playingCount = Math.max(0, playingCount - 1);
+      if (playingCount === 0) document.dispatchEvent(new CustomEvent('mijdaf:video-pause'));
+    };
+    video.addEventListener('pause', onStop);
+    video.addEventListener('ended', onStop);
+    if (!video.paused) { card.classList.add('is-playing'); playingCount++; }
+    btn.addEventListener('click', () => {
+      if (video.paused) video.play().catch(() => {});
+      else video.pause();
+    });
+  });
+
+  // Wire up swipe/drag/dots per stack — only meaningful for a stack that
+  // actually has more than one video in it.
+  allStacks.forEach(setupCarousel);
+
+  function setupCarousel(stack){
+  const cards = Array.from(stack.querySelectorAll('.video-card'));
+  if (cards.length < 2) return; // just one video here — nothing to swipe between
+  const dotsWrap = stack.parentElement ? stack.parentElement.querySelector('.video-stack-dots') : null;
+
+  // Swipe/scroll carousel: native horizontal scroll-snap drives the swipe,
+  // this just builds the pagination dots and keeps them (and clicks on
+  // them) in sync with whichever video is currently centred.
+  if (dotsWrap) {
+    const dots = cards.map((card, i) => {
+      const dot = document.createElement('button');
+      dot.type = 'button';
+      dot.setAttribute('aria-label', `فيديو ${i + 1}`);
+      dot.addEventListener('click', () => {
+        card.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      });
+      dotsWrap.appendChild(dot);
+      return dot;
+    });
+    dots[0].classList.add('is-active');
+
+    const setActive = (activeCard) => {
+      const idx = cards.indexOf(activeCard);
+      dots.forEach((d, i) => d.classList.toggle('is-active', i === idx));
+    };
+
+    const centerObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && entry.intersectionRatio > 0.6) setActive(entry.target);
+      });
+    }, { root: stack, threshold: [0, 0.6, 1] });
+    cards.forEach(card => centerObs.observe(card));
+  }
+
+  // A plain overflow-x container ignores mouse drags — a trackpad/mouse user
+  // gets no swipe at all. Add manual drag-to-scroll for mouse/pen input;
+  // CSS scroll-snap still handles settling on the nearest video afterwards.
+  let dragging = false;
+  let dragMoved = false;
+  let dragStartX = 0;
+  let dragStartScrollLeft = 0;
+
+  stack.addEventListener('pointerdown', (e) => {
+    if (e.pointerType === 'touch') return; // let native touch-scroll handle this
+    dragging = true;
+    dragMoved = false;
+    dragStartX = e.clientX;
+    dragStartScrollLeft = stack.scrollLeft;
+    stack.classList.add('is-dragging');
+  });
+  stack.addEventListener('pointermove', (e) => {
+    if (!dragging) return;
+    const dx = e.clientX - dragStartX;
+    if (Math.abs(dx) > 4) dragMoved = true;
+    stack.scrollLeft = dragStartScrollLeft - dx;
+  });
+  function endDrag(){
+    if (!dragging) return;
+    dragging = false;
+    stack.classList.remove('is-dragging');
+    if (!dragMoved) return;
+    // Manually dragged scrollLeft doesn't always trigger native scroll-snap,
+    // so settle on whichever video is now closest to centred.
+    const width = stack.clientWidth || 1;
+    const idx = Math.round(stack.scrollLeft / width);
+    const clamped = Math.max(0, Math.min(cards.length - 1, idx));
+    cards[clamped].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+  }
+  stack.addEventListener('pointerup', endDrag);
+  stack.addEventListener('pointercancel', endDrag);
+  stack.addEventListener('pointerleave', endDrag);
+
+  // Touch swipe: manually writing to `scrollLeft` (like the mouse-drag code
+  // above) turned out to be the real problem, not a leftover — this page is
+  // RTL (dir="rtl" on <html>), and `scrollLeft` numbers are notoriously
+  // inconsistent across browsers in RTL (some count from 0 going negative,
+  // older WebKit counts the opposite way). Our manual writes kept fighting
+  // the browser's own (correct) RTL scrolling, which is what made it look
+  // like the slide "snapped back". Fix: don't touch scrollLeft ourselves at
+  // all on touch — let native touch-scrolling move the slide exactly like it
+  // already knows how to. We only step in once the finger lifts: measure the
+  // raw on-screen distance it travelled and, if that's a real swipe, command
+  // the browser to land on the next/previous card with scrollIntoView()
+  // (which is direction-safe since the browser computes it, not us). That
+  // overrides native mandatory-snap's overly large "must cross half the
+  // slide" threshold with a much smaller, natural one.
+  function currentCardIndex(){
+    const center = stack.getBoundingClientRect().left + stack.clientWidth / 2;
+    let best = 0, bestDist = Infinity;
+    cards.forEach((card, i) => {
+      const r = card.getBoundingClientRect();
+      const dist = Math.abs((r.left + r.width / 2) - center);
+      if (dist < bestDist) { bestDist = dist; best = i; }
+    });
+    return best;
+  }
+
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let touchStartIndex = 0;
+  let touchTracking = false;
+
+  stack.addEventListener('touchstart', (e) => {
+    if (e.touches.length !== 1) return;
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+    touchStartIndex = currentCardIndex();
+    touchTracking = true;
+  }, { passive: true });
+
+  stack.addEventListener('touchend', (e) => {
+    if (!touchTracking) return;
+    touchTracking = false;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - touchStartX;
+    const dy = t.clientY - touchStartY;
+    if (Math.abs(dx) < Math.abs(dy)) return; // a vertical gesture — leave it to the page scroll
+
+    const width = stack.clientWidth || 1;
+    const SWIPE_THRESHOLD = Math.min(60, width * 0.12); // a normal, modest swipe — not half the slide
+    let idx = touchStartIndex;
+    // RTL layout: the next video sits to the left, so a leftward drag (dx < 0) advances.
+    if (dx < -SWIPE_THRESHOLD) idx = Math.min(cards.length - 1, touchStartIndex + 1);
+    else if (dx > SWIPE_THRESHOLD) idx = Math.max(0, touchStartIndex - 1);
+
+    if (idx !== touchStartIndex) dragMoved = true; // suppress the trailing click below
+    cards[idx].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+  }, { passive: true });
+
+  stack.addEventListener('touchcancel', () => { touchTracking = false; }, { passive: true });
+
+  // After an actual drag/swipe, swallow the trailing click so it doesn't
+  // accidentally toggle a video's play/pause button.
+  stack.addEventListener('click', (e) => {
+    if (dragMoved) { e.preventDefault(); e.stopPropagation(); dragMoved = false; }
+  }, true);
+  } // end setupCarousel
+})();

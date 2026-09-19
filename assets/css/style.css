@@ -2088,6 +2088,105 @@
     .gallery-item.g-big{grid-column:span 2; grid-row:span 2;}
     .gallery-item.g-wide{grid-column:span 2; grid-row:span 1;}
   }
+
+  /* ---- WORKER VIDEOS: horizontal (16:9), swipe between them ---- */
+  .worker-videos{
+    position:relative; overflow:hidden; background:transparent;
+    padding:80px 0; width:100%;
+  }
+  .video-stack{
+    position:relative;
+    width:min(94%, 1040px);
+    margin:0 auto;
+    display:flex;
+    flex-direction:row;
+    overflow-x:auto;
+    scroll-snap-type:x mandatory;
+    scroll-behavior:smooth;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    -ms-overflow-style:none;
+    cursor:grab;
+    user-select:none;
+    -webkit-user-select:none;
+  }
+  .video-stack.is-dragging{
+    cursor:grabbing;
+    scroll-snap-type:none;
+    scroll-behavior:auto;
+  }
+  .video-stack::-webkit-scrollbar{display:none;}
+  .video-card{
+    position:relative;
+    flex:0 0 100%;
+    width:100%;
+    aspect-ratio:16/9;
+    scroll-snap-align:center;
+    scroll-snap-stop:always;
+    border-radius:18px;
+    overflow:hidden;
+    border:none;
+    background:transparent;
+    box-shadow:0 18px 40px rgba(10,13,31,0.28);
+    opacity:0;
+    transition:opacity .6s var(--ease);
+  }
+  .video-card.in{opacity:1;}
+  .video-card-media{
+    position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+    background:transparent; pointer-events:none;
+  }
+  .video-card-empty{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    background:rgba(10,13,31,0.18); color:var(--white);
+    pointer-events:none;
+  }
+  .video-card-empty svg{width:34px; height:34px; opacity:.85;}
+  .video-card.has-video .video-card-empty{display:none;}
+
+  .video-playpause{
+    position:absolute; top:50%; left:50%;
+    transform:translate(-50%, -50%);
+    width:64px; height:64px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(10,13,31,0.48); border:1.5px solid rgba(255,255,255,0.75);
+    color:var(--white); cursor:pointer;
+    backdrop-filter:blur(2px);
+    transition:background .25s var(--ease), transform .2s var(--ease);
+    z-index:5;
+  }
+  .video-playpause:hover{background:rgba(253,87,43,0.75); transform:translate(-50%, -50%) scale(1.06);}
+  .video-playpause svg{width:26px; height:26px;}
+  .video-playpause .icon-play{margin-inline-start:3px;}
+  .video-playpause .icon-pause{display:none;}
+  .video-card.is-playing .video-playpause .icon-play{display:none;}
+  .video-card.is-playing .video-playpause .icon-pause{display:block;}
+
+  .video-stack-dots{
+    display:flex; align-items:center; justify-content:center;
+    gap:10px; margin-top:20px;
+  }
+  .video-stack-dots button{
+    width:9px; height:9px; border-radius:50%;
+    border:none; padding:0; cursor:pointer;
+    background:color-mix(in srgb, var(--heading) 25%, transparent);
+    transition:background .25s var(--ease), transform .25s var(--ease);
+  }
+  .video-stack-dots button.is-active{
+    background:var(--brand, #fd572b);
+    transform:scale(1.25);
+  }
+
+  /* Desktop only: same layout/behaviour, just a noticeably bigger card.
+     aspect-ratio:16/9 on .video-card means height scales with width, so
+     bumping the container's max-width here grows both dimensions together. */
+  @media (min-width:1025px){
+    .video-stack{ width:min(88%, 1400px); }
+  }
+
+  @media (max-width:640px){
+    .video-card{border-radius:12px;}
+  }
   @media (max-width:640px){
     .gallery-grid{grid-template-columns:1fr; grid-auto-rows:220px; gap:14px;}
     .gallery-item,

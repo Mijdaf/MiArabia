@@ -102,7 +102,22 @@
     if (document.hidden) {
       if (raf) cancelAnimationFrame(raf);
       raf = null;
-    } else if (!raf) {
+    } else if (!raf && !videoPlaying) {
+      raf = requestAnimationFrame(frame);
+    }
+  });
+
+  /* Pause while a worker video is actually playing — decoding video and
+     running this canvas loop at the same time is what causes the stutter. */
+  let videoPlaying = false;
+  document.addEventListener('mijdaf:video-play', () => {
+    videoPlaying = true;
+    if (raf) cancelAnimationFrame(raf);
+    raf = null;
+  });
+  document.addEventListener('mijdaf:video-pause', () => {
+    videoPlaying = false;
+    if (!document.hidden && !raf) {
       raf = requestAnimationFrame(frame);
     }
   });

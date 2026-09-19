@@ -102,6 +102,7 @@
 
   /* ---------- animation loop ---------- */
   let running = true;
+  let videoPlaying = false;
   let lastT = performance.now();
 
   function frame(now) {
@@ -160,7 +161,22 @@
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
       running = false;
-    } else if (!running) {
+    } else if (!running && !videoPlaying) {
+      running = true;
+      lastT = performance.now();
+      requestAnimationFrame(frame);
+    }
+  });
+
+  /* Pause while a worker video is actually playing — decoding video and
+     running this canvas loop at the same time is what causes the stutter. */
+  document.addEventListener('mijdaf:video-play', () => {
+    videoPlaying = true;
+    running = false;
+  });
+  document.addEventListener('mijdaf:video-pause', () => {
+    videoPlaying = false;
+    if (!document.hidden && !running) {
       running = true;
       lastT = performance.now();
       requestAnimationFrame(frame);

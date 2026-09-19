@@ -336,6 +336,19 @@ whenIdle(function () {
   }
 
   document.addEventListener('visibilitychange', () => {
+    running = !document.hidden && !videoPlaying;
+    ensureLoop();
+  });
+
+  /* Pause while a worker video is actually playing — decoding video and
+     rendering this WebGL scene at the same time is what causes the stutter. */
+  let videoPlaying = false;
+  document.addEventListener('mijdaf:video-play', () => {
+    videoPlaying = true;
+    running = false;
+  });
+  document.addEventListener('mijdaf:video-pause', () => {
+    videoPlaying = false;
     running = !document.hidden;
     ensureLoop();
   });
