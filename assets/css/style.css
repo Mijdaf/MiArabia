@@ -3793,7 +3793,7 @@ header .logo{ cursor: pointer; }
     .wd-sp{ display:none; }
   }
 
-  /* ---------- splash: the welder welds the logo into place ---------- */
+  /* ---------- splash: the welder welds the logo into place, over scaffolding + light smoke ---------- */
   html.splash-lock, html.splash-lock body{ overflow:hidden; }
   .splash{
     --W:min(440px,78vw);
@@ -3804,7 +3804,7 @@ header .logo{ cursor: pointer; }
       radial-gradient(55% 45% at 50% 58%, rgba(253,87,43,.13), transparent 70%),
       #000032;
     overflow:hidden;
-    animation:spLeave .6s cubic-bezier(.7,0,.3,1) 3.3s forwards;
+    animation:spLeave .6s cubic-bezier(.7,0,.3,1) 4.1s forwards;
   }
   .splash::before{
     content:""; position:absolute; inset:0; pointer-events:none;
@@ -3822,11 +3822,11 @@ header .logo{ cursor: pointer; }
   }
   .splash-stage{ position:relative; display:flex; flex-direction:column; align-items:center; }
 
-  .splash-logo-wrap{ animation:spwGlow .9s ease 2.6s both; }
+  .splash-logo-wrap{ animation:spwGlow .9s ease 3.4s both; }
   .splash-logo{
     width:var(--W);
     clip-path:inset(0 0 0 100%);
-    animation:spwLogo 2.2s var(--spw-ease) .4s forwards;
+    animation:spwLogo 3s var(--spw-ease) .4s forwards;
   }
   .splash-logo img{ display:block; width:100%; height:auto; }
   @keyframes spwLogo{ from{ clip-path:inset(0 0 0 100%); } to{ clip-path:inset(0 0 0 0); } }
@@ -3843,7 +3843,7 @@ header .logo{ cursor: pointer; }
     box-shadow:0 0 10px rgba(253,87,43,.55);
     transform-origin:right center;
     transform:scaleX(0);
-    animation:spwBead 2.2s var(--spw-ease) .4s forwards;
+    animation:spwBead 3s var(--spw-ease) .4s forwards;
   }
   @keyframes spwBead{ from{ transform:scaleX(0); } to{ transform:scaleX(1); } }
 
@@ -3852,7 +3852,7 @@ header .logo{ cursor: pointer; }
   .spw-move{
     position:absolute; left:0; bottom:1.5px; width:150px; height:125px;
     transform:translateX(calc(var(--W) - 32px));
-    animation:spwMove 2.2s var(--spw-ease) .4s both;
+    animation:spwMove 3s var(--spw-ease) .4s both;
   }
   @keyframes spwMove{
     from{ transform:translateX(calc(var(--W) - 32px)); }
@@ -3860,7 +3860,7 @@ header .logo{ cursor: pointer; }
   }
   .spw-pop{
     width:100%; height:100%; transform-origin:50% 100%;
-    animation:spwPop .45s cubic-bezier(.2,1.4,.4,1) both, spwHop .55s ease 2.6s forwards;
+    animation:spwPop .45s cubic-bezier(.2,1.4,.4,1) both, spwHop .55s ease 3.4s forwards;
   }
   @keyframes spwPop{ from{ opacity:0; transform:scale(.6); } to{ opacity:1; transform:scale(1); } }
   @keyframes spwHop{
@@ -3876,67 +3876,74 @@ header .logo{ cursor: pointer; }
   }
   /* weld finished: arc, sparks and hot bead switch off */
   @keyframes spOff{ from{ opacity:1; } to{ opacity:0; } }
-  .splash .wd-arc{ animation:wdFlicker .32s steps(1,end) infinite, spOff .15s linear 2.6s forwards; }
-  .splash .wd-bead{ animation:wdBeadGlow .9s ease-in-out infinite alternate, spOff .4s ease 2.6s forwards; }
-  .splash .spw-sparks{ animation:spOff .3s ease 2.6s forwards; }
+  .splash .wd-arc{ animation:wdFlicker .32s steps(1,end) infinite, spOff .15s linear 3.4s forwards; }
+  .splash .wd-bead{ animation:wdBeadGlow .9s ease-in-out infinite alternate, spOff .4s ease 3.4s forwards; }
+  .splash .spw-sparks{ animation:spOff .3s ease 3.4s forwards; }
+
+  /* ---------- splash backdrop: scaffolding towers + drifting light smoke ---------- */
+  .splash-bg{ position:absolute; inset:0; overflow:hidden; pointer-events:none; }
+
+  /* keep the middle clear so the logo stays crisp; towers fade in toward the edges */
+  .splash-scaf{
+    position:absolute; inset:0;
+    -webkit-mask-image:radial-gradient(ellipse calc(var(--W) * .95) 300px at 50% 52%, transparent 55%, #000 100%);
+            mask-image:radial-gradient(ellipse calc(var(--W) * .95) 300px at 50% 52%, transparent 55%, #000 100%);
+  }
+  .splash-scaf .sc{ position:absolute; bottom:0; height:auto; overflow:visible; }
+  .splash-scaf .sc-l{ left:-3vw;  width:clamp(140px,24vw,330px); opacity:.5; }
+  .splash-scaf .sc-r{ right:-2vw; width:clamp(150px,22vw,300px); opacity:.46; }
+  /* far towers: smaller, dimmer, pushed toward the middle for depth */
+  .splash-scaf-far .sc-fl{ left:clamp(70px,17vw,250px);  width:clamp(120px,16vw,230px); opacity:.2; animation:scFade 1.2s ease .1s both; }
+  .splash-scaf-far .sc-fr{ right:clamp(60px,15vw,230px); width:clamp(110px,14vw,210px); opacity:.16; animation:scFade 1.2s ease .3s both; }
+
+  @media (max-width:640px){
+    .splash-scaf{
+      -webkit-mask-image:radial-gradient(ellipse calc(var(--W) * .95) 215px at 50% 52%, transparent 58%, #000 100%);
+              mask-image:radial-gradient(ellipse calc(var(--W) * .95) 215px at 50% 52%, transparent 58%, #000 100%);
+    }
+  }
+
+  /* scaffolding is "erected" level by level: poles, ledgers and braces draw in, decks slide out */
+  .sc .d{ animation:scDraw .8s cubic-bezier(.3,.6,.3,1) var(--dl,0s) both; }
+  @keyframes scDraw{
+    from{ stroke-dasharray:1; stroke-dashoffset:1; }
+    to  { stroke-dasharray:1; stroke-dashoffset:0; }
+  }
+  .sc .dk{ transform-box:fill-box; transform-origin:left center; animation:scDeck .55s ease-out calc(var(--dl,0s) + .25s) both; }
+  @keyframes scDeck{ from{ opacity:0; transform:scaleX(.15); } to{ opacity:.75; transform:none; } }
+  .sc .dots{ animation:scFade .5s ease-out calc(var(--dl,0s) + .4s) both; }
+  @keyframes scFade{ from{ opacity:0; } }
+
+  /* light smoke: soft sprites rise slowly, spread and fade (negative delays = already drifting at load) */
+  .splash-smoke{ position:absolute; inset:0; overflow:hidden; }
+  .splash-smoke i{
+    position:absolute; bottom:-30%; left:var(--x);
+    width:min(var(--s), 92vw); aspect-ratio:1;
+    margin-left:calc(min(var(--s), 92vw) / -2);
+    background:url("../splash-smoke.png") center / contain no-repeat;
+    opacity:0;
+    animation:spSmoke var(--t) linear var(--d) infinite;
+    will-change:transform, opacity;
+  }
+  @keyframes spSmoke{
+    0%  { opacity:0;                     transform:translate3d(0,0,0) scale(.7) rotate(var(--r0)); }
+    18% { opacity:var(--o); }
+    70% { opacity:calc(var(--o) * .6); }
+    100%{ opacity:0;                     transform:translate3d(var(--dx),-115vh,0) scale(1.55) rotate(var(--r1)); }
+  }
 
   .splash-tag{
     margin:22px 0 0; font-family:var(--font-body); font-weight:700; font-size:15px;
-    color:#b7bcd6; opacity:0; animation:spFade .6s ease 2.7s forwards;
+    color:#b7bcd6; opacity:0; animation:spFade .6s ease 3.5s forwards;
   }
   @keyframes spFade{ from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:none; } }
-
-  /* ---------- splash: the running / jumping arrow that follows the welder ---------- */
-  .spw-arrow{
-    position:absolute; left:0; bottom:1.5px; width:76px; height:61px;
-    transform:translateX(calc(var(--W) - 32px + 140px));
-    animation:spwArrowTrack 2.2s var(--spw-ease) .4s both;
-  }
-  @keyframes spwArrowTrack{
-    from{ transform:translateX(calc(var(--W) - 32px + 140px)); }
-    to  { transform:translateX(calc(-32px + 140px)); }
-  }
-  /* rushes in from off-screen right, then keeps pace behind the welder */
-  .spw-arrow-run{ width:100%; height:100%; animation:spwArrowIn 1s cubic-bezier(.15,.7,.3,1) .1s both; }
-  @keyframes spwArrowIn{ from{ transform:translateX(700px); } to{ transform:translateX(0); } }
-  .spw-arrow-hop{ width:100%; height:100%; transform-origin:50% 100%; animation:spwJump 3.3s linear both; }
-  .spw-arrow svg{
-    display:block; width:100%; height:100%; overflow:visible;
-    filter:drop-shadow(0 0 .8px rgba(255,255,255,.9));
-  }
-  .spw-leg{ transform-box:view-box; animation:spwLegA .25s linear .1s 10 both; }
-  .spw-leg-b{ animation-name:spwLegB; }
-  @keyframes spwLegA{ 0%,50%,100%{ transform:rotate(0); } 25%{ transform:rotate(-40deg); } 75%{ transform:rotate(40deg); } }
-  @keyframes spwLegB{ 0%,50%,100%{ transform:rotate(0); } 25%{ transform:rotate(40deg); } 75%{ transform:rotate(-40deg); } }
-  .spw-speed{ animation:spwSpeed .18s steps(1,end) .1s 14 both; }
-  @keyframes spwSpeed{ 0%{ opacity:.9; transform:translateX(0); } 50%{ opacity:.35; transform:translateX(5px); } }
-  /* two hops while running, a big celebratory one (with the welder) and a little one to finish */
-  @keyframes spwJump{
-    0%,26%   { transform:none; }
-    27%      { transform:scale(1.1,.9); animation-timing-function:ease-out; }
-    30%      { transform:translateY(0) scale(.95,1.08); animation-timing-function:cubic-bezier(.2,.7,.4,1); }
-    35%      { transform:translateY(-36px) rotate(10deg) scale(.96,1.06); animation-timing-function:cubic-bezier(.6,0,.8,.3); }
-    42%      { transform:translateY(0) rotate(-6deg) scale(1.12,.88); }
-    45%,50%  { transform:none; }
-    51%      { transform:scale(1.1,.9); animation-timing-function:ease-out; }
-    54%      { transform:translateY(0) scale(.95,1.08); animation-timing-function:cubic-bezier(.2,.7,.4,1); }
-    59%      { transform:translateY(-36px) rotate(10deg) scale(.96,1.06); animation-timing-function:cubic-bezier(.6,0,.8,.3); }
-    66%      { transform:translateY(0) rotate(-6deg) scale(1.12,.88); }
-    69%,75%  { transform:none; }
-    76%      { transform:scale(1.12,.88); animation-timing-function:ease-out; }
-    78%      { transform:translateY(0) scale(.94,1.1); animation-timing-function:cubic-bezier(.2,.7,.4,1); }
-    84%      { transform:translateY(-46px) rotate(0) scale(.96,1.08); animation-timing-function:cubic-bezier(.6,0,.8,.3); }
-    90%      { transform:translateY(0) scale(1.14,.86); }
-    92%      { transform:none; animation-timing-function:cubic-bezier(.2,.7,.4,1); }
-    95.5%    { transform:translateY(-16px) rotate(6deg); animation-timing-function:cubic-bezier(.6,0,.8,.3); }
-    98%,100% { transform:none; }
-  }
 
   @media (prefers-reduced-motion: reduce){
     .splash *{ animation:none !important; }
     .splash-logo{ clip-path:none; }
     .spw-bead{ transform:none; }
-    .spw-move, .spw-arrow{ display:none; }
+    .spw-move{ display:none; }
+    .splash-smoke i{ opacity:calc(var(--o) * .8); transform:translateY(-45vh); }
     .splash-tag{ opacity:1; }
     .splash{ animation-delay:1.2s; animation-duration:.4s; }
   }
