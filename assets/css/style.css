@@ -3876,8 +3876,8 @@ header .logo{ cursor: pointer; }
   }
   .wd-head{ transform-origin:64px 46px; transform-box:view-box; animation:wdNod 3.2s ease-in-out infinite; }
   @keyframes wdNod{
-    0%,100%{ transform:rotate(8deg); }
-    50%{ transform:rotate(12deg) translateY(.6px); }
+    0%,100%{ transform:rotate(28deg); }
+    50%{ transform:rotate(32deg) translateY(.6px); }
   }
   .wd-arc{ transform-box:fill-box; transform-origin:center; animation:wdFlicker .32s steps(1,end) infinite; }
   @keyframes wdFlicker{
@@ -3906,7 +3906,7 @@ header .logo{ cursor: pointer; }
     .wd-sp{ display:none; }
   }
 
-  /* ---------- splash: the welder welds the logo into place, over scaffolding + light smoke ---------- */
+  /* ---------- splash: the welder welds the logo into place, over light smoke ---------- */
   html.splash-lock, html.splash-lock body{ overflow:hidden; }
   .splash{
     --W:min(440px,78vw);
@@ -3917,7 +3917,7 @@ header .logo{ cursor: pointer; }
       radial-gradient(55% 45% at 50% 58%, rgba(253,87,43,.13), transparent 70%),
       #000032;
     overflow:hidden;
-    animation:spLeave .6s cubic-bezier(.7,0,.3,1) 4.1s forwards;
+    animation:spLeave .5s cubic-bezier(.7,0,.3,1) 2.5s forwards;
   }
   .splash::before{
     content:""; position:absolute; inset:0; pointer-events:none;
@@ -3935,11 +3935,11 @@ header .logo{ cursor: pointer; }
   }
   .splash-stage{ position:relative; display:flex; flex-direction:column; align-items:center; }
 
-  .splash-logo-wrap{ animation:spwGlow .9s ease 3.4s both; }
+  .splash-logo-wrap{ animation:spwGlow .7s ease 1.9s both; }
   .splash-logo{
     width:var(--W);
     clip-path:inset(0 0 0 100%);
-    animation:spwLogo 3s var(--spw-ease) .4s forwards;
+    animation:spwLogo 1.6s var(--spw-ease) .3s forwards;
   }
   .splash-logo img{ display:block; width:100%; height:auto; }
   @keyframes spwLogo{ from{ clip-path:inset(0 0 0 100%); } to{ clip-path:inset(0 0 0 0); } }
@@ -3948,7 +3948,7 @@ header .logo{ cursor: pointer; }
     45%    { filter:drop-shadow(0 0 20px rgba(253,87,43,.7)); }
   }
 
-  .splash-seam{ position:relative; width:var(--W); height:136px; }
+  .splash-seam{ position:relative; width:var(--W); height:28px; margin-top:22px; }
   .spw-plate, .spw-bead{ position:absolute; left:0; bottom:0; width:100%; height:4px; border-radius:2px; }
   .spw-plate{ background:rgba(255,255,255,.14); }
   .spw-bead{
@@ -3956,7 +3956,7 @@ header .logo{ cursor: pointer; }
     box-shadow:0 0 10px rgba(253,87,43,.55);
     transform-origin:right center;
     transform:scaleX(0);
-    animation:spwBead 3s var(--spw-ease) .4s forwards;
+    animation:spwBead 1.6s var(--spw-ease) .3s forwards;
   }
   @keyframes spwBead{ from{ transform:scaleX(0); } to{ transform:scaleX(1); } }
 
@@ -3993,39 +3993,8 @@ header .logo{ cursor: pointer; }
   .splash .wd-bead{ animation:wdBeadGlow .9s ease-in-out infinite alternate, spOff .4s ease 3.4s forwards; }
   .splash .spw-sparks{ animation:spOff .3s ease 3.4s forwards; }
 
-  /* ---------- splash backdrop: scaffolding towers + drifting light smoke ---------- */
+  /* ---------- splash backdrop: drifting light smoke ---------- */
   .splash-bg{ position:absolute; inset:0; overflow:hidden; pointer-events:none; }
-
-  /* keep the middle clear so the logo stays crisp; towers fade in toward the edges */
-  .splash-scaf{
-    position:absolute; inset:0;
-    -webkit-mask-image:radial-gradient(ellipse calc(var(--W) * .95) 300px at 50% 52%, transparent 55%, #000 100%);
-            mask-image:radial-gradient(ellipse calc(var(--W) * .95) 300px at 50% 52%, transparent 55%, #000 100%);
-  }
-  .splash-scaf .sc{ position:absolute; bottom:0; height:auto; overflow:visible; }
-  .splash-scaf .sc-l{ left:-3vw;  width:clamp(140px,24vw,330px); opacity:.5; }
-  .splash-scaf .sc-r{ right:-2vw; width:clamp(150px,22vw,300px); opacity:.46; }
-  /* far towers: smaller, dimmer, pushed toward the middle for depth */
-  .splash-scaf-far .sc-fl{ left:clamp(70px,17vw,250px);  width:clamp(120px,16vw,230px); opacity:.2; animation:scFade 1.2s ease .1s both; }
-  .splash-scaf-far .sc-fr{ right:clamp(60px,15vw,230px); width:clamp(110px,14vw,210px); opacity:.16; animation:scFade 1.2s ease .3s both; }
-
-  @media (max-width:640px){
-    .splash-scaf{
-      -webkit-mask-image:radial-gradient(ellipse calc(var(--W) * .95) 215px at 50% 52%, transparent 58%, #000 100%);
-              mask-image:radial-gradient(ellipse calc(var(--W) * .95) 215px at 50% 52%, transparent 58%, #000 100%);
-    }
-  }
-
-  /* scaffolding is "erected" level by level: poles, ledgers and braces draw in, decks slide out */
-  .sc .d{ animation:scDraw .8s cubic-bezier(.3,.6,.3,1) var(--dl,0s) both; }
-  @keyframes scDraw{
-    from{ stroke-dasharray:1; stroke-dashoffset:1; }
-    to  { stroke-dasharray:1; stroke-dashoffset:0; }
-  }
-  .sc .dk{ transform-box:fill-box; transform-origin:left center; animation:scDeck .55s ease-out calc(var(--dl,0s) + .25s) both; }
-  @keyframes scDeck{ from{ opacity:0; transform:scaleX(.15); } to{ opacity:.75; transform:none; } }
-  .sc .dots{ animation:scFade .5s ease-out calc(var(--dl,0s) + .4s) both; }
-  @keyframes scFade{ from{ opacity:0; } }
 
   /* light smoke: soft sprites rise slowly, spread and fade (negative delays = already drifting at load) */
   .splash-smoke{ position:absolute; inset:0; overflow:hidden; }
@@ -4047,7 +4016,7 @@ header .logo{ cursor: pointer; }
 
   .splash-tag{
     margin:22px 0 0; font-family:var(--font-body); font-weight:500; font-size:15px;
-    color:#b7bcd6; opacity:0; animation:spFade .6s ease 3.5s forwards;
+    color:#b7bcd6; opacity:0; animation:spFade .5s ease 2.0s forwards;
   }
   @keyframes spFade{ from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:none; } }
 
