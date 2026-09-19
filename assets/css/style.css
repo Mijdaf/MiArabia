@@ -3400,12 +3400,30 @@
 
   /* ---------- footer ---------- */
   footer{
+    position:relative;
+    overflow:hidden;
     background:color-mix(in srgb, var(--black) 68%, transparent);
     color:#b7bcd6;
     padding:56px 0 26px;
   }
   html[data-theme="dark"] footer{background:color-mix(in srgb, var(--black) 34%, transparent);}
+  /* Decorative construction illustration (Lottie), tucked in a corner
+     behind the real footer content — purely ambient, never interactive. */
+  .footer-lottie{
+    position:absolute;
+    inset-inline-end:-40px;
+    bottom:-30px;
+    width:320px;
+    max-width:42vw;
+    aspect-ratio:750/500;
+    opacity:.16;
+    pointer-events:none;
+    z-index:0;
+  }
+  .footer-lottie svg{width:100%; height:100%; display:block;}
   footer .wrap{
+    position:relative;
+    z-index:1;
     display:grid;
     grid-template-columns:1.4fr 1fr 1fr;
     gap:40px;
@@ -3726,3 +3744,51 @@ header .logo{ cursor: pointer; }
   70%{ box-shadow: 0 0 0 14px transparent; }
   100%{ box-shadow: 0 0 0 0 transparent; }
 }
+
+  /* ---------- welder mascot sitting on the "Request a Quote" pill ---------- */
+  .qa-welder{
+    position:absolute;
+    inset-inline-start:50%;
+    bottom:calc(100% - 2px);
+    width:112px; height:93px;
+    margin-inline-start:-56px;
+    pointer-events:none;
+    z-index:2;
+  }
+  .qa-welder svg{
+    display:block; width:100%; height:100%;
+    overflow:visible;
+    /* thin light rim so the dark boots/helmet stay readable over the dark hero */
+    filter:drop-shadow(0 0 .7px rgba(255,255,255,.9));
+  }
+  .wd-head{ transform-origin:64px 46px; transform-box:view-box; animation:wdNod 3.2s ease-in-out infinite; }
+  @keyframes wdNod{
+    0%,100%{ transform:rotate(8deg); }
+    50%{ transform:rotate(12deg) translateY(.6px); }
+  }
+  .wd-arc{ transform-box:fill-box; transform-origin:center; animation:wdFlicker .32s steps(1,end) infinite; }
+  @keyframes wdFlicker{
+    0%  { opacity:1;   transform:scale(1)    rotate(0deg); }
+    18% { opacity:.65; transform:scale(.78)  rotate(20deg); }
+    36% { opacity:1;   transform:scale(1.18) rotate(-12deg); }
+    54% { opacity:.8;  transform:scale(.9)   rotate(32deg); }
+    72% { opacity:1;   transform:scale(1.28) rotate(8deg); }
+    88% { opacity:.7;  transform:scale(.85)  rotate(-24deg); }
+  }
+  .wd-bead{ animation:wdBeadGlow .9s ease-in-out infinite alternate; }
+  @keyframes wdBeadGlow{ from{ opacity:.65; } to{ opacity:1; } }
+  .wd-sp{ animation:wdX var(--t) linear var(--d) infinite; }
+  .wd-spy{ animation:wdY var(--t) linear var(--d) infinite; }
+  @keyframes wdX{ from{ transform:translateX(0); } to{ transform:translateX(var(--dx)); } }
+  @keyframes wdY{
+    0%  { transform:translateY(0);                   opacity:1; animation-timing-function:cubic-bezier(.2,.7,.4,1); }
+    42% { transform:translateY(calc(var(--up) * -1)); opacity:1; animation-timing-function:cubic-bezier(.6,0,.9,.6); }
+    100%{ transform:translateY(3px);                 opacity:0; }
+  }
+  @media (max-width:640px){
+    .qa-welder{ width:88px; height:73px; margin-inline-start:-44px; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .wd-head, .wd-arc, .wd-bead, .wd-sp, .wd-spy{ animation:none; }
+    .wd-sp{ display:none; }
+  }
