@@ -1725,11 +1725,8 @@
   const heroTitle = document.querySelector('.hero h1');
   const sectionTitles = titles.filter(el => el !== heroTitle);
 
-  // Hero title: it's already on screen at load, so play it shortly after
-  // the page paints rather than waiting on a scroll trigger.
-  if(heroTitle){
-    window.setTimeout(() => typeWriter(heroTitle, 48), 350);
-  }
+  // Hero titles are typed by the hero slider itself (every slide, each time it
+  // becomes active) — see typeHeroTitle() in the hero slider block below.
 
   // Every other section title: type out once it scrolls into view.
   const titleObs = new IntersectionObserver((entries) => {
@@ -2025,6 +2022,70 @@
   }
   function kick(){ if (!raf && running()) raf = requestAnimationFrame(tick); }
 
+  // ---- typewriter for the hero titles (same effect as the section titles) ----
+  // Types the active slide's title character-by-character with the blinking
+  // cursor. Its height is reserved up front so the text below doesn't jump,
+  // and starting a new one (or switching language) safely cancels the old one.
+  const heroTitles = captions.map(c => c.querySelector('h1, .hero-title'));
+  const TW_SPEED = 48;
+  let twToken = 0;
+  const twSleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+  function twFinish(el){                       // put a half-typed title back to full text
+    if (!el || el._twFull == null) return;
+    if (el.querySelector('.tw-cursor')) el.innerHTML = el._twFull;
+    el._twFull = null; el.style.minHeight = '';
+  }
+
+  async function typeHeroTitle(i){
+    const el = heroTitles[i];
+    if (!el || reduceMotion) return;
+    const token = ++twToken;                   // cancels any earlier run
+    heroTitles.forEach(twFinish);
+
+    const full = el.innerHTML;
+    const h = el.offsetHeight;
+    if (h) el.style.minHeight = h + 'px';
+    el._twFull = full;
+
+    const src = document.createElement('div');
+    src.innerHTML = full;
+    el.innerHTML = '';
+    const cursor = document.createElement('span');
+    cursor.className = 'tw-cursor';
+    el.appendChild(cursor);
+    const alive = () => token === twToken && cursor.parentNode === el;
+
+    await twSleep(300);                        // let the caption fade in first
+    if (!alive()) { if (cursor.parentNode !== el) { el._twFull = null; el.style.minHeight = ''; } return; }
+
+    async function walk(srcNode, dest, isRoot){
+      for (const child of Array.from(srcNode.childNodes)){
+        if (child.nodeType === 3){
+          const tn = document.createTextNode('');
+          dest.insertBefore(tn, isRoot ? cursor : null);
+          const text = child.textContent;
+          for (let k = 0; k < text.length; k++){
+            if (!alive()) return false;
+            tn.textContent += text[k];
+            await twSleep(TW_SPEED);
+          }
+        } else if (child.nodeType === 1){
+          const clone = child.cloneNode(false);
+          dest.insertBefore(clone, isRoot ? cursor : null);
+          if (await walk(child, clone, false) === false) return false;
+        }
+      }
+      return true;
+    }
+    const done = await walk(src, el, true);
+    if (done && alive()){
+      cursor.remove(); el._twFull = null; el.style.minHeight = '';
+    } else if (cursor.parentNode !== el){      // content was replaced (e.g. language switch)
+      el._twFull = null; el.style.minHeight = '';
+    }
+  }
+
   // ---- navigation ----
   function go(n, fromUser){
     n = (n + N) % N;
@@ -2040,7 +2101,7 @@
       setBar(k, k < n ? 1 : 0);
     });
     hero.dataset.tone = slides[n].dataset.tone || 'brand';
-    if (leaving !== n) hero.classList.add('is-slid');
+    if (leaving !== n){ hero.classList.add('is-slid'); typeHeroTitle(n); }
 
     prepare(n);
     prepare((n + 1) % N);
@@ -2159,6 +2220,7 @@
     if (v){ v.loop = false; try { v.currentTime = 0; } catch(e){} }
     if (autoplay) playCurrent();
     kick();
+    typeHeroTitle(0);
   }
   if (reduceMotion){ autoplay = false; pauseBtn && pauseBtn.classList.add('is-paused'); pauseBtn && pauseBtn.setAttribute('aria-pressed', 'true'); }
   const splash = document.getElementById('splash');

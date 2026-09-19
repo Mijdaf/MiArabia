@@ -956,6 +956,8 @@
     vertical-align:-0.1em;
     animation:tw-blink .8s steps(1) infinite;
   }
+  /* hero titles have a tight line-height: keep the cursor from stretching the line box */
+  .hero .tw-cursor{ height:.7em; vertical-align:baseline; margin-block:-.2em 0; }
   @keyframes tw-blink{
     0%, 49%{opacity:1;}
     50%, 100%{opacity:0;}
