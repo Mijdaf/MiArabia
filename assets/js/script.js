@@ -2328,3 +2328,56 @@
     setTimeout(start, 6500);     // safety net
   } else { start(); }
 })();
+
+// ---------- ticker: seamless, gap-free marquee ----------
+// The track holds one set of items in the HTML. We clone that set enough
+// times to fill (at least) the full screen width in each half of the track,
+// then animate by exactly -50%, so the loop restarts with no empty space.
+(function(){
+  const track = document.getElementById('tickerTrack');
+  if(!track) return;
+  const ticker = track.parentElement;
+  const base = Array.from(track.children);
+  if(!base.length) return;
+
+  const SPEED = 60; // px per second (keeps the same pace on any screen size)
+  let lastKey = '';
+
+  function build(){
+    const setW0 = base.reduce((w, el) => w + el.getBoundingClientRect().width, 0);
+    const key = Math.round(setW0) + '|' + ticker.clientWidth;
+    if(key === lastKey && track.classList.contains('is-ready')) return;   // nothing changed: don't restart the animation
+    track.querySelectorAll('[data-ticker-clone]').forEach(n => n.remove());
+    track.classList.remove('is-ready');
+
+    const setW = base.reduce((w, el) => w + el.getBoundingClientRect().width, 0);
+    if(!setW) return;
+
+    const viewW = ticker.clientWidth;
+    const copies = Math.max(1, Math.ceil(viewW / setW));   // sets per half
+    const frag = document.createDocumentFragment();
+    for(let i = 1; i < copies * 2; i++){
+      base.forEach(el => {
+        const c = el.cloneNode(true);
+        c.setAttribute('aria-hidden', 'true');
+        c.setAttribute('data-ticker-clone', '');
+        frag.appendChild(c);
+      });
+    }
+    track.appendChild(frag);
+
+    track.style.setProperty('--ticker-duration', ((copies * setW) / SPEED).toFixed(2) + 's');
+    track.classList.add('is-ready');
+    lastKey = Math.round(setW) + '|' + viewW;
+  }
+
+  let t;
+  function schedule(){ clearTimeout(t); t = setTimeout(build, 120); }
+
+  build();
+  window.addEventListener('resize', schedule);
+  window.addEventListener('load', build);
+  if(document.fonts && document.fonts.ready){ document.fonts.ready.then(build).catch(() => {}); }
+  // text width changes when switching Arabic <-> English
+  new MutationObserver(schedule).observe(document.documentElement, { attributes:true, attributeFilter:['lang'] });
+})();

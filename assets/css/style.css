@@ -887,7 +887,12 @@
     display:inline-flex;
     gap:0;
     direction:ltr;
-    animation:scroll 26s linear infinite;
+  }
+  /* animation starts only after JS has cloned enough copies to fill the
+     screen, so there is never an empty gap at the end of the loop */
+  .ticker-track.is-ready{
+    animation:scroll var(--ticker-duration, 26s) linear infinite;
+    will-change:transform;
   }
   .ticker-track span{
     font-family:var(--font-mono);
