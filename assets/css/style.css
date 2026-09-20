@@ -947,6 +947,11 @@
   .section-head.reveal.in h2::after{transform:scaleX(1);}
 
   /* ---------- Typewriter effect for screen/section titles (h1 hero + h2) ---------- */
+  /* Each visual line is typed inside its own block box (assigned up front by
+     measuring the real, already-laid-out text) so a word is only ever typed
+     on the line it will end up on — it can't start at the end of one line
+     and then jump down once it no longer fits. */
+  .tw-line{ display:block; }
   .tw-cursor{
     display:inline-block;
     width:2px;
@@ -2953,19 +2958,10 @@
   .why-row-details > p{transition:opacity .25s ease;}
   .why-row.is-typing .why-row-details > p{opacity:0; transition:none;}
   .why-row.is-typing .why-typed-out{opacity:1; visibility:visible;}
-  .why-typed-out::after{
-    content:'';
-    display:inline-block;
-    width:2px;
-    height:1em;
-    margin-inline-start:3px;
-    vertical-align:-.15em;
-    background:var(--orange);
-    animation:whyCaretBlink .8s step-end infinite;
-  }
-  .why-typed-out.is-done::after{animation:whyCaretFade .5s ease forwards;}
-  @keyframes whyCaretBlink{0%,100%{opacity:1;} 50%{opacity:0;}}
-  @keyframes whyCaretFade{to{opacity:0;}}
+  /* The caret is a real .tw-cursor element the script moves onto the line
+     currently being typed (see .tw-line above) rather than a ::after tied
+     to the end of the whole block, so it tracks the right line when the
+     text wraps to two or three lines. */
   @media (prefers-reduced-motion: reduce){
     .why-typed-out{display:none;}
     .why-row.is-typing .why-row-details > p{opacity:1;}

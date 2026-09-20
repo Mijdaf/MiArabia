@@ -739,12 +739,121 @@
     });
   });
 
+  // ---------- Shared line-aware typewriter helpers ----------
+  // Typing straight into flowing text lets the browser re-wrap mid-word: the
+  // last word of a line starts appearing at the line's end, then the whole
+  // (partially-typed) word jumps down as soon as it no longer fits. To avoid
+  // that, we first measure — on the real, already-rendered content — exactly
+  // which words land on which visual line, then type each line inside its
+  // own line box, so a word is only ever typed on the line it belongs on.
+  // Used by the section/hero title typewriter and the "why us" row typing.
+  function twComputeLines(root){
+    const lines = [];
+    let current = [];
+    let lastTop = null;
+
+    function ancestorPath(node){
+      const path = [];
+      let el = node.parentElement;
+      while (el && el !== root) { path.unshift(el.tagName); el = el.parentElement; }
+      return path;
+    }
+
+    function handleTextNode(node){
+      const text = node.textContent;
+      if (!text) return;
+      const tokens = text.match(/\s+|\S+/g) || [];
+      const path = ancestorPath(node);
+      let offset = 0;
+      tokens.forEach(tok => {
+        const start = offset;
+        offset += tok.length;
+        let top = lastTop;
+        const range = document.createRange();
+        range.setStart(node, start);
+        range.setEnd(node, offset);
+        const rects = range.getClientRects();
+        if (rects.length) top = Math.round(rects[0].top);
+        if (lastTop !== null && Math.abs(top - lastTop) > 1) {
+          lines.push(current);
+          current = [];
+        }
+        current.push({ path, text: tok });
+        lastTop = top;
+      });
+    }
+
+    (function walk(node){
+      Array.from(node.childNodes).forEach(child => {
+        if (child.nodeType === Node.TEXT_NODE) handleTextNode(child);
+        else if (child.nodeType === Node.ELEMENT_NODE) walk(child);
+      });
+    })(root);
+
+    if (current.length) lines.push(current);
+    return lines;
+  }
+
+  function twMergeRuns(tokens){
+    const runs = [];
+    tokens.forEach(tok => {
+      const key = tok.path.join('>');
+      const last = runs[runs.length - 1];
+      if (last && last.key === key) last.text += tok.text;
+      else runs.push({ key, path: tok.path, text: tok.text });
+    });
+    return runs;
+  }
+
+  function twBuildChain(path){
+    let top = null, leaf = null;
+    path.forEach(tag => {
+      const el = document.createElement(tag);
+      if (leaf) leaf.appendChild(el); else top = el;
+      leaf = el;
+    });
+    return { top, leaf };
+  }
+
+  // Types `root`'s precomputed `lines` (from twComputeLines) into fresh
+  // per-line boxes, keeping `cursor` at the caret. Leaves any partial state
+  // as-is (for the caller to handle) if `alive()` turns false mid-typing.
+  async function twTypeLines(root, lines, speed, cursor, alive, sleep){
+    for (const lineTokens of lines) {
+      if (!alive()) return false;
+      const lineEl = document.createElement('span');
+      lineEl.className = 'tw-line';
+      root.appendChild(lineEl);
+      lineEl.appendChild(cursor);
+
+      const runs = twMergeRuns(lineTokens);
+      for (const run of runs) {
+        if (!alive()) return false;
+        let leafParent = lineEl;
+        if (run.path.length) {
+          const chain = twBuildChain(run.path);
+          lineEl.insertBefore(chain.top, cursor);
+          leafParent = chain.leaf;
+        }
+        const tn = document.createTextNode('');
+        leafParent.insertBefore(tn, leafParent === lineEl ? cursor : null);
+        for (let i = 0; i < run.text.length; i++) {
+          if (!alive()) return false;
+          tn.textContent += run.text[i];
+          await sleep(speed);
+        }
+      }
+    }
+    return true;
+  }
+
   // Why-us rows: type the description out character by character when the
   // row opens. The real <p> keeps the text (so it stays selectable, stays
   // readable by screen readers, and stays the element the AR/EN switcher
   // rewrites); it's just faded while an overlay span types the same string
-  // over it. We type with slice() rather than one <span> per letter so
-  // Arabic letters keep their joined forms while the line builds up.
+  // over it. We type line-by-line (see twComputeLines above) with slice()
+  // within each line — rather than one <span> per letter — so Arabic
+  // letters keep their joined forms while a line builds up.
   (function whyTypewriter(){
     const rows = document.querySelectorAll('.why-row');
     if (!rows.length) return;
@@ -768,8 +877,7 @@
         window.clearTimeout(timer);
         timer = null;
         row.classList.remove('is-typing');
-        out.classList.remove('is-done');
-        out.textContent = '';
+        out.innerHTML = '';
       };
 
       const play = () => {
@@ -779,25 +887,53 @@
         const text = (p.textContent || '').trim();
         if (!text) return;
 
+        // Measure the real, already-laid-out paragraph to find exactly which
+        // words fall on which of its (up to 3) visual lines, then type each
+        // line inside its own box — see twComputeLines above for why.
+        const lineStrings = twComputeLines(p)
+          .map(tokens => tokens.map(t => t.text).join('').trim())
+          .filter(Boolean);
+        if (!lineStrings.length) return;
+
         row.classList.add('is-typing');
-        let i = 0;
+        const lineEls = lineStrings.map(() => {
+          const s = document.createElement('span');
+          s.className = 'tw-line';
+          out.appendChild(s);
+          return s;
+        });
+        const cursor = document.createElement('span');
+        cursor.className = 'tw-cursor';
+
+        let lineIdx = 0, charIdx = 0;
 
         const step = () => {
-          i++;
-          out.textContent = text.slice(0, i);
-          if (i < text.length) {
+          const lineText = lineStrings[lineIdx];
+          const lineEl = lineEls[lineIdx];
+          charIdx++;
+          lineEl.textContent = lineText.slice(0, charIdx);
+          lineEl.appendChild(cursor); // keep the caret on the line being typed
+
+          if (charIdx < lineText.length) {
             // A touch of jitter so it reads like typing, not a machine.
-            const ch = text.charAt(i - 1);
+            const ch = lineText.charAt(charIdx - 1);
             const pause = /[.،,؛;:!؟?]/.test(ch) ? SPEED * 7 : SPEED + Math.random() * 18;
             timer = window.setTimeout(step, pause);
             return;
           }
-          // Done: fade the caret, then hand the line back to the real <p>.
-          out.classList.add('is-done');
+          lineIdx++;
+          charIdx = 0;
+          if (lineIdx < lineStrings.length) {
+            timer = window.setTimeout(step, SPEED + Math.random() * 18);
+            return;
+          }
+          // Done: fade the caret, then hand the lines back to the real <p>.
+          cursor.style.animation = 'none';
+          cursor.style.transition = 'opacity .5s ease';
+          cursor.style.opacity = '0';
           timer = window.setTimeout(() => {
             row.classList.remove('is-typing');
-            out.textContent = '';
-            out.classList.remove('is-done');
+            out.innerHTML = '';
           }, 520);
         };
 
@@ -1686,40 +1822,19 @@
 
   const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
-  function typeWriter(root, speed){
-    return new Promise(resolve => {
-      const original = root.cloneNode(true);
-      root.innerHTML = '';
-      root.classList.add('tw-typing');
-      const cursor = document.createElement('span');
-      cursor.className = 'tw-cursor';
-      root.appendChild(cursor);
-
-      async function typeText(textNode, text){
-        for(let i = 0; i < text.length; i++){
-          textNode.textContent += text[i];
-          await sleep(speed);
-        }
-      }
-      async function walk(srcNode, destParent, isRoot){
-        for(const child of Array.from(srcNode.childNodes)){
-          if(child.nodeType === Node.TEXT_NODE){
-            const tn = document.createTextNode('');
-            destParent.insertBefore(tn, isRoot ? cursor : null);
-            await typeText(tn, child.textContent);
-          } else if(child.nodeType === Node.ELEMENT_NODE){
-            const clone = child.cloneNode(false);
-            destParent.insertBefore(clone, isRoot ? cursor : null);
-            await walk(child, clone, false);
-          }
-        }
-      }
-      walk(original, root, true).then(() => {
-        cursor.remove();
-        root.classList.remove('tw-typing');
-        resolve();
-      });
-    });
+  async function typeWriter(root, speed){
+    // Measure the real, already-laid-out heading first (so we know exactly
+    // which words land on which line), then clear and type line-by-line —
+    // see twComputeLines()/twTypeLines() above for why.
+    const originalHTML = root.innerHTML;
+    const lines = twComputeLines(root);
+    root.innerHTML = '';
+    root.classList.add('tw-typing');
+    const cursor = document.createElement('span');
+    cursor.className = 'tw-cursor';
+    await twTypeLines(root, lines, speed, cursor, () => true, sleep);
+    root.innerHTML = originalHTML; // back to the real markup: stays responsive on resize
+    root.classList.remove('tw-typing');
   }
 
   const heroTitle = document.querySelector('.hero h1');
@@ -2048,40 +2163,23 @@
     if (h) el.style.minHeight = h + 'px';
     el._twFull = full;
 
-    const src = document.createElement('div');
-    src.innerHTML = full;
+    // Measure the real, already-laid-out title first (so we know exactly
+    // which words land on which line), then clear and type line-by-line —
+    // see twComputeLines()/twTypeLines() above for why.
+    const lines = twComputeLines(el);
     el.innerHTML = '';
     const cursor = document.createElement('span');
     cursor.className = 'tw-cursor';
     el.appendChild(cursor);
-    const alive = () => token === twToken && cursor.parentNode === el;
+    const alive = () => token === twToken && el.contains(cursor);
 
     await twSleep(300);                        // let the caption fade in first
-    if (!alive()) { if (cursor.parentNode !== el) { el._twFull = null; el.style.minHeight = ''; } return; }
+    if (!alive()) { if (!el.contains(cursor)) { el._twFull = null; el.style.minHeight = ''; } return; }
 
-    async function walk(srcNode, dest, isRoot){
-      for (const child of Array.from(srcNode.childNodes)){
-        if (child.nodeType === 3){
-          const tn = document.createTextNode('');
-          dest.insertBefore(tn, isRoot ? cursor : null);
-          const text = child.textContent;
-          for (let k = 0; k < text.length; k++){
-            if (!alive()) return false;
-            tn.textContent += text[k];
-            await twSleep(TW_SPEED);
-          }
-        } else if (child.nodeType === 1){
-          const clone = child.cloneNode(false);
-          dest.insertBefore(clone, isRoot ? cursor : null);
-          if (await walk(child, clone, false) === false) return false;
-        }
-      }
-      return true;
-    }
-    const done = await walk(src, el, true);
+    const done = await twTypeLines(el, lines, TW_SPEED, cursor, alive, twSleep);
     if (done && alive()){
-      cursor.remove(); el._twFull = null; el.style.minHeight = '';
-    } else if (cursor.parentNode !== el){      // content was replaced (e.g. language switch)
+      el.innerHTML = full; el._twFull = null; el.style.minHeight = ''; // back to the real markup: stays responsive on resize
+    } else if (!el.contains(cursor)){          // content was replaced (e.g. language switch)
       el._twFull = null; el.style.minHeight = '';
     }
   }
