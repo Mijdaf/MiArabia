@@ -10,7 +10,7 @@
    each spark and cooling back down. He stands up, the pill gives a little
    "done" shake and its check icon flashes, then he turns around, crouches and
    jumps back out of the screen in another arc.
-   The whole thing repeats every ~22 s.
+   It plays ONCE per page load (one shot) and then stays away for good.
 
    Everything is a pure function of time (poseAt), so it is easy to preview
    any frame:  window.__qaWelder.preview(seconds)
@@ -40,7 +40,6 @@
   if (!reduce && label) { label.classList.add('qa-lblwait'); label.style.setProperty('--lw', 0); }   // the words are "missing" until he welds them on
 
   /* ---------- tunables ---------- */  /* ---------- tunables ---------- */
-  var LOOP = 22;                 // seconds between the start of two visits
   var VU = 78;                   // walking speed, svg units / second
   var TD = 0.45, TA = 0.35;      // brake / accelerate time while walking
   var NB = 3, SEG = 13;          // number of weld bursts, seam length per burst (units)
@@ -362,12 +361,18 @@
   }
 
   /* ---------- driver ---------- */
-  var raf = 0, timer = 0, t0 = 0;
+  var raf = 0, t0 = 0, started = false, hiddenAt = 0;
 
   function hideAll() {
     svg.style.visibility = 'hidden';
     if (label) label.style.setProperty('--heat', 0);
     btn.style.translate = '';
+  }
+  // one shot: when it is over (or was skipped past), the words stay on the button and the welder is put away for good
+  function finish() {
+    cancelAnimationFrame(raf);
+    revealed = true; if (label) label.classList.remove('qa-lblwait');
+    hideAll();
   }
   function visit() {
     tl = build(); tl.hit = false;
@@ -378,16 +383,25 @@
   }
   function loop(now) {
     var t = (now - t0) / 1000;
-    if (t >= tl.tEnd) {
-      hideAll();
-      timer = setTimeout(visit, Math.max(2000, (LOOP - tl.tEnd) * 1000));
-      return;
-    }
+    if (t >= tl.tEnd) { finish(); return; }
     draw(t);
     raf = requestAnimationFrame(loop);
   }
 
+  // if the tab is put in the background mid-show, the show waits for it instead of being used up unseen
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) hiddenAt = performance.now();
+    else if (hiddenAt) { t0 += performance.now() - hiddenAt; hiddenAt = 0; }
+  });
+
   function begin() {
+    if (started) return;
+    if (document.hidden) {                                       // nobody is looking yet: wait until the tab is shown
+      var wait = function () { if (!document.hidden) { document.removeEventListener('visibilitychange', wait); begin(); } };
+      document.addEventListener('visibilitychange', wait);
+      return;
+    }
+    started = true;
     if (reduce) {                                                // reduced motion: hold one calm frame
       revealed = true; if (label) label.classList.remove('qa-lblwait');
       tl = build();
@@ -416,12 +430,13 @@
   // test / preview hook
   window.__qaWelder = {
     preview: function (t) {
-      clearTimeout(timer); cancelAnimationFrame(raf);
+      cancelAnimationFrame(raf);
       if (!tl) { tl = build(); tl.hit = true; }
       svg.style.visibility = 'visible';
       draw(t); return tl;
     },
     timeline: function () { return tl || (tl = build()); },
+    replay: function () { started = true; visit(); },                      // play the show again (for testing)
     rebuild: function () { tl = build(); tl.hit = true; return tl; }      // re-measure (e.g. after a language switch)
   };
 })();
