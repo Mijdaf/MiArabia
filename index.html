@@ -25,7 +25,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=22">
+<link rel="stylesheet" href="assets/css/style.css?v=27">
 </head>
 <body>
 
@@ -416,23 +416,6 @@
     </div>
   </section>
 
-
-  <!-- WORKER REEL — fast Unsplash stills cross-fading like a silent video loop; no heading, no captions, purely visual.
-       Sits directly above the "How We Work" screen. -->
-  <section class="worker-reel" id="worker-videos">
-    <div class="wrap">
-      <div class="worker-reel-frame" id="workerReel" aria-hidden="true">
-        <img class="wr-slide" style="--i:0" src="https://images.unsplash.com/photo-1744735973756-b2efa8be24c8?w=1400&q=70&auto=format&fit=crop" alt="" width="1400" height="600" decoding="async" loading="eager">
-        <img class="wr-slide" style="--i:1" src="https://images.unsplash.com/photo-1587582423116-ec07293f0395?w=1400&q=70&auto=format&fit=crop" alt="" width="1400" height="600" decoding="async" loading="lazy">
-        <img class="wr-slide" style="--i:2" src="https://images.unsplash.com/photo-1647586028042-1de4d4a935e6?w=1400&q=70&auto=format&fit=crop" alt="" width="1400" height="600" decoding="async" loading="lazy">
-        <img class="wr-slide" style="--i:3" src="https://images.unsplash.com/photo-1591588582259-e675bd2e6088?w=1400&q=70&auto=format&fit=crop" alt="" width="1400" height="600" decoding="async" loading="lazy">
-        <img class="wr-slide" style="--i:4" src="https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=1400&q=70&auto=format&fit=crop" alt="" width="1400" height="600" decoding="async" loading="lazy">
-        <img class="wr-slide" style="--i:5" src="https://images.unsplash.com/photo-1702388247745-14431714d32f?w=1400&q=70&auto=format&fit=crop" alt="" width="1400" height="600" decoding="async" loading="lazy">
-        <img class="wr-slide" style="--i:6" src="https://images.unsplash.com/photo-1579847188804-ecba0e2ea330?w=1400&q=70&auto=format&fit=crop" alt="" width="1400" height="600" decoding="async" loading="lazy">
-        <img class="wr-slide" style="--i:7" src="https://images.unsplash.com/photo-1626885930974-4b69aa21bbf9?w=1400&q=70&auto=format&fit=crop" alt="" width="1400" height="600" decoding="async" loading="lazy">
-      </div>
-    </div>
-  </section>
 
   <!-- HOW WE WORK -->
   <section class="process dot-field" id="process">
@@ -985,6 +968,42 @@
     </div>
   </section>
 
+  <!-- COMPANY IN NUMBERS
+       The two figures come from the dashboard ("أرقام الشركة" tab -> site_settings).
+       The whole section stays hidden until at least one number is above zero. -->
+  <section class="stats" id="stats" hidden>
+    <h2 class="sr-only" data-en="The company in numbers">الشركة بالأرقام</h2>
+    <div class="wrap">
+      <div class="stats-grid">
+
+        <div class="stat" data-stat="employees" hidden>
+          <span class="stat-num" aria-hidden="true">0</span>
+          <span class="sr-only" data-stat-final></span>
+          <span class="stat-rule" aria-hidden="true"></span>
+          <div class="stat-meta">
+            <span class="stat-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 10V5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v5"/><path d="M14 6a6 6 0 0 1 6 6v3"/><path d="M4 15v-3a6 6 0 0 1 6-6"/><rect x="2" y="15" width="20" height="4" rx="1"/></svg>
+            </span>
+            <p class="stat-label" data-en="Company employees">موظفو الشركة</p>
+          </div>
+        </div>
+
+        <div class="stat" data-stat="projects" hidden>
+          <span class="stat-num" aria-hidden="true">0</span>
+          <span class="sr-only" data-stat-final></span>
+          <span class="stat-rule" aria-hidden="true"></span>
+          <div class="stat-meta">
+            <span class="stat-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4h6v3H9z"/><path d="M9 14.5l2 2 4-4"/></svg>
+            </span>
+            <p class="stat-label" data-en="Projects we've worked on">المشاريع التي عملنا عليها</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
 </main>
 
 <footer>
@@ -1003,7 +1022,6 @@
         <li><a href="#process" data-en="How We Work">كيف نعمل؟</a></li>
         <li><a href="#services" data-en="Services">خدماتنا</a></li>
         <li><a href="#gallery" data-en="Our Work">أعمالنا</a></li>
-        <li><a href="#worker-videos" data-en="Videos">فيديوهات</a></li>
         <li><a href="#contact" data-en="Contact">تواصل معنا</a></li>
       </ul>
     </div>
@@ -1261,8 +1279,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="assets/js/supabase-config.js?v=1"></script>
-<script src="assets/js/data-service.js?v=1"></script>
-<script src="assets/js/script.js?v=11"></script>
+<script src="assets/js/data-service.js?v=2"></script>
+<script src="assets/js/script.js?v=14"></script>
 <script src="assets/js/glow-dots-bg.js?v=1"></script>
 <script src="assets/js/sparks-bg.js?v=1"></script>
 <script type="module" src="assets/js/pipe-rack-bg.js?v=1"></script>
@@ -1282,24 +1300,5 @@
   })();
 </script>
 <script src="assets/js/welder.js?v=13"></script>
-<script>
-  // Worker reel: run the cross-fade only while it is on screen (saves CPU while the visitor is elsewhere on the page).
-  (function(){
-    var frame = document.getElementById('workerReel');
-    if (!frame) return;
-    if (!('IntersectionObserver' in window)) return; // no observer -> CSS keeps it running
-    // start fetching every still well before the reel scrolls into view, so no slide ever shows up blank
-    var pre = new IntersectionObserver(function(entries){
-      if (!entries[0].isIntersecting) return;
-      frame.querySelectorAll('img[loading="lazy"]').forEach(function(img){ img.loading = 'eager'; });
-      pre.disconnect();
-    }, { rootMargin: '1800px 0px' });
-    pre.observe(frame);
-    frame.classList.add('js-ready');
-    new IntersectionObserver(function(entries){
-      entries.forEach(function(e){ frame.classList.toggle('is-live', e.isIntersecting); });
-    }, { rootMargin: '150px 0px' }).observe(frame);
-  })();
-</script>
 </body>
 </html>

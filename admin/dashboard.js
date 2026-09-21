@@ -38,6 +38,7 @@
     setupNotifications();
     setupMessages();
     setupImages();
+    setupStats();
     setupSettings();
   }
 
@@ -46,6 +47,7 @@
     const panels = {
       messages: document.getElementById('tabMessages'),
       images: document.getElementById('tabImages'),
+      stats: document.getElementById('tabStats'),
       settings: document.getElementById('tabSettings'),
     };
     tabs.forEach((tab) => {
@@ -317,6 +319,71 @@
       errorEl.hidden = false;
       console.error(err);
     }
+  }
+
+  // ---------------- تاب أرقام الشركة ----------------
+  // بيقبل أرقام عربية (٠١٢) وإنجليزي (012) وفواصل الآلاف (1,250)، ويحوّلهم لرقم صحيح.
+  function parseCount(raw) {
+    const latin = String(raw || '')
+      .replace(/[\u0660-\u0669]/g, (c) => String(c.charCodeAt(0) - 0x0660))
+      .replace(/[\u06F0-\u06F9]/g, (c) => String(c.charCodeAt(0) - 0x06F0))
+      .replace(/[\s,\u066C\u060C]/g, '');
+    if (latin === '') return 0;
+    if (!/^\d{1,9}$/.test(latin)) return null;
+    return parseInt(latin, 10);
+  }
+
+  function setupStats() {
+    const form = document.getElementById('statsForm');
+    const employeesInput = document.getElementById('setEmployees');
+    const projectsInput = document.getElementById('setProjects');
+    const errorEl = document.getElementById('statsError');
+    const successEl = document.getElementById('statsSuccess');
+
+    loadStats();
+
+    async function loadStats() {
+      try {
+        const settings = await window.mijdafData.getSettings();
+        employeesInput.value = settings.employeesCount || '';
+        projectsInput.value = settings.projectsCount || '';
+      } catch (err) {
+        console.error('loadStats failed', err);
+      }
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorEl.hidden = true;
+      successEl.hidden = true;
+
+      const employeesCount = parseCount(employeesInput.value);
+      const projectsCount = parseCount(projectsInput.value);
+
+      if (employeesCount === null || projectsCount === null) {
+        errorEl.textContent = 'اكتب أرقام صحيحة فقط (من غير حروف أو علامات، وبحد أقصى 9 خانات).';
+        errorEl.hidden = false;
+        return;
+      }
+
+      try {
+        await window.mijdafData.updateCompanyStats({ employeesCount, projectsCount });
+        employeesInput.value = employeesCount || '';
+        projectsInput.value = projectsCount || '';
+        successEl.hidden = false;
+        setTimeout(() => { successEl.hidden = true; }, 2500);
+      } catch (err) {
+        console.error('updateCompanyStats failed', err);
+        const missingColumns = err && (
+          err.code === 'PGRST204' || err.code === '42703' ||
+          /employees_count|projects_count/.test(err.message || '')
+        );
+        errorEl.textContent = missingColumns
+          ? 'لازم تشغّل ملف add-company-stats.sql في Supabase الأول (SQL Editor > Run)، وبعدها احفظ تاني.'
+          : 'حدث خطأ أثناء الحفظ، يرجى المحاولة مرة أخرى.';
+        errorEl.hidden = false;
+      }
+    });
   }
 
   // ---------------- تاب الإعدادات ----------------

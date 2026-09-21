@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>لوحة تحكم مي أرابيا</title>
 <link rel="icon" href="../assets/icon-192.png">
-<link rel="stylesheet" href="dashboard.css?v=8">
+<link rel="stylesheet" href="dashboard.css?v=9">
 </head>
 <body>
 
@@ -27,6 +27,7 @@
         الرسائل <span class="badge" id="unreadBadge" hidden>0</span>
       </button>
       <button class="tab" data-tab="images" role="tab" aria-selected="false">الصور</button>
+      <button class="tab" data-tab="stats" role="tab" aria-selected="false">أرقام الشركة</button>
       <button class="tab" data-tab="settings" role="tab" aria-selected="false">الإعدادات</button>
     </nav>
 
@@ -50,6 +51,28 @@
         </div>
         <div id="imagesGrid" class="images-grid"></div>
         <p id="imagesEmpty" class="muted center" hidden>لا توجد صور مضافة حتى الآن — يعرض الموقع الصور الافتراضية.</p>
+      </section>
+
+      <!-- تاب أرقام الشركة -->
+      <section id="tabStats" class="tab-panel">
+        <div class="panel-head">
+          <h2>أرقام الشركة</h2>
+        </div>
+        <p class="muted">الرقمين دول بيظهروا في الموقع قبل الفوتر مباشرة، وبيتحدّثوا أول ما تدوس "حفظ الأرقام".</p>
+        <form id="statsForm" class="stack settings-panel" novalidate>
+          <label>عدد موظفين الشركة
+            <input type="text" id="setEmployees" inputmode="numeric" autocomplete="off" placeholder="مثال: 45" dir="ltr">
+          </label>
+
+          <label>عدد المشاريع اللي اشتغلنا عليها
+            <input type="text" id="setProjects" inputmode="numeric" autocomplete="off" placeholder="مثال: 120" dir="ltr">
+          </label>
+          <p class="muted small">لو سيبت خانة فاضية أو 0، الرقم ده مش هيظهر في الموقع. ولو الخانتين فاضيين، القسم كله بيختفي.</p>
+
+          <p class="error" id="statsError" hidden></p>
+          <p class="success-text" id="statsSuccess" hidden>تم الحفظ بنجاح ✓</p>
+          <button type="submit" class="btn-primary">حفظ الأرقام</button>
+        </form>
       </section>
 
       <!-- تاب الإعدادات -->
@@ -117,7 +140,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="../assets/js/supabase-config.js?v=6"></script>
-  <script src="../assets/js/data-service.js?v=6"></script>
-  <script src="dashboard.js?v=9"></script>
+  <script src="../assets/js/data-service.js?v=7"></script>
+  <script src="dashboard.js?v=10"></script>
 </body>
 </html>

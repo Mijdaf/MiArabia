@@ -143,6 +143,74 @@
   // dashboard — controls whether the "Send via Email" buttons are shown.
   let NOTIFY_EMAIL_READY = false;
 
+  // ---------- Company stats (employees / projects) ----------
+  // The numbers are set from the dashboard ("أرقام الشركة" tab -> site_settings).
+  // The section stays hidden until at least one number is above zero, and the
+  // figures count up every time the section scrolls into view (same replay
+  // behaviour as the rest of the page's screen transitions).
+  const companyStats = (function(){
+    const section = document.getElementById('stats');
+    if (!section) return { apply(){} };
+    const items = Array.from(section.querySelectorAll('[data-stat]')).map((el) => ({
+      key: el.dataset.stat,
+      el,
+      num: el.querySelector('.stat-num'),
+      final: el.querySelector('[data-stat-final]'),
+      value: 0,
+    }));
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const DURATION = 1600;
+    const fmt = (n) => n.toLocaleString('en-US');
+    const easeOut = (t) => 1 - Math.pow(1 - t, 3);
+    let raf = 0;
+
+    const showFinal = () => items.forEach((it) => { it.num.textContent = fmt(it.value); });
+
+    function play(){
+      cancelAnimationFrame(raf);
+      section.classList.add('is-live');
+      if (reduceMotion) { showFinal(); return; }
+      items.forEach((it) => { it.num.textContent = '0'; });
+      const t0 = performance.now();
+      const tick = (now) => {
+        const p = Math.min(1, (now - t0) / DURATION);
+        const k = easeOut(p);
+        items.forEach((it) => { it.num.textContent = fmt(Math.round(it.value * k)); });
+        if (p < 1) raf = requestAnimationFrame(tick);
+      };
+      raf = requestAnimationFrame(tick);
+    }
+    function stop(){
+      cancelAnimationFrame(raf);
+      section.classList.remove('is-live');
+      showFinal();
+    }
+
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver((entries) => {
+        entries.forEach((e) => { e.isIntersecting ? play() : stop(); });
+      }, { threshold: 0.35, rootMargin: '0px 0px -8% 0px' }).observe(section);
+    } else {
+      section.classList.add('is-live');   // no observer support: just show the finished figures
+    }
+
+    return {
+      // values: { employees: n, projects: n } — anything that is not a positive number hides that figure
+      apply(values){
+        let any = false;
+        items.forEach((it) => {
+          const v = Math.max(0, Math.floor(Number(values && values[it.key]) || 0));
+          it.value = v;
+          it.el.hidden = v <= 0;
+          it.num.textContent = fmt(v);
+          it.final.textContent = fmt(v);
+          if (v > 0) any = true;
+        });
+        section.hidden = !any;
+      },
+    };
+  })();
+
   // Pull the live WhatsApp number + confirm an email is configured from the
   // dashboard settings (site_settings table), and keep every phone number
   // shown on the page in sync with it. Fails silently and keeps the
@@ -163,6 +231,8 @@
 
       NOTIFY_EMAIL_READY = Boolean(settings.notifyEmail);
       document.querySelectorAll('[data-email-channel-btn]').forEach((btn) => { btn.hidden = !NOTIFY_EMAIL_READY; });
+
+      companyStats.apply({ employees: settings.employeesCount, projects: settings.projectsCount });
     } catch (e) { console.error('loadSiteSettings failed', e); }
   })();
 
@@ -1616,69 +1686,49 @@
   });
 })();
 
-// ---------- easter egg: request button plays hard-to-get (desktop mouse only) ----------
+// ---------- modals + on-screen keyboard (phones) ----------
+// When the keyboard opens, the browser keeps the page's layout viewport at full height and only
+// shrinks the *visible* area (visualViewport). A fixed, full-height modal then extends behind the
+// keyboard and — because it is not taller than its content — has nothing to scroll, so swiping did
+// nothing and the lower fields were unreachable. Here the open modal is sized to the visible area
+// above the keyboard, so its box scrolls normally, and the focused field is brought into view.
 (function(){
-  const btn = document.getElementById('openRequestModal');
-  if(!btn) return;
+  const vv = window.visualViewport;
+  const overlays = Array.from(document.querySelectorAll('.modal-overlay'));
+  if (!vv || !overlays.length) return;
 
-  const hasFinePointer = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(!hasFinePointer || prefersReducedMotion) return; // touch & reduced-motion users: normal button, always
-
-  const MAX_DODGES = 1;
-  const PADDING = 14;
-  let dodges = 0;
-  let settled = true;
-  let initialRect = null;
-
-  function getInitialRect(){
-    if(!initialRect){
-      initialRect = btn.getBoundingClientRect();
-    }
-    return initialRect;
+  let raf = 0;
+  function apply(){
+    raf = 0;
+    // keyboard up = the visible height is clearly smaller than the layout height (and the page is not pinch-zoomed)
+    const keyboardUp = vv.scale <= 1.02 && (window.innerHeight - vv.height) > 120;
+    overlays.forEach((ov) => {
+      if (keyboardUp && ov.classList.contains('open')) {
+        ov.style.top = vv.offsetTop + 'px';
+        ov.style.height = vv.height + 'px';
+        ov.style.setProperty('--vv-h', vv.height + 'px');
+        ov.classList.add('kb-open');
+      } else if (ov.classList.contains('kb-open')) {
+        ov.style.top = '';
+        ov.style.height = '';
+        ov.style.removeProperty('--vv-h');
+        ov.classList.remove('kb-open');
+      }
+    });
   }
+  const schedule = () => { if (!raf) raf = requestAnimationFrame(apply); };
 
-  function settle(){
-    settled = true;
-    btn.style.transition = 'transform .35s ease';
-    btn.style.transform = 'translate(0px, 0px)';
-    btn.classList.add('qa-caught');
-    setTimeout(() => btn.classList.remove('qa-caught'), 500);
-  }
-
-  function dodge(){
-    if(dodges >= MAX_DODGES){ settle(); return; }
-    dodges++;
-    settled = false;
-    const rect = getInitialRect();
-    const minX = Math.min(PADDING - rect.left, (window.innerWidth - PADDING) - rect.right);
-    const maxX = Math.max(PADDING - rect.left, (window.innerWidth - PADDING) - rect.right);
-    const minY = Math.min(PADDING - rect.top, (window.innerHeight - PADDING) - rect.bottom);
-    const maxY = Math.max(PADDING - rect.top, (window.innerHeight - PADDING) - rect.bottom);
-    const dx = minX + Math.random() * (maxX - minX);
-    const dy = minY + Math.random() * (maxY - minY);
-    btn.style.transition = 'transform .28s cubic-bezier(.34,1.56,.64,1)';
-    btn.style.transform = `translate(${dx}px, ${dy}px)`;
-    if(dodges >= MAX_DODGES){
-      // After teasing a few times, it gives up so the request can actually be submitted
-      setTimeout(settle, 260);
-    }
-  }
-
-  btn.addEventListener('pointerenter', (e) => {
-    if(e.pointerType !== 'mouse') return; // touch/pen: never dodges, always tappable
-    dodge();
-  });
-
-  btn.addEventListener('click', () => {
-    // Reset the game for next time, after letting this click go through
-    setTimeout(() => { dodges = 0; settle(); }, 400);
-  });
-
-  window.addEventListener('resize', () => {
-    initialRect = null;
-    settle();
-    dodges = 0;
+  vv.addEventListener('resize', schedule);
+  vv.addEventListener('scroll', schedule);
+  window.addEventListener('orientationchange', schedule);
+  overlays.forEach((ov) => {
+    new MutationObserver(schedule).observe(ov, { attributes: true, attributeFilter: ['class'] });
+    // moving to the next field (keyboard "next" / tapping a field) keeps that field in view above the keyboard
+    ov.addEventListener('focusin', (e) => {
+      if (!/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
+      if (!window.matchMedia('(pointer:coarse)').matches) return;
+      setTimeout(() => { e.target.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, 320);
+    });
   });
 })();
 

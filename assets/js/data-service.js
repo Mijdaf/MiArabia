@@ -163,12 +163,14 @@
     // ---------------- إعدادات الموقع (رقم الواتساب + إيميل الإشعارات) ----------------
     async getSettings() {
       const sb = getClient();
-      if (!sb) return { whatsappNumber: '', notifyEmail: '' };
+      if (!sb) return { whatsappNumber: '', notifyEmail: '', employeesCount: 0, projectsCount: 0 };
       const { data, error } = await sb.from('site_settings').select('*').eq('id', 1).single();
-      if (error) { console.error('getSettings', error); return { whatsappNumber: '', notifyEmail: '' }; }
+      if (error) { console.error('getSettings', error); return { whatsappNumber: '', notifyEmail: '', employeesCount: 0, projectsCount: 0 }; }
       return {
         whatsappNumber: data.whatsapp_number || '',
         notifyEmail: data.notify_email || '',
+        employeesCount: Number(data.employees_count) || 0,
+        projectsCount: Number(data.projects_count) || 0,
       };
     },
 
@@ -184,6 +186,26 @@
         })
         .eq('id', 1);
       if (error) throw error;
+    },
+
+    // ---------------- أرقام الشركة (عدد الموظفين + عدد المشاريع) ----------------
+    // بتتحفظ في نفس صف site_settings (id = 1)، ومنفصلة عن حفظ الواتساب والإيميل
+    // عشان لو الأعمدة لسه ما اتضافتش في Supabase ما تأثرش على باقي الإعدادات.
+    async updateCompanyStats({ employeesCount, projectsCount }) {
+      const sb = getClient();
+      if (!sb) throw new Error('Supabase غير مفعّل');
+      const { data, error } = await sb
+        .from('site_settings')
+        .update({
+          employees_count: employeesCount,
+          projects_count: projectsCount,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', 1)
+        .select('id');
+      if (error) throw error;
+      // لو الصف مش موجود أو الصلاحيات منعت التعديل، Supabase بيرجع 0 صفوف من غير error
+      if (!data || data.length === 0) throw new Error('لم يتم تحديث أي صف في site_settings');
     },
 
     // ---------------- إرسال إيميل الطلب (عبر Supabase Edge Function) ----------------
