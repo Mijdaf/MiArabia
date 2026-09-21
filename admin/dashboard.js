@@ -5,6 +5,10 @@
     quick_request: 'طلب سريع',
     quick_inquiry: 'استفسار سريع',
   };
+  const CHANNEL_LABELS = {
+    whatsapp: '📱 واتساب',
+    email: '📧 إيميل',
+  };
 
   // ---------------- تسجيل الدخول / الحماية ----------------
   async function boot() {
@@ -34,6 +38,7 @@
     setupNotifications();
     setupMessages();
     setupImages();
+    setupSettings();
   }
 
   function setupTabs() {
@@ -41,6 +46,7 @@
     const panels = {
       messages: document.getElementById('tabMessages'),
       images: document.getElementById('tabImages'),
+      settings: document.getElementById('tabSettings'),
     };
     tabs.forEach((tab) => {
       tab.addEventListener('click', () => {
@@ -179,7 +185,7 @@
           <span class="message-card-title">${escapeHtml(row.name || row.phone || 'بدون اسم')}</span>
           <span class="message-card-source">${SOURCE_LABELS[row.source] || row.source}</span>
         </div>
-        <div class="message-card-date">${date}</div>
+        <div class="message-card-date">${date}${row.channel ? ` • ${CHANNEL_LABELS[row.channel] || escapeHtml(row.channel)}` : ''}</div>
         <div class="message-card-body">
           <dl>
             ${row.company ? `<dt>الشركة</dt><dd>${escapeHtml(row.company)}</dd>` : ''}
@@ -311,6 +317,53 @@
       errorEl.hidden = false;
       console.error(err);
     }
+  }
+
+  // ---------------- تاب الإعدادات ----------------
+  function setupSettings() {
+    const form = document.getElementById('settingsForm');
+    const whatsappInput = document.getElementById('setWhatsapp');
+    const emailInput = document.getElementById('setEmail');
+    const errorEl = document.getElementById('settingsError');
+    const successEl = document.getElementById('settingsSuccess');
+
+    loadSettings();
+
+    async function loadSettings() {
+      try {
+        const settings = await window.mijdafData.getSettings();
+        whatsappInput.value = settings.whatsappNumber || '';
+        emailInput.value = settings.notifyEmail || '';
+      } catch (err) {
+        console.error('loadSettings failed', err);
+      }
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorEl.hidden = true;
+      successEl.hidden = true;
+
+      const whatsappNumber = whatsappInput.value.trim().replace(/[^0-9]/g, '');
+      const notifyEmail = emailInput.value.trim();
+
+      if (!whatsappNumber) {
+        errorEl.textContent = 'اكتب رقم الواتساب بالأرقام فقط.';
+        errorEl.hidden = false;
+        return;
+      }
+
+      try {
+        await window.mijdafData.updateSettings({ whatsappNumber, notifyEmail });
+        whatsappInput.value = whatsappNumber;
+        successEl.hidden = false;
+        setTimeout(() => { successEl.hidden = true; }, 2500);
+      } catch (err) {
+        console.error('updateSettings failed', err);
+        errorEl.textContent = 'حدث خطأ أثناء الحفظ، يرجى المحاولة مرة أخرى.';
+        errorEl.hidden = false;
+      }
+    });
   }
 
   // ---------------- أدوات ----------------

@@ -116,6 +116,8 @@ h3{ font-size:18px; font-weight:700; color:var(--navy-deep); margin:0 0 16px; }
 .btn-ghost.small{ padding:6px 12px; }
 
 .error{ color:var(--danger); font-size:13px; font-weight:600; margin:0; }
+.success-text{ color:var(--success); font-size:13px; font-weight:600; margin:0; }
+.settings-panel{ max-width:440px; }
 .captcha-wrap{ display:flex; justify-content:center; transform:scale(0.92); transform-origin:center; }
 @media (max-width:360px){ .captcha-wrap{ transform:scale(0.8); } }
 

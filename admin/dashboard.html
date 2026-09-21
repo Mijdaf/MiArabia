@@ -27,6 +27,7 @@
         الرسائل <span class="badge" id="unreadBadge" hidden>0</span>
       </button>
       <button class="tab" data-tab="images" role="tab" aria-selected="false">الصور</button>
+      <button class="tab" data-tab="settings" role="tab" aria-selected="false">الإعدادات</button>
     </nav>
 
     <main class="content">
@@ -49,6 +50,28 @@
         </div>
         <div id="imagesGrid" class="images-grid"></div>
         <p id="imagesEmpty" class="muted center" hidden>لا توجد صور مضافة حتى الآن — يعرض الموقع الصور الافتراضية.</p>
+      </section>
+
+      <!-- تاب الإعدادات -->
+      <section id="tabSettings" class="tab-panel">
+        <div class="panel-head">
+          <h2>إعدادات الموقع</h2>
+        </div>
+        <form id="settingsForm" class="stack settings-panel">
+          <label>رقم الواتساب (اللي بيستقبل الطلبات)
+            <input type="tel" id="setWhatsapp" placeholder="9665xxxxxxxx" dir="ltr" required>
+          </label>
+          <p class="muted small">اكتب الرقم بصيغة دولية بدون + أو مسافات أو أصفار زيادة، مثال: 966536760429</p>
+
+          <label>الإيميل الرسمي (اللي هتوصله طلبات "إرسال عبر البريد الإلكتروني")
+            <input type="email" id="setEmail" placeholder="orders@yourdomain.com" dir="ltr">
+          </label>
+          <p class="muted small">لو الخانة دي فاضية، زرار "إرسال عبر البريد الإلكتروني" هيفضل مخفي في الموقع.</p>
+
+          <p class="error" id="settingsError" hidden></p>
+          <p class="success-text" id="settingsSuccess" hidden>تم الحفظ بنجاح ✓</p>
+          <button type="submit" class="btn-primary">حفظ الإعدادات</button>
+        </form>
       </section>
 
     </main>
