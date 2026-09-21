@@ -160,6 +160,51 @@
       return () => sb.removeChannel(channel);
     },
 
+    // ---------------- إعدادات الموقع (رقم الواتساب + إيميل الإشعارات) ----------------
+    async getSettings() {
+      const sb = getClient();
+      if (!sb) return { whatsappNumber: '', notifyEmail: '' };
+      const { data, error } = await sb.from('site_settings').select('*').eq('id', 1).single();
+      if (error) { console.error('getSettings', error); return { whatsappNumber: '', notifyEmail: '' }; }
+      return {
+        whatsappNumber: data.whatsapp_number || '',
+        notifyEmail: data.notify_email || '',
+      };
+    },
+
+    async updateSettings({ whatsappNumber, notifyEmail }) {
+      const sb = getClient();
+      if (!sb) throw new Error('Supabase غير متصل');
+      const { error } = await sb
+        .from('site_settings')
+        .update({
+          whatsapp_number: whatsappNumber,
+          notify_email: notifyEmail,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', 1);
+      if (error) throw error;
+    },
+
+    // ---------------- إرسال إيميل الطلب (عبر Supabase Edge Function) ----------------
+    async sendOrderEmail(payload) {
+      if (!window.isSupabaseConfigured || !window.isSupabaseConfigured()) {
+        throw new Error('Supabase غير متصل');
+      }
+      const res = await fetch(`${window.SUPABASE_URL}/functions/v1/send-order-email`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${window.SUPABASE_ANON_KEY}`,
+          apikey: window.SUPABASE_ANON_KEY,
+        },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'فشل إرسال الإيميل');
+      return data;
+    },
+
     // ---------------- تسجيل دخول الأدمن ----------------
     async login(email, password) {
       const sb = getClient();

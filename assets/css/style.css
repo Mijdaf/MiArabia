@@ -3212,7 +3212,10 @@
     box-shadow:0 0 0 3px rgba(253,87,43,0.14);
     outline:none;
   }
+  .form-actions{ display:flex; flex-wrap:wrap; gap:10px; margin-top:6px; }
+  .form-actions .btn{ flex:1 1 200px; justify-content:center; }
   .contact-form .btn-primary{width:100%; justify-content:center; margin-top:6px;}
+  .contact-form .form-actions .btn-primary{ width:auto; margin-top:0; }
   .form-note{font-size:14px; color:var(--text-soft); margin-top:14px; text-align:center;}
   .form-success{
     display:none;
@@ -3550,6 +3553,8 @@
   .modal-form .field{ margin-bottom:16px; }
   .modal-form .form-row{ margin-bottom:0; }
   .modal-form .btn-primary{ width:100%; justify-content:center; margin-top:4px; }
+  .modal-form .form-actions{ display:flex; flex-wrap:wrap; gap:10px; margin-top:4px; }
+  .modal-form .form-actions .btn{ flex:1 1 160px; justify-content:center; width:auto; margin-top:0; }
 
   @media (max-width:520px){
     .modal-box{ padding:30px 22px 26px; }

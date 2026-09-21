@@ -135,7 +135,36 @@
 
   // Shared WhatsApp number used by the contact form and both quick-action
   // popups (Request a Quote / Inquiries) — one place to update it.
-  const CONTACT_WHATSAPP_NUMBER = '966536760429';
+  // This is only the fallback used before the live value loads from the
+  // dashboard settings below (or if Supabase isn't connected at all).
+  let CONTACT_WHATSAPP_NUMBER = '966536760429';
+
+  // Becomes true once we've confirmed a notification email is set in the
+  // dashboard — controls whether the "Send via Email" buttons are shown.
+  let NOTIFY_EMAIL_READY = false;
+
+  // Pull the live WhatsApp number + confirm an email is configured from the
+  // dashboard settings (site_settings table), and keep every phone number
+  // shown on the page in sync with it. Fails silently and keeps the
+  // hardcoded fallback above if Supabase isn't connected yet.
+  (async function loadSiteSettings(){
+    try {
+      if (!window.mijdafData || !window.mijdafData.isReady()) return;
+      const settings = await window.mijdafData.getSettings();
+
+      if (settings.whatsappNumber) {
+        CONTACT_WHATSAPP_NUMBER = settings.whatsappNumber.replace(/[^0-9]/g, '');
+        const formatted = CONTACT_WHATSAPP_NUMBER.length === 12
+          ? CONTACT_WHATSAPP_NUMBER.replace(/(\d{3})(\d{2})(\d{3})(\d{4})/, '+$1 $2 $3 $4')
+          : `+${CONTACT_WHATSAPP_NUMBER}`;
+        document.querySelectorAll('[data-live-phone]').forEach((el) => { el.textContent = formatted; });
+        document.querySelectorAll('[data-live-phone-href]').forEach((el) => { el.setAttribute('href', `tel:+${CONTACT_WHATSAPP_NUMBER}`); });
+      }
+
+      NOTIFY_EMAIL_READY = Boolean(settings.notifyEmail);
+      document.querySelectorAll('[data-email-channel-btn]').forEach((btn) => { btn.hidden = !NOTIFY_EMAIL_READY; });
+    } catch (e) { console.error('loadSiteSettings failed', e); }
+  })();
 
   // Light / dark theme toggle
   (function(){
@@ -1190,11 +1219,15 @@
     } catch (e) { console.error('sendToDashboard failed', e); }
   }
 
-  // Contact form -> WhatsApp handoff (same number as the quick-action popups)
+  // Contact form -> WhatsApp handoff, or straight to the notify email
+  // (same number/email as the quick-action popups), depending on which
+  // button the visitor pressed.
   const form = document.getElementById('contactForm');
   const success = document.getElementById('formSuccess');
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
+
+    const channel = (e.submitter && e.submitter.dataset.channel) || 'whatsapp';
 
     const name = document.getElementById('fname').value.trim();
     const company = document.getElementById('fcompany').value.trim();
@@ -1204,22 +1237,34 @@
     const phone2 = document.getElementById('fphone2').value.trim();
     const details = document.getElementById('fmsg').value.trim();
 
-    let msg = `طلب جديد من موقع مي أرابيا:\n\n*الاسم:* ${name}`;
-    if (company) msg += `\n*الشركة:* ${company}`;
-    msg += `\n*البريد الإلكتروني:* ${email}`;
-    msg += `\n*الخدمة المطلوبة:* ${service}`;
-    msg += `\n*رقم الجوال:* ${phone}`;
-    if (phone2) msg += `\n*رقم بديل:* ${phone2}`;
-    if (details) msg += `\n*تفاصيل المشروع:* ${details}`;
-
-    const url = `https://wa.me/${CONTACT_WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
-    window.open(url, '_blank');
-
-    sendToDashboard({
+    const payload = {
       source: 'contact',
       name, company, email, phone, phone2,
-      service, message: details,
-    });
+      service, message: details, channel,
+    };
+
+    if (channel === 'email') {
+      try {
+        await window.mijdafData.sendOrderEmail(payload);
+      } catch (err) {
+        console.error('sendOrderEmail failed', err);
+        alert('حصل خطأ أثناء إرسال الإيميل. جرّب تبعت عبر واتساب أو حاول تاني بعد شوية.');
+        return;
+      }
+    } else {
+      let msg = `طلب جديد من موقع مي أرابيا:\n\n*الاسم:* ${name}`;
+      if (company) msg += `\n*الشركة:* ${company}`;
+      msg += `\n*البريد الإلكتروني:* ${email}`;
+      msg += `\n*الخدمة المطلوبة:* ${service}`;
+      msg += `\n*رقم الجوال:* ${phone}`;
+      if (phone2) msg += `\n*رقم بديل:* ${phone2}`;
+      if (details) msg += `\n*تفاصيل المشروع:* ${details}`;
+
+      const url = `https://wa.me/${CONTACT_WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+      window.open(url, '_blank');
+    }
+
+    sendToDashboard(payload);
 
     success.classList.add('show');
     form.querySelectorAll('input, textarea').forEach(el => el.value = '');
@@ -1289,14 +1334,27 @@
         if (e.key === 'Escape' && overlay.classList.contains('open')) closeModal(overlay);
       });
 
-      modalForm.addEventListener('submit', (e) => {
+      modalForm.addEventListener('submit', async (e) => {
         e.preventDefault();
+
+        const channel = (e.submitter && e.submitter.dataset.channel) || 'whatsapp';
+        const payload = { ...(buildPayload ? buildPayload(modalForm) : {}), channel };
+
+        if (channel === 'email') {
+          try {
+            await window.mijdafData.sendOrderEmail(payload);
+          } catch (err) {
+            console.error('sendOrderEmail failed', err);
+            alert('حصل خطأ أثناء إرسال الإيميل. جرّب تبعت عبر واتساب أو حاول تاني بعد شوية.');
+            return;
+          }
+        } else {
+          const message = buildMessage(modalForm);
+          openWhatsApp(message);
+        }
+
         if (successEl) successEl.classList.add('show');
-
-        const message = buildMessage(modalForm);
-        openWhatsApp(message);
-
-        if (buildPayload) sendToDashboard(buildPayload(modalForm));
+        sendToDashboard(payload);
 
         modalForm.querySelectorAll('input, textarea').forEach(el => el.value = '');
         setTimeout(() => closeModal(overlay), 1400);
