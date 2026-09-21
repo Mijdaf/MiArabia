@@ -1,4 +1,10 @@
 -- شغّل الملف ده كامل مرة واحدة في: Supabase Dashboard > SQL Editor > New query
+--
+-- لو الجدول form_messages كان اتعمل قبل كده (يعني شغّلت الملف ده قبل ما نضيف عمود
+-- channel)، شغّل السطر ده لوحده مرة واحدة عشان يضيف العمود الناقص من غير ما يمسح
+-- أي بيانات موجودة:
+--   alter table form_messages add column if not exists channel text;
+
 
 -- ============ جدول صور المعرض ============
 create table if not exists gallery_images (
@@ -38,6 +44,7 @@ create table if not exists form_messages (
   phone2 text,
   service text,
   message text,
+  channel text,
   status text default 'new' check (status in ('new', 'read')),
   created_at timestamptz default now()
 );

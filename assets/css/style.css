@@ -685,11 +685,11 @@
     object-fit:cover;
     object-position:center 22%;
     animation:heroZoom 24s ease-in-out infinite alternate;
-    background:#060a20;
+    background:#0a0a0a;
   }
   .hero-overlay{
     position:absolute; inset:0;
-    background:linear-gradient(175deg, rgba(6,10,32,0.94) 0%, rgba(9,15,48,0.88) 55%, rgba(9,15,48,0.7) 100%);
+    background:linear-gradient(175deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.38) 55%, rgba(0,0,0,0.22) 100%);
     z-index:1;
   }
   @keyframes heroZoom{
@@ -3175,6 +3175,88 @@
   }
   html[dir="rtl"] .field select{ background-position:36px center; padding-inline-start:38px; }
   html[dir="ltr"] .field select{ background-position:right 36px center; padding-inline-end:38px; }
+
+  /* ---------- custom dropdown (replaces the native <select> popup, which mobile
+     browsers/OS render with their own system colors instead of the site's palette) ---------- */
+  .custom-select{ position:relative; }
+  .custom-select-trigger{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    border:1px solid var(--border-strong);
+    border-radius:9px;
+    padding:12px 14px;
+    font-family:var(--font-body);
+    font-size:16.5px;
+    text-align:start;
+    color:var(--text);
+    background:var(--surface);
+    cursor:pointer;
+    transition:border-color .2s var(--ease), box-shadow .2s var(--ease), background .2s var(--ease);
+  }
+  .custom-select-trigger:hover{ border-color:var(--border-strong); background:var(--surface-2); }
+  .custom-select.open .custom-select-trigger{
+    border-color:var(--orange);
+    box-shadow:0 0 0 3px rgba(253,87,43,0.14);
+  }
+  .custom-select-arrow{
+    width:13px; height:13px; flex:0 0 auto;
+    color:var(--ink-soft);
+    transition:transform .25s var(--ease);
+  }
+  .custom-select.open .custom-select-arrow{ transform:rotate(180deg); color:var(--orange); }
+  .custom-select-panel{
+    overflow:hidden;
+    max-height:0;
+    visibility:hidden;
+    transition:max-height .3s var(--ease);
+  }
+  .custom-select.open .custom-select-panel{ visibility:visible; }
+  .custom-select-options{
+    display:flex;
+    flex-direction:column;
+    margin-top:8px;
+    border:1px solid var(--border-strong);
+    border-radius:11px;
+    background:var(--surface-2);
+    overflow:hidden;
+  }
+  .custom-select-option{
+    display:flex;
+    align-items:center;
+    gap:11px;
+    width:100%;
+    border:none;
+    border-bottom:1px solid var(--border);
+    background:transparent;
+    padding:12px 14px;
+    font-family:var(--font-body);
+    font-size:15.5px;
+    text-align:start;
+    color:var(--text);
+    cursor:pointer;
+    transition:background .15s var(--ease), color .15s var(--ease);
+  }
+  .custom-select-option:last-child{ border-bottom:none; }
+  .custom-select-option:hover,
+  .custom-select-option:focus-visible{ background:color-mix(in srgb, var(--orange) 12%, transparent); }
+  .custom-select-option.is-selected{ color:var(--orange); font-weight:700; background:color-mix(in srgb, var(--orange) 8%, transparent); }
+  .custom-select-radio{
+    width:17px; height:17px; flex:0 0 auto;
+    border-radius:50%;
+    border:1.6px solid var(--border-strong);
+    position:relative;
+    transition:border-color .15s var(--ease);
+  }
+  .custom-select-option.is-selected .custom-select-radio{ border-color:var(--orange); }
+  .custom-select-option.is-selected .custom-select-radio::after{
+    content:"";
+    position:absolute; inset:3px;
+    border-radius:50%;
+    background:var(--orange);
+  }
 
   .field textarea{resize:vertical; min-height:96px;}
   .field input:focus, .field select:focus, .field textarea:focus{

@@ -1474,6 +1474,74 @@
     });
   })();
 
+  // Custom-styled dropdown for "Service Needed" fields. Replaces the native <select> popup
+  // (which mobile browsers render with their own system/OS colors, not the site's palette)
+  // with a fully-styled panel, while keeping the original <select> in the DOM — hidden —
+  // as the source of truth so every existing handler that reads its `.value` keeps working.
+  (function(){
+    const currentLang = () => (document.documentElement.getAttribute('lang') === 'en' ? 'en' : 'ar');
+
+    document.querySelectorAll('[data-custom-select]').forEach(wrapper => {
+      const trigger = wrapper.querySelector('.custom-select-trigger');
+      const valueEl = wrapper.querySelector('.custom-select-value');
+      const panel = wrapper.querySelector('.custom-select-panel');
+      const options = Array.from(wrapper.querySelectorAll('.custom-select-option'));
+      const nativeSelect = wrapper.parentElement.querySelector('select.custom-select-native');
+      if (!trigger || !panel || !options.length) return;
+
+      function close(){
+        wrapper.classList.remove('open');
+        trigger.setAttribute('aria-expanded', 'false');
+        panel.style.maxHeight = '0px';
+        options.forEach(o => o.setAttribute('tabindex', '-1'));
+      }
+      function open(){
+        wrapper.classList.add('open');
+        trigger.setAttribute('aria-expanded', 'true');
+        panel.style.maxHeight = panel.scrollHeight + 'px';
+        options.forEach(o => o.setAttribute('tabindex', '0'));
+      }
+
+      close();
+
+      trigger.addEventListener('click', () => {
+        wrapper.classList.contains('open') ? close() : open();
+      });
+
+      options.forEach(opt => {
+        opt.addEventListener('click', () => {
+          options.forEach(o => { o.classList.remove('is-selected'); o.setAttribute('aria-selected', 'false'); });
+          opt.classList.add('is-selected');
+          opt.setAttribute('aria-selected', 'true');
+
+          const span = opt.querySelector('[data-en]');
+          const lang = currentLang();
+          if (span){
+            const enText = span.getAttribute('data-en') || span.textContent;
+            const arText = span.getAttribute('data-ar') || span.textContent;
+            valueEl.setAttribute('data-en', enText);
+            valueEl.setAttribute('data-ar', arText);
+            valueEl.textContent = lang === 'en' ? enText : arText;
+          }
+
+          if (nativeSelect){
+            nativeSelect.value = opt.dataset.value;
+            nativeSelect.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+          close();
+          trigger.focus();
+        });
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!wrapper.contains(e.target)) close();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && wrapper.classList.contains('open')) close();
+      });
+    });
+  })();
+
   // Gallery: load from Supabase when connected, otherwise keep the built-in images.
   // Then wire up the scroll reveal + lightbox on whichever items end up in the DOM.
   (async function(){
@@ -2172,7 +2240,7 @@
 })();
 
 // ---------- Hero video slider ----------
-// Four video slides (brand film + three site videos) with a caption and one
+// Seven video slides (brand film + six site videos) with a caption and one
 // CTA each. Auto-advances when a video ends (or after FALLBACK_MS if a video
 // can't play, e.g. autoplay blocked / data saver). Only the first video is
 // fetched up front; the next one is preloaded once the current one starts.
