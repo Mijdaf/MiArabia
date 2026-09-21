@@ -25,7 +25,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=16">
+<link rel="stylesheet" href="assets/css/style.css?v=22">
 </head>
 <body>
 
@@ -1023,72 +1023,81 @@
   <div class="qa-menu" id="qaMenu">
     <button type="button" class="qa-item qa-request" data-ripple id="openRequestModal" aria-haspopup="dialog">
       <span class="qa-welder" aria-hidden="true">
-          <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" focusable="false" class="wd-svg">
-            <defs>
-              <radialGradient id="wdArc">
-                <stop offset="0" stop-color="#ffffff"/>
-                <stop offset=".35" stop-color="#d8edff"/>
-                <stop offset=".72" stop-color="#6db7ff" stop-opacity=".55"/>
-                <stop offset="1" stop-color="#6db7ff" stop-opacity="0"/>
-              </radialGradient>
-              <radialGradient id="wdHalo">
-                <stop offset="0" stop-color="#ffb066" stop-opacity=".75"/>
-                <stop offset="1" stop-color="#fd572b" stop-opacity="0"/>
-              </radialGradient>
-              <linearGradient id="wdBead" x1="0" x2="1" y1="0" y2="0">
-                <stop offset="0" stop-color="#fd572b" stop-opacity="0"/>
-                <stop offset=".6" stop-color="#ff8a3d" stop-opacity=".9"/>
-                <stop offset="1" stop-color="#ffe27a"/>
-              </linearGradient>
-              <clipPath id="wdTorsoClip"><path d="M39 74 L38.5 54 Q38.5 46.5 50 46 Q64 46.5 64 57 L59 73 Q49 78 39 74 Z"/></clipPath>
-            </defs>
-            <g class="wd-fly" transform="translate(0 0)"><animateTransform id="wdFlyAnim" attributeName="transform" type="translate" values="0 -1700;0 0;0 0;0 -1700;0 -1700" keyTimes="0;0.0592;0.8487;0.9013;1" calcMode="spline" keySplines=".5 0 .9 .55;0 0 1 1;.55 0 .9 .5;0 0 1 1" dur="15.2s" repeatCount="indefinite"/>
-            <g stroke="#cfe3ff" stroke-width="1.3" stroke-linecap="round" fill="none" opacity="0"><animate attributeName="opacity" values="0;0.8;0.8;0;0" keyTimes="0;0.0132;0.0526;0.0592;1" calcMode="spline" keySplines="0 0 1 1;0 0 1 1;0 0 1 1;0 0 1 1" dur="15.2s" repeatCount="indefinite"/><path d="M40 -34 L40 -6" /><path d="M47 -46 L47 -12" /><path d="M54 -30 L54 -2" /><path d="M61 -40 L61 -8" /></g>
-            <g stroke="#cfe3ff" stroke-width="1.3" stroke-linecap="round" fill="none" opacity="0"><animate attributeName="opacity" values="0;0;0.8;0.8;0;0" keyTimes="0;0.8487;0.8618;0.8882;0.9013;1" calcMode="spline" keySplines="0 0 1 1;0 0 1 1;0 0 1 1;0 0 1 1;0 0 1 1" dur="15.2s" repeatCount="indefinite"/><path d="M40 104 L40 128" /><path d="M47 102 L47 136" /><path d="M54 106 L54 126" /><path d="M61 102 L61 132" /></g>
-            <!-- far leg (stands straight when finished, extended behind while welding) -->
-            <path fill="none" stroke="#0a0d1f" stroke-width="13" stroke-linecap="round" stroke-linejoin="round" d="M44 71 L30 88"><animate attributeName="d" values="M44 71 L43 90;M44 71 L43 90;M44 71 L30 88;M44 71 L30 88;M44 71 L43 90;M44 71 L43 90;M44 71 L30 88;M44 71 L30 88;M44 71 L43 90;M44 71 L43 90" keyTimes="0;0.0362;0.0691;0.2632;0.3224;0.4211;0.4671;0.6974;0.7566;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="15.2s" repeatCount="indefinite"/></path>
-            <path fill="none" stroke="#0f3aa0" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" d="M44 71 L30 88"><animate attributeName="d" values="M44 71 L43 90;M44 71 L43 90;M44 71 L30 88;M44 71 L30 88;M44 71 L43 90;M44 71 L43 90;M44 71 L30 88;M44 71 L30 88;M44 71 L43 90;M44 71 L43 90" keyTimes="0;0.0362;0.0691;0.2632;0.3224;0.4211;0.4671;0.6974;0.7566;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="15.2s" repeatCount="indefinite"/></path>
-            <g transform="translate(32.4 86)"><animateTransform attributeName="transform" type="translate" values="43 90.3;43 90.3;32.4 86;32.4 86;43 90.3;43 90.3;32.4 86;32.4 86;43 90.3;43 90.3" keyTimes="0;0.0362;0.0691;0.2632;0.3224;0.4211;0.4671;0.6974;0.7566;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="15.2s" repeatCount="indefinite"/><g transform="rotate(10)"><animateTransform attributeName="transform" type="rotate" values="0;0;10;10;0;0;10;10;0;0" keyTimes="0;0.0362;0.0691;0.2632;0.3224;0.4211;0.4671;0.6974;0.7566;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="15.2s" repeatCount="indefinite"/><g transform="translate(-41.5 -89.5)"><path d="M37 89.5 L46 89.5 L47 93 Q55 93.5 56 97 L56 98 L36 98 Z" fill="#2a2f55" stroke="#0a0d1f" stroke-width="1.5" stroke-linejoin="round"/><path d="M36 96.5 H56" stroke="#8a93c9" stroke-width="1.4" stroke-linecap="round"/></g></g></g>
+        <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" focusable="false" class="wd-svg" id="wdRig">
+          <defs>
+            <radialGradient id="wdArc">
+              <stop offset="0" stop-color="#ffffff"/>
+              <stop offset=".35" stop-color="#d8edff"/>
+              <stop offset=".72" stop-color="#6db7ff" stop-opacity=".55"/>
+              <stop offset="1" stop-color="#6db7ff" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="wdHalo">
+              <stop offset="0" stop-color="#ffb066" stop-opacity=".75"/>
+              <stop offset="1" stop-color="#fd572b" stop-opacity="0"/>
+            </radialGradient>
+            <clipPath id="wdTorsoClip"><path d="M-11 -1 L-11.5 -21 Q-11.5 -28.5 0 -29 Q14 -28.5 14 -18 L9 -2 Q-1 3 -11 -1 Z"/></clipPath>
+          </defs>
+          <!-- Rig: every moving part is positioned frame-by-frame by assets/js/welder.js -->
+          <g id="wdFig">
+            <!-- far leg -->
+            <path id="wdLegFo" fill="none" stroke="#0a0d1f" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+            <path id="wdLegFf" fill="none" stroke="#0f3aa0" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+            <g id="wdBootF"><path d="M-6 -1 L6 -1 L7 3 Q16 4 17 7 L17 8 L-7 8 Z" fill="#2a2f55" stroke="#0a0d1f" stroke-width="1.5" stroke-linejoin="round"/><path d="M-7 6 H17" stroke="#8a93c9" stroke-width="1.4" stroke-linecap="round"/></g>
             <!-- near leg -->
-            <path fill="none" stroke="#0a0d1f" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" d="M46 70 L53 90"><animate attributeName="d" values="M52 70 L53 90;M52 70 L53 90;M46 70 L53 90;M46 70 L53 90;M52 70 L53 90;M52 70 L53 90;M46 70 L53 90;M46 70 L53 90;M52 70 L53 90;M52 70 L53 90" keyTimes="0;0.0362;0.0691;0.2632;0.3224;0.4211;0.4671;0.6974;0.7566;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="15.2s" repeatCount="indefinite"/></path>
-            <path fill="none" stroke="#164dcc" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" d="M46 70 L53 90"><animate attributeName="d" values="M52 70 L53 90;M52 70 L53 90;M46 70 L53 90;M46 70 L53 90;M52 70 L53 90;M52 70 L53 90;M46 70 L53 90;M46 70 L53 90;M52 70 L53 90;M52 70 L53 90" keyTimes="0;0.0362;0.0691;0.2632;0.3224;0.4211;0.4671;0.6974;0.7566;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="15.2s" repeatCount="indefinite"/></path>
-            <g transform="translate(0 0)"><animateTransform attributeName="transform" type="translate" values="0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0" keyTimes="0;0.0362;0.0691;0.2632;0.3224;0.4211;0.4671;0.6974;0.7566;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="15.2s" repeatCount="indefinite"/><path d="M46 89 L58 89 L59 93 Q68 94 69 97 L69 98 L45 98 Z" fill="#2a2f55" stroke="#0a0d1f" stroke-width="1.5" stroke-linejoin="round"/><path d="M45 96 H69" stroke="#8a93c9" stroke-width="1.4" stroke-linecap="round"/></g>
-            <g transform="translate(0 -6)"><g transform="rotate(34 48 73)"><animateTransform attributeName="transform" type="rotate" values="0 48 73;0 48 73;34 48 73;34 48 73;0 48 73;0 48 73;34 48 73;34 48 73;0 48 73;0 48 73" keyTimes="0;0.0362;0.0691;0.2632;0.3224;0.4211;0.4671;0.6974;0.7566;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="15.2s" repeatCount="indefinite"/>
-            <!-- neck -->
-            <rect x="47.5" y="38" width="10.5" height="14" rx="3.2" fill="#d99a5b" stroke="#0a0d1f" stroke-width="1.4"/>
-            <rect x="48.2" y="38.5" width="9.1" height="7.5" rx="2.6" fill="#a8703a" opacity=".55"/>
-            <!-- torso -->
-            <path d="M39 74 L38.5 54 Q38.5 46.5 50 46 Q64 46.5 64 57 L59 73 Q49 78 39 74 Z" fill="#fd572b"/>
-            <g clip-path="url(#wdTorsoClip)">
-              <path d="M30 60 L72 60" stroke="#e8edf9" stroke-width="3.4"/>
-              <path d="M30 67 L72 67" stroke="#e8edf9" stroke-width="3.4"/>
-              <path d="M30 77 L66 77" stroke="#c9391a" stroke-width="7" opacity=".5"/>
+            <path id="wdLegNo" fill="none" stroke="#0a0d1f" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+            <path id="wdLegNf" fill="none" stroke="#164dcc" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+            <g id="wdBootN"><path d="M-6 -1 L6 -1 L7 3 Q16 4 17 7 L17 8 L-7 8 Z" fill="#2a2f55" stroke="#0a0d1f" stroke-width="1.5" stroke-linejoin="round"/><path d="M-7 6 H17" stroke="#8a93c9" stroke-width="1.4" stroke-linecap="round"/></g>
+            <!-- torso + backpack (origin = hip) -->
+            <g id="wdBody">
+              <g id="wdPack">
+                <!-- gas cylinder strapped to the side of the pack -->
+                <rect x="-31" y="-27" width="7.4" height="22" rx="3.6" fill="#cfd6ee" stroke="#0a0d1f" stroke-width="1.5"/>
+                <rect x="-29.2" y="-31" width="3.8" height="4.6" rx="1.3" fill="#8a93c9" stroke="#0a0d1f" stroke-width="1.3"/>
+                <path d="M-31 -21 H-23.6" stroke="#8a93c9" stroke-width="1.5"/>
+                <!-- pack body -->
+                <rect x="-25" y="-27" width="15.5" height="26" rx="5" fill="#2a2f55" stroke="#0a0d1f" stroke-width="1.6"/>
+                <rect x="-24.4" y="-32" width="14.3" height="6.6" rx="3.3" fill="#fd572b" stroke="#0a0d1f" stroke-width="1.4"/>
+                <rect x="-23.6" y="-14" width="9" height="10" rx="2.3" fill="#3b4278" stroke="#0a0d1f" stroke-width="1.2"/>
+                <path d="M-25 -19.5 H-9.5" stroke="#e8edf9" stroke-width="2.2"/>
+              </g>
+              <rect x="-2.5" y="-37" width="10.5" height="14" rx="3.2" fill="#d99a5b" stroke="#0a0d1f" stroke-width="1.4"/>
+              <rect x="-1.8" y="-36.5" width="9.1" height="7.5" rx="2.6" fill="#a8703a" opacity=".55"/>
+              <path d="M-11 -1 L-11.5 -21 Q-11.5 -28.5 0 -29 Q14 -28.5 14 -18 L9 -2 Q-1 3 -11 -1 Z" fill="#fd572b"/>
+              <g clip-path="url(#wdTorsoClip)">
+                <path d="M-20 -15 L22 -15" stroke="#e8edf9" stroke-width="3.4"/>
+                <path d="M-20 -8 L22 -8" stroke="#e8edf9" stroke-width="3.4"/>
+                <path d="M-20 2 L16 2" stroke="#c9391a" stroke-width="7" opacity=".5"/>
+              </g>
+              <path d="M-11 -1 L-11.5 -21 Q-11.5 -28.5 0 -29 Q14 -28.5 14 -18 L9 -2 Q-1 3 -11 -1 Z" fill="none" stroke="#0a0d1f" stroke-width="1.6" stroke-linejoin="round"/>
+              <!-- pack strap over the shoulder -->
+              <path d="M-2.5 -27.5 Q-8.5 -17 -9 -3" fill="none" stroke="#0a0d1f" stroke-width="4.4" stroke-linecap="round"/>
+              <path d="M-2.5 -27.5 Q-8.5 -17 -9 -3" fill="none" stroke="#1c2350" stroke-width="2.6" stroke-linecap="round"/>
             </g>
-            <path d="M39 74 L38.5 54 Q38.5 46.5 50 46 Q64 46.5 64 57 L59 73 Q49 78 39 74 Z" fill="none" stroke="#0a0d1f" stroke-width="1.6" stroke-linejoin="round"/>
-            </g></g>
-            <!-- far arm + torch + glove -->
-            <path fill="none" stroke="#0a0d1f" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" d="M58.7 46.5 L66.9 68.8 L85 84"><animate attributeName="d" values="M52.5 44.5 L55 57.5 L59 68;M52.5 44.5 L55 57.5 L59 68;M58.7 46.5 L66.9 68.8 L85 84;M58.7 46.5 L66.9 68.8 L85 84;M52.5 44.5 L55 57.5 L59 68;M52.5 44.5 L55 57.5 L59 68;M58.7 46.5 L66.9 68.8 L85 84;M58.7 46.5 L66.9 68.8 L85 84;M52.5 44.5 L55 57.5 L59 68;M52.5 44.5 L55 57.5 L59 68" keyTimes="0;0.0362;0.0691;0.2632;0.3224;0.4211;0.4671;0.6974;0.7566;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="15.2s" repeatCount="indefinite"/></path>
-            <path fill="none" stroke="#d8431b" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" d="M58.7 46.5 L66.9 68.8 L85 84"><animate attributeName="d" values="M52.5 44.5 L55 57.5 L59 68;M52.5 44.5 L55 57.5 L59 68;M58.7 46.5 L66.9 68.8 L85 84;M58.7 46.5 L66.9 68.8 L85 84;M52.5 44.5 L55 57.5 L59 68;M52.5 44.5 L55 57.5 L59 68;M58.7 46.5 L66.9 68.8 L85 84;M58.7 46.5 L66.9 68.8 L85 84;M52.5 44.5 L55 57.5 L59 68;M52.5 44.5 L55 57.5 L59 68" keyTimes="0;0.0362;0.0691;0.2632;0.3224;0.4211;0.4671;0.6974;0.7566;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="15.2s" repeatCount="indefinite"/></path>
-            <g transform="translate(85.5 84.5)"><animateTransform attributeName="transform" type="translate" values="59.5 68.5;59.5 68.5;85.5 84.5;85.5 84.5;59.5 68.5;59.5 68.5;85.5 84.5;85.5 84.5;59.5 68.5;59.5 68.5" keyTimes="0;0.0362;0.0691;0.2632;0.3224;0.4211;0.4671;0.6974;0.7566;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="15.2s" repeatCount="indefinite"/><g transform="rotate(0)"><animateTransform attributeName="transform" type="rotate" values="25;25;0;0;25;25;0;0;25;25" keyTimes="0;0.0362;0.0691;0.2632;0.3224;0.4211;0.4671;0.6974;0.7566;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="15.2s" repeatCount="indefinite"/><path d="M-10.5 -13.5 L2.5 3.5" stroke="#0a0d1f" stroke-width="8" stroke-linecap="round"/><path d="M-10.5 -13.5 L2.5 3.5" stroke="#3b4278" stroke-width="5.2" stroke-linecap="round"/><path d="M2.5 3.5 L8.5 11" stroke="#0a0d1f" stroke-width="5" stroke-linecap="round"/><path d="M2.5 3.5 L8.5 11" stroke="#cfd6ee" stroke-width="2.6" stroke-linecap="round"/></g></g>
-            <circle r="5" fill="#b9783a" stroke="#0a0d1f" stroke-width="1.5" cx="85.5" cy="84.5"><animate attributeName="cx" values="59.5;59.5;85.5;85.5;59.5;59.5;85.5;85.5;59.5;59.5" keyTimes="0;0.0362;0.0691;0.2632;0.3224;0.4211;0.4671;0.6974;0.7566;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="15.2s" repeatCount="indefinite"/><animate attributeName="cy" values="68.5;68.5;84.5;84.5;68.5;68.5;84.5;84.5;68.5;68.5" keyTimes="0;0.0362;0.0691;0.2632;0.3224;0.4211;0.4671;0.6974;0.7566;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="15.2s" repeatCount="indefinite"/></circle>
+            <!-- far arm + welding torch -->
+            <path id="wdArmFo" fill="none" stroke="#0a0d1f" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+            <path id="wdArmFf" fill="none" stroke="#d8431b" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+            <g id="wdTorch">
+              <path d="M-10.5 -13.5 L2.5 3.5" stroke="#0a0d1f" stroke-width="8" stroke-linecap="round"/>
+              <path d="M-10.5 -13.5 L2.5 3.5" stroke="#3b4278" stroke-width="5.2" stroke-linecap="round"/>
+              <path d="M2.5 3.5 L8.5 11" stroke="#0a0d1f" stroke-width="5" stroke-linecap="round"/>
+              <path d="M2.5 3.5 L8.5 11" stroke="#cfd6ee" stroke-width="2.6" stroke-linecap="round"/>
+            </g>
+            <circle id="wdGloveF" r="5" fill="#b9783a" stroke="#0a0d1f" stroke-width="1.5"/>
             <!-- near arm -->
-            <path fill="none" stroke="#0a0d1f" stroke-width="11.5" stroke-linecap="round" stroke-linejoin="round" d="M58.9 45.6 L64.1 64.9 L80 77"><animate attributeName="d" values="M51.5 44 L51 58 L53 69;M51.5 44 L51 58 L53 69;M58.9 45.6 L64.1 64.9 L80 77;M58.9 45.6 L64.1 64.9 L80 77;M51.5 44 L51 58 L53 69;M51.5 44 L51 58 L53 69;M58.9 45.6 L64.1 64.9 L80 77;M58.9 45.6 L64.1 64.9 L80 77;M51.5 44 L51 58 L53 69;M51.5 44 L51 58 L53 69" keyTimes="0;0.0362;0.0691;0.2632;0.3224;0.4211;0.4671;0.6974;0.7566;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="15.2s" repeatCount="indefinite"/></path>
-            <path fill="none" stroke="#fd572b" stroke-width="8.5" stroke-linecap="round" stroke-linejoin="round" d="M58.9 45.6 L64.1 64.9 L80 77"><animate attributeName="d" values="M51.5 44 L51 58 L53 69;M51.5 44 L51 58 L53 69;M58.9 45.6 L64.1 64.9 L80 77;M58.9 45.6 L64.1 64.9 L80 77;M51.5 44 L51 58 L53 69;M51.5 44 L51 58 L53 69;M58.9 45.6 L64.1 64.9 L80 77;M58.9 45.6 L64.1 64.9 L80 77;M51.5 44 L51 58 L53 69;M51.5 44 L51 58 L53 69" keyTimes="0;0.0362;0.0691;0.2632;0.3224;0.4211;0.4671;0.6974;0.7566;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="15.2s" repeatCount="indefinite"/></path>
-            <line stroke="#e8edf9" stroke-width="2.6" stroke-linecap="round" x1="60.304" y1="50.811" x2="63.84" y2="63.935"><animate attributeName="x1" values="51.365;51.365;60.304;60.304;51.365;51.365;60.304;60.304;51.365;51.365" keyTimes="0;0.0362;0.0691;0.2632;0.3224;0.4211;0.4671;0.6974;0.7566;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="15.2s" repeatCount="indefinite"/><animate attributeName="y1" values="47.78;47.78;50.811;50.811;47.78;47.78;50.811;50.811;47.78;47.78" keyTimes="0;0.0362;0.0691;0.2632;0.3224;0.4211;0.4671;0.6974;0.7566;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="15.2s" repeatCount="indefinite"/><animate attributeName="x2" values="51.025;51.025;63.84;63.84;51.025;51.025;63.84;63.84;51.025;51.025" keyTimes="0;0.0362;0.0691;0.2632;0.3224;0.4211;0.4671;0.6974;0.7566;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="15.2s" repeatCount="indefinite"/><animate attributeName="y2" values="57.3;57.3;63.935;63.935;57.3;57.3;63.935;63.935;57.3;57.3" keyTimes="0;0.0362;0.0691;0.2632;0.3224;0.4211;0.4671;0.6974;0.7566;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="15.2s" repeatCount="indefinite"/></line>
-            <circle r="5.4" fill="#d99a5b" stroke="#0a0d1f" stroke-width="1.5" cx="80.5" cy="78"><animate attributeName="cx" values="53.5;53.5;80.5;80.5;53.5;53.5;80.5;80.5;53.5;53.5" keyTimes="0;0.0362;0.0691;0.2632;0.3224;0.4211;0.4671;0.6974;0.7566;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="15.2s" repeatCount="indefinite"/><animate attributeName="cy" values="70;70;78;78;70;70;78;78;70;70" keyTimes="0;0.0362;0.0691;0.2632;0.3224;0.4211;0.4671;0.6974;0.7566;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="15.2s" repeatCount="indefinite"/></circle>
-            <line stroke="#a8703a" stroke-width="1.3" stroke-linecap="round" x1="77.5" y1="76" x2="83" y2="80.5"><animate attributeName="x1" values="50.5;50.5;77.5;77.5;50.5;50.5;77.5;77.5;50.5;50.5" keyTimes="0;0.0362;0.0691;0.2632;0.3224;0.4211;0.4671;0.6974;0.7566;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="15.2s" repeatCount="indefinite"/><animate attributeName="y1" values="68;68;76;76;68;68;76;76;68;68" keyTimes="0;0.0362;0.0691;0.2632;0.3224;0.4211;0.4671;0.6974;0.7566;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="15.2s" repeatCount="indefinite"/><animate attributeName="x2" values="56;56;83;83;56;56;83;83;56;56" keyTimes="0;0.0362;0.0691;0.2632;0.3224;0.4211;0.4671;0.6974;0.7566;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="15.2s" repeatCount="indefinite"/><animate attributeName="y2" values="72.5;72.5;80.5;80.5;72.5;72.5;80.5;80.5;72.5;72.5" keyTimes="0;0.0362;0.0691;0.2632;0.3224;0.4211;0.4671;0.6974;0.7566;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="15.2s" repeatCount="indefinite"/></line>
-            <g transform="translate(0 -6)"><g transform="rotate(34 48 73)"><animateTransform attributeName="transform" type="rotate" values="0 48 73;0 48 73;34 48 73;34 48 73;0 48 73;0 48 73;34 48 73;34 48 73;0 48 73;0 48 73" keyTimes="0;0.0362;0.0691;0.2632;0.3224;0.4211;0.4671;0.6974;0.7566;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="15.2s" repeatCount="indefinite"/>
-            <g transform="translate(-8 -10)"><animateTransform attributeName="transform" type="translate" values="-12 -7.5;-12 -7.5;-8 -10;-8 -10;-12 -7.5;-12 -7.5;-8 -10;-8 -10;-12 -7.5;-12 -7.5" keyTimes="0;0.0362;0.0691;0.2632;0.3224;0.4211;0.4671;0.6974;0.7566;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1;.45 0 .55 1;0 0 1 1" dur="15.2s" repeatCount="indefinite"/><g transform="rotate(30 64 46)"><animateTransform attributeName="transform" type="rotate" values="-2 64 46;-2 64 46;30 64 46;32.5 64 46;29 64 46;30 64 46;-2 64 46;-2 64 46;30 64 46;32.5 64 46;29 64 46;30 64 46;-2 64 46;-2 64 46" keyTimes="0;0.0362;0.0691;0.1316;0.1974;0.2632;0.3224;0.4211;0.4671;0.5461;0.625;0.6974;0.7566;1" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1" dur="15.2s" repeatCount="indefinite"/><path d="M50 40 Q49 25 63 24 Q77 24 78 37 L78 46 Q78 50 73 50 L59 50 Q50 49 50 40 Z" fill="#3d4478" stroke="#0a0d1f" stroke-width="1.6" stroke-linejoin="round"/>
-              <path d="M54 33 Q57 27.5 66 27.5" fill="none" stroke="#8b94d0" stroke-width="2" stroke-linecap="round"/>
-              <rect x="64" y="33" width="14" height="11" rx="2.6" fill="#0d2f33" stroke="#0a0d1f" stroke-width="1.4"/>
-              <path d="M67 35.6 L72.5 35.6" stroke="#ffffff" stroke-width="1.4" stroke-linecap="round" opacity=".55"/>
-              <circle cx="55.5" cy="40" r="2.2" fill="#8b94d0" stroke="#0a0d1f" stroke-width="1"/></g></g>
-            </g></g>
-            </g><!-- /wd-fly -->
-            <!-- weld bead on the surface -->
-            <g><animate attributeName="opacity" values="0;0;1;1;0.45;0.45;1;1;0.35;0.35;0" keyTimes="0;0.0691;0.1118;0.2632;0.3618;0.4638;0.5066;0.6974;0.8224;0.9013;1" calcMode="spline" keySplines="0 0 1 1;0 0 1 1;0 0 1 1;0 0 1 1;0 0 1 1;0 0 1 1;0 0 1 1;0 0 1 1;0 0 1 1;0 0 1 1" dur="15.2s" repeatCount="indefinite"/><rect x="66" y="96.6" width="30" height="1.8" rx=".9" fill="url(#wdBead)" class="wd-bead"/></g>
-            <!-- arc + sparks: only while welding -->
-            <g><animate attributeName="opacity" values="0;0;1;1;0;0;1;1;0;0" keyTimes="0;0.0658;0.0757;0.2599;0.2697;0.4605;0.4704;0.6941;0.7039;1" calcMode="spline" keySplines="0 0 1 1;0 0 1 1;0 0 1 1;0 0 1 1;0 0 1 1;0 0 1 1;0 0 1 1;0 0 1 1;0 0 1 1" dur="15.2s" repeatCount="indefinite"/><g transform="translate(95 96.5)">
+            <path id="wdArmNo" fill="none" stroke="#0a0d1f" stroke-width="11.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path id="wdArmNf" fill="none" stroke="#fd572b" stroke-width="8.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <line id="wdArmNs" stroke="#e8edf9" stroke-width="2.6" stroke-linecap="round"/>
+            <circle id="wdGloveN" r="5.4" fill="#d99a5b" stroke="#0a0d1f" stroke-width="1.5"/>
+            <!-- helmet -->
+            <g id="wdHead">
+              <path d="M-12 -42.5 Q-13 -57.5 1 -58.5 Q15 -58.5 16 -45.5 L16 -36.5 Q16 -32.5 11 -32.5 L-3 -32.5 Q-12 -33.5 -12 -42.5 Z" fill="#3d4478" stroke="#0a0d1f" stroke-width="1.6" stroke-linejoin="round"/>
+              <path d="M-8 -49.5 Q-5 -55 4 -55" fill="none" stroke="#8b94d0" stroke-width="2" stroke-linecap="round"/>
+              <rect x="2" y="-49.5" width="14" height="11" rx="2.6" fill="#0d2f33" stroke="#0a0d1f" stroke-width="1.4"/>
+              <path d="M5 -46.9 L10.5 -46.9" stroke="#ffffff" stroke-width="1.4" stroke-linecap="round" opacity=".55"/>
+              <circle cx="-6.5" cy="-42.5" r="2.2" fill="#8b94d0" stroke="#0a0d1f" stroke-width="1"/>
+            </g>
+            <!-- arc + sparks (only lit while welding) -->
+            <g id="wdArcG" opacity="0">
               <g class="wd-arc">
                 <circle r="15" fill="url(#wdHalo)"/>
                 <circle r="6.5" fill="url(#wdArc)"/>
@@ -1104,10 +1113,11 @@
               <g class="wd-sp" style="--dx:-20px;--up:14px;--t:.9s;--d:-.05s"><circle class="wd-spy" r=".9" fill="#ff8a3d"/></g>
               <g class="wd-sp" style="--dx:18px;--up:12px;--t:.75s;--d:-.35s"><circle class="wd-spy" r="1" fill="#fff2a8"/></g>
               <g class="wd-sp" style="--dx:40px;--up:28px;--t:1s;--d:-.65s"><circle class="wd-spy" r="1" fill="#ffd24a"/></g>
-            </g></g>
-          </svg>
-        </span>
-      <span class="qa-item-label" data-en="Request a Quote">قدّم طلبك</span>
+            </g>
+          </g>
+        </svg>
+      </span>
+      <span class="qa-item-label" id="wdLabel" data-en="Request a Quote">قدّم طلبك</span>
       <span class="qa-item-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/></svg>
       </span>
@@ -1256,48 +1266,7 @@
     });
   })();
 </script>
-<script>
-  // Welder mascot (15.2s SMIL loop): drops in from the top, welds the moment he lands, stands, welds a second time, stands, then flies back up.
-  // The "Request a Quote" pill shakes on every touch-down.
-  (function(){
-    var svg = document.querySelector('.qa-welder svg');
-    var fly = document.getElementById('wdFlyAnim');
-    if (!svg || !fly) return;
-    var LOOP = 15.2, LAND = 0.9;                          // must match gen (TS / LAND)
-    var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var tpl = fly.getAttribute('values');                 // holds the placeholder distance (1700)
-    function fit(){
-      // distance (in svg units) from the mascot to just above the top of the viewport
-      var r = svg.getBoundingClientRect();
-      if (!r.width) return;
-      var d = Math.ceil((r.bottom + 80) / (r.width / 120));
-      fly.setAttribute('values', tpl.replace(/-1700/g, '-' + d));
-    }
-    fit();
-    window.addEventListener('resize', fit);
-    window.addEventListener('load', function(){ setTimeout(fit, 1200); setTimeout(fit, 4000); }); // after the drop-in of the quick-actions settles
-    if (reduce && svg.pauseAnimations) {
-      svg.setCurrentTime(3);                              // reduced motion: hold the "welding" pose, no flying, no shake
-      svg.pauseAnimations();
-      return;
-    }
-    // shake the pill exactly when he touches down
-    var btn = document.getElementById('openRequestModal');
-    var hitTimer = 0;
-    function hit(){
-      if (!btn) return;
-      btn.classList.remove('qa-hit'); void btn.offsetWidth; btn.classList.add('qa-hit');
-      clearTimeout(hitTimer); hitTimer = setTimeout(function(){ btn.classList.remove('qa-hit'); }, 1500);
-    }
-    var last = svg.getCurrentTime() % LOOP;
-    (function tick(){
-      var ph = svg.getCurrentTime() % LOOP;
-      if (last < LAND && ph >= LAND && ph - LAND < 0.3) hit();
-      last = ph;
-      requestAnimationFrame(tick);
-    })();
-  })();
-</script>
+<script src="assets/js/welder.js?v=12"></script>
 <script>
   // Worker reel: run the cross-fade only while it is on screen (saves CPU while the visitor is elsewhere on the page).
   (function(){

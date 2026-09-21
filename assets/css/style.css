@@ -3299,7 +3299,7 @@
     opacity:.28;
     animation:qaGlowPulse 2.6s ease-in-out infinite;
   }
-  .qa-request::before{ background:var(--orange); }
+  .qa-request::before{ background:color-mix(in srgb, var(--orange) calc(var(--w, 1) * 100%), transparent calc((1 - var(--w, 1)) * 100%)); }
   .qa-inquiry::before{ background:#164dcc; animation-delay:.5s; }
   @keyframes qaGlowPulse{
     0%, 100%{ opacity:.18; transform:scale(.94); }
@@ -3308,7 +3308,13 @@
   @media (prefers-reduced-motion: reduce){
     .qa-item::before{ animation:none; opacity:.4; }
   }
-  .qa-request{ background:var(--orange); color:var(--white); }
+  .qa-request{
+    --w:1; /* weld reveal progress (0 = raw unwelded metal, 1 = fully welded orange); JS drives it up from 0 in three steps, one per weld burst, then leaves it at 1 for good */
+    background:linear-gradient(to right,
+      var(--orange) calc(var(--w) * 100% - 3%),
+      #b0bae0 calc(var(--w) * 100% + 3%));
+    color:var(--white);
+  }
   .qa-request .qa-item-icon{ background:rgba(255,255,255,0.22); color:var(--white); }
   .qa-inquiry{ background:#164dcc; color:var(--white); }
   .qa-inquiry .qa-item-icon{ background:rgba(255,255,255,0.22); color:var(--white); }
@@ -3951,6 +3957,36 @@ header .logo{ cursor: pointer; }
   @media (prefers-reduced-motion: reduce){
     .wd-head, .wd-arc, .wd-bead, .wd-sp, .wd-spy{ animation:none; }
     .wd-sp{ display:none; }
+  }
+
+  /* ---------- welder visit: welds/heats the button's own "قدّم طلبك" text + "done" icon flash ---------- */
+  /* The welder (see assets/js/welder.js) walks in, kneels on the "Request a Quote" pill and tack-welds
+     along its top edge in three short bursts, welding the button's words on; the button's own label glows white-hot
+     in sync with each spark and cools back down, the pill gives a little "done" shake and its
+     check icon flashes, then he turns around and walks back out of the screen. */
+  .qa-item-label{
+    --heat:0;
+    text-shadow:
+      0 0 calc(var(--heat) * 12px) rgba(255, 214, 140, var(--heat)),
+      0 0 calc(var(--heat) * 4px) rgba(255, 255, 255, var(--heat));
+    filter:brightness(calc(1 + var(--heat) * .4));
+  }
+  .qa-request .qa-item-icon.qa-flash{ animation:qaIconFlash .9s ease-out 1; }
+  @keyframes qaIconFlash{
+    0%  { background:rgba(255,255,255,.22); color:var(--white); transform:scale(1); }
+    22% { background:#fff; color:var(--orange); transform:scale(1.22); }
+    100%{ background:rgba(255,255,255,.22); color:var(--white); transform:scale(1); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .qa-request .qa-item-icon.qa-flash{ animation:none; }
+  }
+
+  /* first visit: the button's words are missing
+     until the seam is laid down, then appear along it (--lw = weld progress, --wdir = seam direction) */
+  .qa-item-label.qa-lblwait{
+    -webkit-mask-image:linear-gradient(var(--wdir, to right), #000 calc(var(--lw, 0) * 110% - 10%), transparent calc(var(--lw, 0) * 110%));
+            mask-image:linear-gradient(var(--wdir, to right), #000 calc(var(--lw, 0) * 110% - 10%), transparent calc(var(--lw, 0) * 110%));
+    -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
   }
 
   /* ---------- splash: the welder welds the logo into place, over light smoke ---------- */
