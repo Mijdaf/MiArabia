@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>لوحة تحكم مي أرابيا</title>
 <link rel="icon" href="../assets/icon-192.png">
-<link rel="stylesheet" href="dashboard.css?v=10">
+<link rel="stylesheet" href="dashboard.css?v=11">
 </head>
 <body>
 
@@ -60,8 +60,8 @@
           <h2>شركاء النجاح</h2>
           <button id="addPartnerBtn" class="btn-primary small" type="button">+ إضافة شريك</button>
         </div>
-        <p class="muted">القسم ده بيظهر في الموقع قبل الفوتر، وبيتحرك تلقائي لفوق زي تتر مسلسل. القسم بيفضل مخفي لحد ما تضيف شريك واحد على الأقل. ترتيب الإضافة هو ترتيب الظهور.</p>
-        <div id="partnersGrid" class="images-grid"></div>
+        <p class="muted">القسم ده بيظهر جمب الرقمين ("الشركة بالأرقام")، وبيتحرك تلقائي لفوق زي تتر مسلسل، وبيفضل مخفي لحد ما تضيف شريك واحد على الأقل. ترتيب الإضافة هو ترتيب الظهور.</p>
+        <div id="partnersList" class="partners-admin-list"></div>
         <p id="partnersEmpty" class="muted center" hidden>لسه مفيش شركاء مضافين.</p>
       </section>
 
@@ -124,14 +124,6 @@
         <label>اسم الشركة (إنجليزي)
           <input type="text" id="prtNameEn">
         </label>
-        <label>شعار الشركة من جهازك (اختياري)
-          <input type="file" id="prtFile" accept="image/*">
-        </label>
-        <p class="muted small">أو أدخل رابط شعار جاهز بدلاً من ذلك:</p>
-        <label>رابط الشعار (اختياري، بدلاً من الرفع)
-          <input type="url" id="prtLogoUrl" placeholder="https://...">
-        </label>
-        <p class="muted small">لو سبت الشعار فاضي، هيظهر اسم الشركة بس في القائمة.</p>
         <p class="error" id="partnerFormError" hidden></p>
         <button type="submit" class="btn-primary">حفظ الشريك</button>
       </form>
@@ -178,7 +170,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="../assets/js/supabase-config.js?v=6"></script>
-  <script src="../assets/js/data-service.js?v=8"></script>
-  <script src="dashboard.js?v=11"></script>
+  <script src="../assets/js/data-service.js?v=9"></script>
+  <script src="dashboard.js?v=12"></script>
 </body>
 </html>

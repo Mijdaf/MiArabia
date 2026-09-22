@@ -145,13 +145,17 @@
 
   // ---------- Company stats (employees / projects) ----------
   // The numbers are set from the dashboard ("أرقام الشركة" tab -> site_settings).
-  // The section stays hidden until at least one number is above zero, and the
-  // figures count up every time the section scrolls into view (same replay
-  // behaviour as the rest of the page's screen transitions).
+  // The section stays hidden until at least one number is above zero OR the
+  // "شركاء النجاح" partners list (a third column in the same row, wired up
+  // further down) has at least one entry. The figures count up every time
+  // the section scrolls into view (same replay behaviour as the rest of the
+  // page's screen transitions).
   const companyStats = (function(){
     const section = document.getElementById('stats');
-    if (!section) return { apply(){} };
-    const items = Array.from(section.querySelectorAll('[data-stat]')).map((el) => ({
+    if (!section) return { apply(){}, setPartnersVisible(){} };
+    // only the two numeric figures — the partners column (data-stat="partners")
+    // has no .stat-num/[data-stat-final] and is managed separately below
+    const items = Array.from(section.querySelectorAll('[data-stat="employees"], [data-stat="projects"]')).map((el) => ({
       key: el.dataset.stat,
       el,
       num: el.querySelector('.stat-num'),
@@ -163,6 +167,8 @@
     const fmt = (n) => n.toLocaleString('en-US');
     const easeOut = (t) => 1 - Math.pow(1 - t, 3);
     let raf = 0;
+    let anyStats = false;
+    let partnersVisible = false;
 
     const showFinal = () => items.forEach((it) => { it.num.textContent = fmt(it.value); });
 
@@ -206,7 +212,13 @@
           it.final.textContent = fmt(v);
           if (v > 0) any = true;
         });
-        section.hidden = !any;
+        anyStats = any;
+        section.hidden = !(anyStats || partnersVisible);
+      },
+      // called once the partners list has loaded (see further down this file)
+      setPartnersVisible(flag){
+        partnersVisible = flag;
+        section.hidden = !(anyStats || partnersVisible);
       },
     };
   })();
@@ -1542,36 +1554,55 @@
     });
   })();
 
-  // Success partners (شركاء النجاح): fully driven by the dashboard.
-  // Renders the partner list twice back-to-back inside #partnersReel and
-  // loops a translateY(0 -> -50%) animation, so it scrolls endlessly upward
-  // like a TV series' end credits with no visible seam. Stays hidden if the
-  // admin hasn't added any partners yet.
+  // Success partners (شركاء النجاح): a third column beside the two figures
+  // above, fully driven by the dashboard. Renders the partner names twice
+  // back-to-back inside #partnersReel and loops a translateY(0 -> -50%)
+  // animation so it scrolls endlessly upward like a TV series' end credits
+  // with no visible seam, then continuously fades every name by how far it
+  // sits from the middle of the little window so the centred one reads
+  // clearly. Stays hidden if the admin hasn't added any partners yet.
   (async function(){
-    const section = document.getElementById('partnersSection');
+    const stat = document.getElementById('statPartners');
+    const viewport = document.getElementById('partnersViewport');
     const reel = document.getElementById('partnersReel');
-    if (!section || !reel) return;
+    if (!stat || !viewport || !reel) return;
     if (!window.mijdafData || !window.mijdafData.isReady()) return;
 
     try {
       const partners = await window.mijdafData.listPartners();
-      if (!partners.length) return; // section stays hidden
+      if (!partners.length) return; // stays hidden
 
-      const rowHtml = (p) => `
-        <div class="partner-row">
-          ${p.logoUrl ? `<span class="partner-logo"><img src="${p.logoUrl}" alt="${p.nameAr}" loading="lazy"></span>` : ''}
-          <span class="partner-name" data-en="${p.nameEn || p.nameAr}">${p.nameAr}</span>
-        </div>`;
+      const rowHtml = (p) => `<div class="partner-row"><span class="partner-name" data-en="${p.nameEn || p.nameAr}">${p.nameAr}</span></div>`;
 
       // duplicate the list so the loop from 0% to -50% is seamless
       reel.innerHTML = partners.map(rowHtml).join('') + partners.map(rowHtml).join('');
 
       // scale the animation duration to the list length so the scroll
       // speed (px/sec) stays roughly constant however many partners there are
-      const perItemSeconds = 3.2;
-      reel.style.setProperty('--partners-duration', `${Math.max(14, partners.length * perItemSeconds)}s`);
+      const perItemSeconds = 2.4;
+      reel.style.setProperty('--partners-duration', `${Math.max(10, partners.length * perItemSeconds)}s`);
 
-      section.hidden = false;
+      stat.hidden = false;
+      companyStats.setPartnersVisible(true);
+
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduceMotion) return; // static list, no scroll/fade (see the CSS media query)
+
+      // continuously fade each name by its distance from the viewport's
+      // vertical middle — the one nearest the centre ends up fully opaque
+      let raf = 0;
+      function tick(){
+        const vRect = viewport.getBoundingClientRect();
+        const centerY = vRect.top + vRect.height / 2;
+        reel.querySelectorAll('.partner-row').forEach((row) => {
+          const r = row.getBoundingClientRect();
+          const dist = Math.abs((r.top + r.height / 2) - centerY);
+          const norm = Math.min(1, dist / (vRect.height / 2 || 1));
+          row.querySelector('.partner-name').style.opacity = (1 - norm * 0.72).toFixed(2);
+        });
+        raf = requestAnimationFrame(tick);
+      }
+      raf = requestAnimationFrame(tick);
     } catch (e) {
       console.error('partners load failed', e);
     }

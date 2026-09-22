@@ -342,29 +342,24 @@
   }
 
   function renderPartners() {
-    const grid = document.getElementById('partnersGrid');
+    const list = document.getElementById('partnersList');
     const empty = document.getElementById('partnersEmpty');
     empty.hidden = allPartners.length > 0;
-    grid.innerHTML = '';
+    list.innerHTML = '';
 
     allPartners.forEach((p) => {
-      const card = document.createElement('div');
-      card.className = 'image-card';
-      card.innerHTML = `
-        ${p.logoUrl ? `<img src="${p.logoUrl}" alt="${escapeHtml(p.nameAr)}">` : `<div class="image-card-placeholder">${escapeHtml(p.nameAr)}</div>`}
-        <div class="image-card-body">
-          <div class="image-card-title">${escapeHtml(p.nameAr || 'بدون اسم')}</div>
-          <div class="image-card-actions">
-            <button class="link-danger" data-action="delete">حذف</button>
-          </div>
-        </div>`;
-      card.querySelector('[data-action="delete"]').addEventListener('click', async () => {
+      const row = document.createElement('div');
+      row.className = 'partner-admin-row';
+      row.innerHTML = `
+        <span class="partner-admin-name">${escapeHtml(p.nameAr || 'بدون اسم')}</span>
+        <button class="link-danger" data-action="delete" type="button">حذف</button>`;
+      row.querySelector('[data-action="delete"]').addEventListener('click', async () => {
         if (!confirm('هل تريد حذف هذا الشريك من القائمة؟')) return;
-        await window.mijdafData.deletePartner(p.id, p.storagePath);
+        await window.mijdafData.deletePartner(p.id);
         allPartners = allPartners.filter((x) => x.id !== p.id);
         renderPartners();
       });
-      grid.appendChild(card);
+      list.appendChild(row);
     });
   }
 
@@ -384,8 +379,6 @@
 
     const nameAr = document.getElementById('prtNameAr').value.trim();
     const nameEn = document.getElementById('prtNameEn').value.trim();
-    const file = document.getElementById('prtFile').files[0];
-    const logoUrl = document.getElementById('prtLogoUrl').value.trim();
 
     if (!nameAr) {
       errorEl.textContent = 'يرجى كتابة اسم الشركة.';
@@ -394,12 +387,7 @@
     }
 
     try {
-      await window.mijdafData.uploadPartner(file, {
-        nameAr,
-        nameEn,
-        logoUrl,
-        sortOrder: allPartners.length,
-      });
+      await window.mijdafData.addPartner({ nameAr, nameEn, sortOrder: allPartners.length });
       closePartnerModal();
       await loadPartners();
     } catch (err) {
