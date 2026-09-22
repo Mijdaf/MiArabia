@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>لوحة تحكم مي أرابيا</title>
 <link rel="icon" href="../assets/icon-192.png">
-<link rel="stylesheet" href="dashboard.css?v=9">
+<link rel="stylesheet" href="dashboard.css?v=10">
 </head>
 <body>
 
@@ -27,6 +27,7 @@
         الرسائل <span class="badge" id="unreadBadge" hidden>0</span>
       </button>
       <button class="tab" data-tab="images" role="tab" aria-selected="false">الصور</button>
+      <button class="tab" data-tab="partners" role="tab" aria-selected="false">شركاء النجاح</button>
       <button class="tab" data-tab="stats" role="tab" aria-selected="false">أرقام الشركة</button>
       <button class="tab" data-tab="settings" role="tab" aria-selected="false">الإعدادات</button>
     </nav>
@@ -51,6 +52,17 @@
         </div>
         <div id="imagesGrid" class="images-grid"></div>
         <p id="imagesEmpty" class="muted center" hidden>لا توجد صور مضافة حتى الآن — يعرض الموقع الصور الافتراضية.</p>
+      </section>
+
+      <!-- تاب شركاء النجاح -->
+      <section id="tabPartners" class="tab-panel">
+        <div class="panel-head">
+          <h2>شركاء النجاح</h2>
+          <button id="addPartnerBtn" class="btn-primary small" type="button">+ إضافة شريك</button>
+        </div>
+        <p class="muted">القسم ده بيظهر في الموقع قبل الفوتر، وبيتحرك تلقائي لفوق زي تتر مسلسل. القسم بيفضل مخفي لحد ما تضيف شريك واحد على الأقل. ترتيب الإضافة هو ترتيب الظهور.</p>
+        <div id="partnersGrid" class="images-grid"></div>
+        <p id="partnersEmpty" class="muted center" hidden>لسه مفيش شركاء مضافين.</p>
       </section>
 
       <!-- تاب أرقام الشركة -->
@@ -100,6 +112,32 @@
     </main>
   </div>
 
+  <!-- مودال: إضافة شريك -->
+  <div class="overlay" id="partnerModalOverlay">
+    <div class="modal">
+      <button class="modal-close" id="partnerModalClose" type="button">×</button>
+      <h3>إضافة شريك نجاح</h3>
+      <form id="partnerForm" class="stack">
+        <label>اسم الشركة (عربي)
+          <input type="text" id="prtNameAr" required>
+        </label>
+        <label>اسم الشركة (إنجليزي)
+          <input type="text" id="prtNameEn">
+        </label>
+        <label>شعار الشركة من جهازك (اختياري)
+          <input type="file" id="prtFile" accept="image/*">
+        </label>
+        <p class="muted small">أو أدخل رابط شعار جاهز بدلاً من ذلك:</p>
+        <label>رابط الشعار (اختياري، بدلاً من الرفع)
+          <input type="url" id="prtLogoUrl" placeholder="https://...">
+        </label>
+        <p class="muted small">لو سبت الشعار فاضي، هيظهر اسم الشركة بس في القائمة.</p>
+        <p class="error" id="partnerFormError" hidden></p>
+        <button type="submit" class="btn-primary">حفظ الشريك</button>
+      </form>
+    </div>
+  </div>
+
   <!-- مودال: إضافة/تعديل صورة -->
   <div class="overlay" id="imageModalOverlay">
     <div class="modal">
@@ -140,7 +178,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="../assets/js/supabase-config.js?v=6"></script>
-  <script src="../assets/js/data-service.js?v=7"></script>
-  <script src="dashboard.js?v=10"></script>
+  <script src="../assets/js/data-service.js?v=8"></script>
+  <script src="dashboard.js?v=11"></script>
 </body>
 </html>

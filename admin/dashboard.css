@@ -211,6 +211,15 @@ h3{ font-size:18px; font-weight:700; color:var(--navy-deep); margin:0 0 16px; }
 .image-card-actions{ display:flex; justify-content:flex-end; }
 .link-danger{ background:none; border:none; color:var(--danger); font-weight:700; font-size:13px; padding:4px; }
 
+/* Partners tab reuses .image-card; logos are shown contained (not cropped),
+   and a partner added with no logo shows its name as a text placeholder. */
+#partnersGrid .image-card img{ object-fit:contain; padding:14px; background:#f4f6fb; }
+.image-card-placeholder{
+  height:140px; display:flex; align-items:center; justify-content:center;
+  text-align:center; padding:10px; background:#f4f6fb; color:var(--navy-deep);
+  font-weight:800; font-size:15px;
+}
+
 /* Overlay / modal */
 .overlay{
   position:fixed; inset:0; z-index:50;

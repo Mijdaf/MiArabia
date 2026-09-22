@@ -25,7 +25,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=27">
+<link rel="stylesheet" href="assets/css/style.css?v=28">
 </head>
 <body>
 
@@ -1050,6 +1050,23 @@
     </div>
   </section>
 
+  <!-- SUCCESS PARTNERS (شركاء النجاح)
+       Fully controlled from the dashboard ("الشركاء" tab -> partners table).
+       Stays hidden until the admin adds at least one partner. Renders as an
+       endless vertical scroll — like a TV series' end credits. -->
+  <section class="partners" id="partnersSection" hidden>
+    <div class="wrap">
+      <div class="partners-head reveal">
+        <div class="eyebrow" data-en="Our Partners">شركاؤنا</div>
+        <h2 data-en="Success Partners">شركاء النجاح</h2>
+        <p data-en="Companies and clients we're proud to have worked alongside.">شركات وعملاء يشرفنا إننا اشتغلنا معاهم.</p>
+      </div>
+      <div class="partners-reel-viewport" id="partnersViewport">
+        <div class="partners-reel" id="partnersReel"></div>
+      </div>
+    </div>
+  </section>
+
 </main>
 
 <footer>
@@ -1355,8 +1372,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="assets/js/supabase-config.js?v=1"></script>
-<script src="assets/js/data-service.js?v=2"></script>
-<script src="assets/js/script.js?v=14"></script>
+<script src="assets/js/data-service.js?v=3"></script>
+<script src="assets/js/script.js?v=15"></script>
 <script src="assets/js/glow-dots-bg.js?v=1"></script>
 <script src="assets/js/sparks-bg.js?v=1"></script>
 <script type="module" src="assets/js/pipe-rack-bg.js?v=1"></script>

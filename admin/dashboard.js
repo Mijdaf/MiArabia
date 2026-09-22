@@ -38,6 +38,7 @@
     setupNotifications();
     setupMessages();
     setupImages();
+    setupPartners();
     setupStats();
     setupSettings();
   }
@@ -47,6 +48,7 @@
     const panels = {
       messages: document.getElementById('tabMessages'),
       images: document.getElementById('tabImages'),
+      partners: document.getElementById('tabPartners'),
       stats: document.getElementById('tabStats'),
       settings: document.getElementById('tabSettings'),
     };
@@ -314,6 +316,92 @@
       }
       closeImageModal();
       await loadImages();
+    } catch (err) {
+      errorEl.textContent = 'حدث خطأ أثناء الحفظ، يرجى المحاولة مرة أخرى.';
+      errorEl.hidden = false;
+      console.error(err);
+    }
+  }
+
+  // ---------------- تاب شركاء النجاح ----------------
+  let allPartners = [];
+
+  function setupPartners() {
+    document.getElementById('addPartnerBtn').addEventListener('click', () => openPartnerModal());
+    document.getElementById('partnerModalClose').addEventListener('click', closePartnerModal);
+    document.getElementById('partnerModalOverlay').addEventListener('click', (e) => {
+      if (e.target.id === 'partnerModalOverlay') closePartnerModal();
+    });
+    document.getElementById('partnerForm').addEventListener('submit', submitPartnerForm);
+    loadPartners();
+  }
+
+  async function loadPartners() {
+    allPartners = await window.mijdafData.listPartners();
+    renderPartners();
+  }
+
+  function renderPartners() {
+    const grid = document.getElementById('partnersGrid');
+    const empty = document.getElementById('partnersEmpty');
+    empty.hidden = allPartners.length > 0;
+    grid.innerHTML = '';
+
+    allPartners.forEach((p) => {
+      const card = document.createElement('div');
+      card.className = 'image-card';
+      card.innerHTML = `
+        ${p.logoUrl ? `<img src="${p.logoUrl}" alt="${escapeHtml(p.nameAr)}">` : `<div class="image-card-placeholder">${escapeHtml(p.nameAr)}</div>`}
+        <div class="image-card-body">
+          <div class="image-card-title">${escapeHtml(p.nameAr || 'بدون اسم')}</div>
+          <div class="image-card-actions">
+            <button class="link-danger" data-action="delete">حذف</button>
+          </div>
+        </div>`;
+      card.querySelector('[data-action="delete"]').addEventListener('click', async () => {
+        if (!confirm('هل تريد حذف هذا الشريك من القائمة؟')) return;
+        await window.mijdafData.deletePartner(p.id, p.storagePath);
+        allPartners = allPartners.filter((x) => x.id !== p.id);
+        renderPartners();
+      });
+      grid.appendChild(card);
+    });
+  }
+
+  function openPartnerModal() {
+    document.getElementById('partnerForm').reset();
+    document.getElementById('partnerFormError').hidden = true;
+    document.getElementById('partnerModalOverlay').classList.add('open');
+  }
+  function closePartnerModal() {
+    document.getElementById('partnerModalOverlay').classList.remove('open');
+  }
+
+  async function submitPartnerForm(e) {
+    e.preventDefault();
+    const errorEl = document.getElementById('partnerFormError');
+    errorEl.hidden = true;
+
+    const nameAr = document.getElementById('prtNameAr').value.trim();
+    const nameEn = document.getElementById('prtNameEn').value.trim();
+    const file = document.getElementById('prtFile').files[0];
+    const logoUrl = document.getElementById('prtLogoUrl').value.trim();
+
+    if (!nameAr) {
+      errorEl.textContent = 'يرجى كتابة اسم الشركة.';
+      errorEl.hidden = false;
+      return;
+    }
+
+    try {
+      await window.mijdafData.uploadPartner(file, {
+        nameAr,
+        nameEn,
+        logoUrl,
+        sortOrder: allPartners.length,
+      });
+      closePartnerModal();
+      await loadPartners();
     } catch (err) {
       errorEl.textContent = 'حدث خطأ أثناء الحفظ، يرجى المحاولة مرة أخرى.';
       errorEl.hidden = false;

@@ -116,6 +116,69 @@
       if (error) throw error;
     },
 
+    // ---------------- شركاء النجاح ----------------
+    async listPartners() {
+      const sb = getClient();
+      if (!sb) return [];
+      const { data, error } = await sb
+        .from('partners')
+        .select('*')
+        .order('sort_order', { ascending: true });
+      if (error) { console.error('listPartners', error); return []; }
+      return (data || []).map((row) => ({
+        id: row.id,
+        nameAr: row.name_ar || '',
+        nameEn: row.name_en || '',
+        logoUrl: row.storage_path ? publicUrlFor(sb, row.storage_path) : '',
+        storagePath: row.storage_path || '',
+        sortOrder: row.sort_order || 0,
+      }));
+    },
+
+    async uploadPartner(file, meta) {
+      const sb = getClient();
+      if (!sb) throw new Error('Supabase غير متصل');
+      let storagePath = '';
+      if (file) {
+        const safeName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, '_');
+        storagePath = `partners/${Date.now()}-${safeName}`;
+        const { error: uploadError } = await sb.storage.from(GALLERY_BUCKET).upload(storagePath, file);
+        if (uploadError) throw uploadError;
+      } else if (meta.logoUrl) {
+        storagePath = meta.logoUrl;
+      }
+      const { data, error } = await sb
+        .from('partners')
+        .insert({
+          name_ar: meta.nameAr || '',
+          name_en: meta.nameEn || '',
+          storage_path: storagePath,
+          sort_order: meta.sortOrder ?? 0,
+        })
+        .select()
+        .single();
+      if (error) throw error;
+      return data;
+    },
+
+    async deletePartner(id, storagePath) {
+      const sb = getClient();
+      if (!sb) throw new Error('Supabase غير متصل');
+      if (storagePath && !/^https?:\/\//i.test(storagePath)) {
+        await sb.storage.from(GALLERY_BUCKET).remove([storagePath]);
+      }
+      const { error } = await sb.from('partners').delete().eq('id', id);
+      if (error) throw error;
+    },
+
+    async updatePartnerOrder(items) {
+      const sb = getClient();
+      if (!sb) throw new Error('Supabase غير متصل');
+      for (const item of items) {
+        await sb.from('partners').update({ sort_order: item.sortOrder }).eq('id', item.id);
+      }
+    },
+
     // ---------------- رسايل الفورم ----------------
     async submitMessage(payload) {
       const sb = getClient();

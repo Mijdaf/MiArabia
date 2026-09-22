@@ -1542,6 +1542,41 @@
     });
   })();
 
+  // Success partners (شركاء النجاح): fully driven by the dashboard.
+  // Renders the partner list twice back-to-back inside #partnersReel and
+  // loops a translateY(0 -> -50%) animation, so it scrolls endlessly upward
+  // like a TV series' end credits with no visible seam. Stays hidden if the
+  // admin hasn't added any partners yet.
+  (async function(){
+    const section = document.getElementById('partnersSection');
+    const reel = document.getElementById('partnersReel');
+    if (!section || !reel) return;
+    if (!window.mijdafData || !window.mijdafData.isReady()) return;
+
+    try {
+      const partners = await window.mijdafData.listPartners();
+      if (!partners.length) return; // section stays hidden
+
+      const rowHtml = (p) => `
+        <div class="partner-row">
+          ${p.logoUrl ? `<span class="partner-logo"><img src="${p.logoUrl}" alt="${p.nameAr}" loading="lazy"></span>` : ''}
+          <span class="partner-name" data-en="${p.nameEn || p.nameAr}">${p.nameAr}</span>
+        </div>`;
+
+      // duplicate the list so the loop from 0% to -50% is seamless
+      reel.innerHTML = partners.map(rowHtml).join('') + partners.map(rowHtml).join('');
+
+      // scale the animation duration to the list length so the scroll
+      // speed (px/sec) stays roughly constant however many partners there are
+      const perItemSeconds = 3.2;
+      reel.style.setProperty('--partners-duration', `${Math.max(14, partners.length * perItemSeconds)}s`);
+
+      section.hidden = false;
+    } catch (e) {
+      console.error('partners load failed', e);
+    }
+  })();
+
   // Gallery: load from Supabase when connected, otherwise keep the built-in images.
   // Then wire up the scroll reveal + lightbox on whichever items end up in the DOM.
   (async function(){
