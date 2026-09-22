@@ -237,7 +237,7 @@ h3{ font-size:18px; font-weight:700; color:var(--navy-deep); margin:0 0 16px; }
   position:relative;
 }
 .modal-close{
-  position:absolute; top:14px; left:14px;
+  position:absolute; top:14px; right:14px;
   background:none; border:none; font-size:22px; color:var(--ink-soft);
 }
 

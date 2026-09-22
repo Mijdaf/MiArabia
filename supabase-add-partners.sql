@@ -1,14 +1,11 @@
 -- شركاء النجاح (Success Partners)
 -- شغّل الملف ده مرة واحدة بس في Supabase: Project > SQL Editor > New query > الصق الكود ده > Run
--- بعد ما تشغّله، تاب "شركاء النجاح" في الداشبورد هيشتغل على طول، وهيستخدم نفس
--- الـ Storage bucket المستخدم أصلاً لصور المعرض (gallery) لحفظ شعارات الشركات
--- (تحت مجلد partners/ جواه)، فمش محتاج تعمل bucket جديد.
+-- بعد ما تشغّله، تاب "شركاء النجاح" في الداشبورد هيشتغل على طول (اسم الشركة بس، من غير صور).
 
 create table if not exists public.partners (
   id bigint generated always as identity primary key,
   name_ar text not null default '',
   name_en text not null default '',
-  storage_path text default '',   -- ممكن يكون مسار في الـ storage أو رابط خارجي جاهز
   sort_order integer not null default 0,
   created_at timestamptz not null default now()
 );

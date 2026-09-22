@@ -3,7 +3,7 @@
 
   async function boot() {
     if (!window.mijdafData || !window.mijdafData.isReady()) {
-      console.error('[mijdaf-login] Supabase غير جاهز — تأكد من ملف supabase-config.js ومن اتصال cdn.jsdelivr.net');
+      console.error('[mijdaf-login] Supabase not ready — check supabase-config.js and the cdn.jsdelivr.net connection');
       return;
     }
     const session = await window.mijdafData.getSession();
@@ -12,7 +12,7 @@
     }
   }
 
-  // ---------------- كابتشا (reCAPTCHA) ----------------
+  // ---------------- CAPTCHA (reCAPTCHA) ----------------
   const CAPTCHA_PLACEHOLDER = 'PASTE_SITE_KEY_HERE';
 
   function captchaConfigured() {
@@ -21,8 +21,8 @@
   }
 
   function captchaPassed() {
-    if (!captchaConfigured()) return true; // لسه ملهاش مفتاح، سيبها مش مفعّلة
-    if (typeof grecaptcha === 'undefined') return false; // السكريبت لسه محملش
+    if (!captchaConfigured()) return true; // no key set yet, leave it disabled
+    if (typeof grecaptcha === 'undefined') return false; // script hasn't loaded yet
     return Boolean(grecaptcha.getResponse().trim());
   }
 
@@ -39,7 +39,7 @@
     loginError.hidden = true;
 
     if (!captchaPassed()) {
-      loginError.textContent = 'يرجى إكمال التحقق (كابتشا) بتحديد خانة "أنا لست برنامج روبوت" قبل تسجيل الدخول.';
+      loginError.textContent = 'Please complete the captcha by checking "I\'m not a robot" before logging in.';
       loginError.hidden = false;
       return;
     }
@@ -50,7 +50,7 @@
       await window.mijdafData.login(email, password);
       location.replace('dashboard.html');
     } catch (err) {
-      loginError.textContent = 'بيانات الدخول غير صحيحة.';
+      loginError.textContent = 'Incorrect login details.';
       loginError.hidden = false;
       resetCaptcha();
     }

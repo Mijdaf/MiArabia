@@ -3739,6 +3739,11 @@
      invisible), and script.js continuously fades every name in/out by its
      distance from the middle so the centred one reads clearly. */
   .stat-partners{ display:flex; flex-direction:column; }
+  /* unlike the two number stats (which anchor to the tape-measure's start
+     edge), this column has no number/rule — its icon+label row should
+     center under the centred, scrolling name reel instead of hugging the
+     column's start edge, or the whole column reads as mis-centred. */
+  .stat-partners .stat-meta{ justify-content:center; }
   .partners-reel-viewport{
     position:relative;
     height:clamp(112px, 13vw, 168px);

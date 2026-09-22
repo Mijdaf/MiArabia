@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>لوحة تحكم مي أرابيا</title>
+<title>Mijdaf Admin Dashboard</title>
 <link rel="icon" href="../assets/icon-192.png">
 <link rel="stylesheet" href="dashboard.css?v=11">
 </head>
@@ -13,157 +13,157 @@
   <div class="screen" id="screenDashboard" style="display:block; min-height:auto; padding:0;">
     <header class="topbar">
       <div class="topbar-brand">
-        <img src="../assets/mijdaf-mark-orange.png" alt="مي أرابيا">
-        <span>لوحة تحكم مي أرابيا</span>
+        <img src="../assets/mijdaf-mark-orange.png" alt="Mijdaf">
+        <span>Mijdaf Admin Dashboard</span>
       </div>
       <div class="topbar-actions">
-        <button id="notifyBtn" class="btn-ghost" type="button">🔔 تفعيل الإشعارات</button>
-        <button id="logoutBtn" class="btn-ghost" type="button">تسجيل خروج</button>
+        <button id="notifyBtn" class="btn-ghost" type="button">🔔 Enable notifications</button>
+        <button id="logoutBtn" class="btn-ghost" type="button">Log out</button>
       </div>
     </header>
 
     <nav class="tabs" role="tablist">
       <button class="tab is-active" data-tab="messages" role="tab" aria-selected="true">
-        الرسائل <span class="badge" id="unreadBadge" hidden>0</span>
+        Messages <span class="badge" id="unreadBadge" hidden>0</span>
       </button>
-      <button class="tab" data-tab="images" role="tab" aria-selected="false">الصور</button>
-      <button class="tab" data-tab="partners" role="tab" aria-selected="false">شركاء النجاح</button>
-      <button class="tab" data-tab="stats" role="tab" aria-selected="false">أرقام الشركة</button>
-      <button class="tab" data-tab="settings" role="tab" aria-selected="false">الإعدادات</button>
+      <button class="tab" data-tab="images" role="tab" aria-selected="false">Images</button>
+      <button class="tab" data-tab="partners" role="tab" aria-selected="false">Success Partners</button>
+      <button class="tab" data-tab="stats" role="tab" aria-selected="false">Company Stats</button>
+      <button class="tab" data-tab="settings" role="tab" aria-selected="false">Settings</button>
     </nav>
 
     <main class="content">
 
-      <!-- تاب الرسائل -->
+      <!-- Messages tab -->
       <section id="tabMessages" class="tab-panel is-active">
         <div class="panel-head">
-          <h2>الرسائل الواردة</h2>
-          <button id="refreshMessagesBtn" class="btn-ghost small" type="button">تحديث</button>
+          <h2>Inbox</h2>
+          <button id="refreshMessagesBtn" class="btn-ghost small" type="button">Refresh</button>
         </div>
         <div id="messagesList" class="messages-list"></div>
-        <p id="messagesEmpty" class="muted center" hidden>لا توجد رسائل حتى الآن.</p>
+        <p id="messagesEmpty" class="muted center" hidden>No messages yet.</p>
       </section>
 
-      <!-- تاب الصور -->
+      <!-- Images tab -->
       <section id="tabImages" class="tab-panel">
         <div class="panel-head">
-          <h2>صور المعرض</h2>
-          <button id="addImageBtn" class="btn-primary small" type="button">+ إضافة صورة</button>
+          <h2>Gallery images</h2>
+          <button id="addImageBtn" class="btn-primary small" type="button">+ Add image</button>
         </div>
         <div id="imagesGrid" class="images-grid"></div>
-        <p id="imagesEmpty" class="muted center" hidden>لا توجد صور مضافة حتى الآن — يعرض الموقع الصور الافتراضية.</p>
+        <p id="imagesEmpty" class="muted center" hidden>No images added yet — the site shows the default images.</p>
       </section>
 
-      <!-- تاب شركاء النجاح -->
+      <!-- Success partners tab -->
       <section id="tabPartners" class="tab-panel">
         <div class="panel-head">
-          <h2>شركاء النجاح</h2>
-          <button id="addPartnerBtn" class="btn-primary small" type="button">+ إضافة شريك</button>
+          <h2>Success Partners</h2>
+          <button id="addPartnerBtn" class="btn-primary small" type="button">+ Add partner</button>
         </div>
-        <p class="muted">القسم ده بيظهر جمب الرقمين ("الشركة بالأرقام")، وبيتحرك تلقائي لفوق زي تتر مسلسل، وبيفضل مخفي لحد ما تضيف شريك واحد على الأقل. ترتيب الإضافة هو ترتيب الظهور.</p>
+        <p class="muted">This section appears next to the two figures ("Company in numbers"), scrolling upward automatically like end credits, and stays hidden until you add at least one partner. Add order is display order.</p>
         <div id="partnersList" class="partners-admin-list"></div>
-        <p id="partnersEmpty" class="muted center" hidden>لسه مفيش شركاء مضافين.</p>
+        <p id="partnersEmpty" class="muted center" hidden>No partners added yet.</p>
       </section>
 
-      <!-- تاب أرقام الشركة -->
+      <!-- Company stats tab -->
       <section id="tabStats" class="tab-panel">
         <div class="panel-head">
-          <h2>أرقام الشركة</h2>
+          <h2>Company Stats</h2>
         </div>
-        <p class="muted">الرقمين دول بيظهروا في الموقع قبل الفوتر مباشرة، وبيتحدّثوا أول ما تدوس "حفظ الأرقام".</p>
+        <p class="muted">These two figures appear on the site right before the footer, and update as soon as you press "Save numbers".</p>
         <form id="statsForm" class="stack settings-panel" novalidate>
-          <label>عدد موظفين الشركة
-            <input type="text" id="setEmployees" inputmode="numeric" autocomplete="off" placeholder="مثال: 45" dir="ltr">
+          <label>Number of company employees
+            <input type="text" id="setEmployees" inputmode="numeric" autocomplete="off" placeholder="e.g. 45" dir="ltr">
           </label>
 
-          <label>عدد المشاريع اللي اشتغلنا عليها
-            <input type="text" id="setProjects" inputmode="numeric" autocomplete="off" placeholder="مثال: 120" dir="ltr">
+          <label>Number of projects worked on
+            <input type="text" id="setProjects" inputmode="numeric" autocomplete="off" placeholder="e.g. 120" dir="ltr">
           </label>
-          <p class="muted small">لو سيبت خانة فاضية أو 0، الرقم ده مش هيظهر في الموقع. ولو الخانتين فاضيين، القسم كله بيختفي.</p>
+          <p class="muted small">If a field is left empty or 0, that number won't show on the site. If both fields are empty, the whole section is hidden.</p>
 
           <p class="error" id="statsError" hidden></p>
-          <p class="success-text" id="statsSuccess" hidden>تم الحفظ بنجاح ✓</p>
-          <button type="submit" class="btn-primary">حفظ الأرقام</button>
+          <p class="success-text" id="statsSuccess" hidden>Saved successfully ✓</p>
+          <button type="submit" class="btn-primary">Save numbers</button>
         </form>
       </section>
 
-      <!-- تاب الإعدادات -->
+      <!-- Settings tab -->
       <section id="tabSettings" class="tab-panel">
         <div class="panel-head">
-          <h2>إعدادات الموقع</h2>
+          <h2>Site Settings</h2>
         </div>
         <form id="settingsForm" class="stack settings-panel">
-          <label>رقم الواتساب (اللي بيستقبل الطلبات)
+          <label>WhatsApp number (receives requests)
             <input type="tel" id="setWhatsapp" placeholder="9665xxxxxxxx" dir="ltr" required>
           </label>
-          <p class="muted small">اكتب الرقم بصيغة دولية بدون + أو مسافات أو أصفار زيادة، مثال: 966536760429</p>
+          <p class="muted small">Enter the number in international format without +, spaces, or a leading zero, e.g. 966536760429</p>
 
-          <label>الإيميل الرسمي (اللي هتوصله طلبات "إرسال عبر البريد الإلكتروني")
+          <label>Official email (receives "Send via Email" requests)
             <input type="email" id="setEmail" placeholder="orders@yourdomain.com" dir="ltr">
           </label>
-          <p class="muted small">لو الخانة دي فاضية، زرار "إرسال عبر البريد الإلكتروني" هيفضل مخفي في الموقع.</p>
+          <p class="muted small">If this field is empty, the "Send via Email" button stays hidden on the site.</p>
 
           <p class="error" id="settingsError" hidden></p>
-          <p class="success-text" id="settingsSuccess" hidden>تم الحفظ بنجاح ✓</p>
-          <button type="submit" class="btn-primary">حفظ الإعدادات</button>
+          <p class="success-text" id="settingsSuccess" hidden>Saved successfully ✓</p>
+          <button type="submit" class="btn-primary">Save settings</button>
         </form>
       </section>
 
     </main>
   </div>
 
-  <!-- مودال: إضافة شريك -->
+  <!-- Modal: add partner -->
   <div class="overlay" id="partnerModalOverlay">
     <div class="modal">
       <button class="modal-close" id="partnerModalClose" type="button">×</button>
-      <h3>إضافة شريك نجاح</h3>
+      <h3>Add success partner</h3>
       <form id="partnerForm" class="stack">
-        <label>اسم الشركة (عربي)
+        <label>Company name (Arabic)
           <input type="text" id="prtNameAr" required>
         </label>
-        <label>اسم الشركة (إنجليزي)
+        <label>Company name (English)
           <input type="text" id="prtNameEn">
         </label>
         <p class="error" id="partnerFormError" hidden></p>
-        <button type="submit" class="btn-primary">حفظ الشريك</button>
+        <button type="submit" class="btn-primary">Save partner</button>
       </form>
     </div>
   </div>
 
-  <!-- مودال: إضافة/تعديل صورة -->
+  <!-- Modal: add/edit image -->
   <div class="overlay" id="imageModalOverlay">
     <div class="modal">
       <button class="modal-close" id="imageModalClose" type="button">×</button>
-      <h3>إضافة صورة للمعرض</h3>
+      <h3>Add image to gallery</h3>
       <form id="imageForm" class="stack">
-        <label>اختر صورة من جهازك
+        <label>Choose an image from your device
           <input type="file" id="imgFile" accept="image/*">
         </label>
-        <p class="muted small">أو أدخل رابط صورة جاهز بدلاً من ذلك:</p>
-        <label>رابط الصورة (اختياري، بدلاً من الرفع)
+        <p class="muted small">Or enter an image URL instead:</p>
+        <label>Image URL (optional, instead of uploading)
           <input type="url" id="imgUrl" placeholder="https://...">
         </label>
-        <label>العنوان (عربي)
+        <label>Title (Arabic)
           <input type="text" id="imgTitleAr" required>
         </label>
-        <label>العنوان (إنجليزي)
+        <label>Title (English)
           <input type="text" id="imgTitleEn">
         </label>
-        <label>الوصف (عربي)
+        <label>Description (Arabic)
           <textarea id="imgTextAr" rows="2"></textarea>
         </label>
-        <label>الوصف (إنجليزي)
+        <label>Description (English)
           <textarea id="imgTextEn" rows="2"></textarea>
         </label>
-        <label>حجم الصورة في الشبكة
+        <label>Image size in the grid
           <select id="imgSize">
-            <option value="normal">عادي</option>
-            <option value="wide">عريض</option>
-            <option value="big">كبير</option>
+            <option value="normal">Normal</option>
+            <option value="wide">Wide</option>
+            <option value="big">Big</option>
           </select>
         </label>
         <p class="error" id="imageFormError" hidden></p>
-        <button type="submit" class="btn-primary">حفظ الصورة</button>
+        <button type="submit" class="btn-primary">Save image</button>
       </form>
     </div>
   </div>

@@ -1,19 +1,19 @@
 (function () {
   console.log('[mijdaf-dashboard] dashboard.js v4 loaded');
   const SOURCE_LABELS = {
-    contact: 'نموذج التواصل',
-    quick_request: 'طلب سريع',
-    quick_inquiry: 'استفسار سريع',
+    contact: 'Contact form',
+    quick_request: 'Quick request',
+    quick_inquiry: 'Quick inquiry',
   };
   const CHANNEL_LABELS = {
-    whatsapp: '📱 واتساب',
-    email: '📧 إيميل',
+    whatsapp: '📱 WhatsApp',
+    email: '📧 Email',
   };
 
-  // ---------------- تسجيل الدخول / الحماية ----------------
+  // ---------------- Login / auth guard ----------------
   async function boot() {
     if (!window.mijdafData || !window.mijdafData.isReady()) {
-      console.error('[mijdaf-dashboard] Supabase غير جاهز — تأكد من ملف supabase-config.js ومن اتصال cdn.jsdelivr.net');
+      console.error('[mijdaf-dashboard] Supabase not ready — check supabase-config.js and the cdn.jsdelivr.net connection');
       location.replace('index.html');
       return;
     }
@@ -30,7 +30,7 @@
     location.replace('index.html');
   });
 
-  // ---------------- الداشبورد ----------------
+  // ---------------- Dashboard ----------------
   let unsubscribeRealtime = null;
 
   function initDashboard() {
@@ -65,7 +65,7 @@
     });
   }
 
-  // ---------------- إشعارات المتصفح ----------------
+  // ---------------- Browser notifications ----------------
   let notificationsEnabled = false;
 
   function setupNotifications() {
@@ -74,19 +74,19 @@
       btn.hidden = true;
       return;
     }
-    // نبدأ بالإشعارات متوقفة دايمًا، والمستخدم هو اللي يفعّلها بالزرار
+    // notifications always start off; the user turns them on with the button
     notificationsEnabled = false;
     updateNotifyBtn(btn);
 
     btn.addEventListener('click', async () => {
-      // لو شغالة، دوسة واحدة تكفي لإيقافها فورًا (مش محتاجين إذن المتصفح لإيقافها)
+      // if already on, one click is enough to turn it off instantly (no browser permission needed to turn off)
       if (notificationsEnabled) {
         notificationsEnabled = false;
         updateNotifyBtn(btn);
         return;
       }
 
-      // لو مقفولة، نتأكد من إذن المتصفح الأول
+      // if off, check the browser permission first
       let permission = Notification.permission;
       if (permission === 'default') {
         permission = await Notification.requestPermission();
@@ -95,8 +95,8 @@
       if (permission === 'granted') {
         notificationsEnabled = true;
       } else {
-        // المستخدم رافض الإذن من إعدادات المتصفح نفسها؛ لازم يفعّله من هناك أولاً
-        alert('الإشعارات محظورة من إعدادات المتصفح لهذا الموقع. يرجى تفعيلها من إعدادات الموقع في المتصفح (أيقونة القفل بجانب الرابط) أولاً.');
+        // the user denied permission at the browser level; they need to enable it from there first
+        alert('Notifications are blocked in this site\'s browser settings. Please enable them from the site settings in your browser (the lock icon next to the address bar) first.');
         notificationsEnabled = false;
       }
       updateNotifyBtn(btn);
@@ -105,7 +105,7 @@
 
   function updateNotifyBtn(btn) {
     btn.classList.toggle('is-on', notificationsEnabled);
-    btn.textContent = notificationsEnabled ? '🔔 الإشعارات مفعّلة' : '🔕 تفعيل الإشعارات';
+    btn.textContent = notificationsEnabled ? '🔔 Notifications on' : '🔕 Enable notifications';
   }
 
   function playBeep() {
@@ -120,14 +120,14 @@
       osc.start();
       gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
       osc.stop(ctx.currentTime + 0.4);
-    } catch (e) { /* بعض المتصفحات محتاجة تفاعل مستخدم أولاً، مش مشكلة لو فشل */ }
+    } catch (e) { /* some browsers need a user interaction first; fine if this fails */ }
   }
 
   function notifyNewMessage(row) {
     bumpTitleBadge();
     if (!notificationsEnabled) return;
     playBeep();
-    const title = 'رسالة جديدة من الموقع';
+    const title = 'New message from the website';
     const body = `${SOURCE_LABELS[row.source] || row.source} — ${row.name || row.phone || ''}`;
     new Notification(title, { body, icon: '../assets/icon-192.png' });
   }
@@ -135,14 +135,14 @@
   let unreadTitleCount = 0;
   function bumpTitleBadge() {
     unreadTitleCount += 1;
-    document.title = `(${unreadTitleCount}) لوحة تحكم مي أرابيا`;
+    document.title = `(${unreadTitleCount}) Mijdaf Admin Dashboard`;
   }
   function resetTitleBadge() {
     unreadTitleCount = 0;
-    document.title = 'لوحة تحكم مي أرابيا';
+    document.title = 'Mijdaf Admin Dashboard';
   }
 
-  // ---------------- تاب الرسايل ----------------
+  // ---------------- Messages tab ----------------
   let allMessages = [];
 
   function setupMessages() {
@@ -182,31 +182,31 @@
       const card = document.createElement('div');
       card.className = `message-card${row.status === 'new' ? ' is-new' : ''}`;
 
-      const date = new Date(row.created_at).toLocaleString('ar-EG', { dateStyle: 'medium', timeStyle: 'short' });
+      const date = new Date(row.created_at).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
 
       card.innerHTML = `
         <div class="message-card-top">
-          <span class="message-card-title">${escapeHtml(row.name || row.phone || 'بدون اسم')}</span>
+          <span class="message-card-title">${escapeHtml(row.name || row.phone || 'No name')}</span>
           <span class="message-card-source">${SOURCE_LABELS[row.source] || row.source}</span>
         </div>
         <div class="message-card-date">${date}${row.channel ? ` • ${CHANNEL_LABELS[row.channel] || escapeHtml(row.channel)}` : ''}</div>
         <div class="message-card-body">
           <dl>
-            ${row.company ? `<dt>الشركة</dt><dd>${escapeHtml(row.company)}</dd>` : ''}
-            ${row.email ? `<dt>البريد</dt><dd>${escapeHtml(row.email)}</dd>` : ''}
-            ${row.phone ? `<dt>الجوال</dt><dd>${escapeHtml(row.phone)}</dd>` : ''}
-            ${row.phone2 ? `<dt>رقم بديل</dt><dd>${escapeHtml(row.phone2)}</dd>` : ''}
-            ${row.service ? `<dt>الخدمة</dt><dd>${escapeHtml(row.service)}</dd>` : ''}
+            ${row.company ? `<dt>Company</dt><dd>${escapeHtml(row.company)}</dd>` : ''}
+            ${row.email ? `<dt>Email</dt><dd>${escapeHtml(row.email)}</dd>` : ''}
+            ${row.phone ? `<dt>Phone</dt><dd>${escapeHtml(row.phone)}</dd>` : ''}
+            ${row.phone2 ? `<dt>Alternate phone</dt><dd>${escapeHtml(row.phone2)}</dd>` : ''}
+            ${row.service ? `<dt>Service</dt><dd>${escapeHtml(row.service)}</dd>` : ''}
           </dl>
           ${row.message ? `<p>${escapeHtml(row.message)}</p>` : ''}
           <div class="message-card-actions">
-            ${row.status === 'new' ? '<button class="btn-ghost small" data-action="read">تحديد كمقروءة</button>' : ''}
-            <button class="link-danger" data-action="delete">حذف</button>
+            ${row.status === 'new' ? '<button class="btn-ghost small" data-action="read">Mark as read</button>' : ''}
+            <button class="link-danger" data-action="delete">Delete</button>
           </div>
         </div>`;
 
       card.addEventListener('click', (e) => {
-        if (e.target.dataset.action) return; // الأزرار تتعامل لوحدها
+        if (e.target.dataset.action) return; // buttons handle themselves
         card.classList.toggle('is-open');
       });
 
@@ -219,7 +219,7 @@
 
       card.querySelector('[data-action="delete"]').addEventListener('click', async (e) => {
         e.stopPropagation();
-        if (!confirm('هل تريد حذف هذه الرسالة؟')) return;
+        if (!confirm('Delete this message?')) return;
         await window.mijdafData.deleteMessage(row.id);
         allMessages = allMessages.filter((m) => m.id !== row.id);
         renderMessages();
@@ -229,7 +229,7 @@
     });
   }
 
-  // ---------------- تاب الصور ----------------
+  // ---------------- Images tab ----------------
   let allImages = [];
 
   function setupImages() {
@@ -253,7 +253,7 @@
     empty.hidden = allImages.length > 0;
     grid.innerHTML = '';
 
-    const sizeLabels = { normal: 'عادي', wide: 'عريض', big: 'كبير' };
+    const sizeLabels = { normal: 'Normal', wide: 'Wide', big: 'Big' };
 
     allImages.forEach((img) => {
       const card = document.createElement('div');
@@ -261,14 +261,14 @@
       card.innerHTML = `
         <img src="${img.url}" alt="${escapeHtml(img.titleAr)}">
         <div class="image-card-body">
-          <div class="image-card-title">${escapeHtml(img.titleAr || 'بدون عنوان')}</div>
+          <div class="image-card-title">${escapeHtml(img.titleAr || 'No title')}</div>
           <div class="image-card-meta">${sizeLabels[img.size] || img.size}</div>
           <div class="image-card-actions">
-            <button class="link-danger" data-action="delete">حذف</button>
+            <button class="link-danger" data-action="delete">Delete</button>
           </div>
         </div>`;
       card.querySelector('[data-action="delete"]').addEventListener('click', async () => {
-        if (!confirm('هل تريد حذف هذه الصورة من المعرض؟')) return;
+        if (!confirm('Delete this image from the gallery?')) return;
         await window.mijdafData.deleteImage(img.id, img.storagePath);
         allImages = allImages.filter((i) => i.id !== img.id);
         renderImages();
@@ -303,7 +303,7 @@
     };
 
     if (!file && !url) {
-      errorEl.textContent = 'يرجى اختيار صورة من جهازك أو إدخال رابط صورة.';
+      errorEl.textContent = 'Please choose an image from your device or enter an image URL.';
       errorEl.hidden = false;
       return;
     }
@@ -317,13 +317,13 @@
       closeImageModal();
       await loadImages();
     } catch (err) {
-      errorEl.textContent = 'حدث خطأ أثناء الحفظ، يرجى المحاولة مرة أخرى.';
+      errorEl.textContent = 'An error occurred while saving, please try again.';
       errorEl.hidden = false;
       console.error(err);
     }
   }
 
-  // ---------------- تاب شركاء النجاح ----------------
+  // ---------------- Success partners tab ----------------
   let allPartners = [];
 
   function setupPartners() {
@@ -351,10 +351,10 @@
       const row = document.createElement('div');
       row.className = 'partner-admin-row';
       row.innerHTML = `
-        <span class="partner-admin-name">${escapeHtml(p.nameAr || 'بدون اسم')}</span>
-        <button class="link-danger" data-action="delete" type="button">حذف</button>`;
+        <span class="partner-admin-name">${escapeHtml(p.nameAr || 'No name')}</span>
+        <button class="link-danger" data-action="delete" type="button">Delete</button>`;
       row.querySelector('[data-action="delete"]').addEventListener('click', async () => {
-        if (!confirm('هل تريد حذف هذا الشريك من القائمة؟')) return;
+        if (!confirm('Delete this partner from the list?')) return;
         await window.mijdafData.deletePartner(p.id);
         allPartners = allPartners.filter((x) => x.id !== p.id);
         renderPartners();
@@ -381,7 +381,7 @@
     const nameEn = document.getElementById('prtNameEn').value.trim();
 
     if (!nameAr) {
-      errorEl.textContent = 'يرجى كتابة اسم الشركة.';
+      errorEl.textContent = 'Please enter the company name.';
       errorEl.hidden = false;
       return;
     }
@@ -391,14 +391,14 @@
       closePartnerModal();
       await loadPartners();
     } catch (err) {
-      errorEl.textContent = 'حدث خطأ أثناء الحفظ، يرجى المحاولة مرة أخرى.';
+      errorEl.textContent = 'An error occurred while saving, please try again.';
       errorEl.hidden = false;
       console.error(err);
     }
   }
 
-  // ---------------- تاب أرقام الشركة ----------------
-  // بيقبل أرقام عربية (٠١٢) وإنجليزي (012) وفواصل الآلاف (1,250)، ويحوّلهم لرقم صحيح.
+  // ---------------- Company stats tab ----------------
+  // Accepts Arabic-Indic digits (٠١٢), Latin digits (012), and thousands separators (1,250), converting them to an integer.
   function parseCount(raw) {
     const latin = String(raw || '')
       .replace(/[\u0660-\u0669]/g, (c) => String(c.charCodeAt(0) - 0x0660))
@@ -437,7 +437,7 @@
       const projectsCount = parseCount(projectsInput.value);
 
       if (employeesCount === null || projectsCount === null) {
-        errorEl.textContent = 'اكتب أرقام صحيحة فقط (من غير حروف أو علامات، وبحد أقصى 9 خانات).';
+        errorEl.textContent = 'Enter valid numbers only (no letters or symbols, up to 9 digits).';
         errorEl.hidden = false;
         return;
       }
@@ -455,14 +455,14 @@
           /employees_count|projects_count/.test(err.message || '')
         );
         errorEl.textContent = missingColumns
-          ? 'لازم تشغّل ملف add-company-stats.sql في Supabase الأول (SQL Editor > Run)، وبعدها احفظ تاني.'
-          : 'حدث خطأ أثناء الحفظ، يرجى المحاولة مرة أخرى.';
+          ? 'You need to run add-company-stats.sql in Supabase first (SQL Editor > Run), then save again.'
+          : 'An error occurred while saving, please try again.';
         errorEl.hidden = false;
       }
     });
   }
 
-  // ---------------- تاب الإعدادات ----------------
+  // ---------------- Settings tab ----------------
   function setupSettings() {
     const form = document.getElementById('settingsForm');
     const whatsappInput = document.getElementById('setWhatsapp');
@@ -491,7 +491,7 @@
       const notifyEmail = emailInput.value.trim();
 
       if (!whatsappNumber) {
-        errorEl.textContent = 'اكتب رقم الواتساب بالأرقام فقط.';
+        errorEl.textContent = 'Enter the WhatsApp number using digits only.';
         errorEl.hidden = false;
         return;
       }
@@ -503,13 +503,13 @@
         setTimeout(() => { successEl.hidden = true; }, 2500);
       } catch (err) {
         console.error('updateSettings failed', err);
-        errorEl.textContent = 'حدث خطأ أثناء الحفظ، يرجى المحاولة مرة أخرى.';
+        errorEl.textContent = 'An error occurred while saving, please try again.';
         errorEl.hidden = false;
       }
     });
   }
 
-  // ---------------- أدوات ----------------
+  // ---------------- Helpers ----------------
   function escapeHtml(str) {
     return String(str || '').replace(/[&<>"']/g, (c) => ({
       '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
