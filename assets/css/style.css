@@ -3380,7 +3380,7 @@
   /* Always-on attention motion: each pill breathes in its own brand
      color and gives a punchy 3D wobble so both options stay noticeable
      without needing a click. */
-  .qa-request{ animation:qaPulseOrange 2.6s ease-in-out infinite; }
+  .qa-request{ animation:qaPulseOrange 2.6s ease-in-out infinite, qaShake3D 3.6s ease-in-out 2.4s infinite; }
   /* the welder lands on the pill -> same 3D shake, played once, starting exactly at its shaking part (62%) */
   .qa-request.qa-hit{ animation:qaPulseOrange 2.6s ease-in-out infinite, qaShake3D 3.6s ease-in-out -2.2s 1 both; }
   .qa-inquiry{ animation:qaPulseBlue 2.6s ease-in-out .5s infinite, qaShake3D 3.6s ease-in-out .7s infinite; }
