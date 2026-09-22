@@ -149,6 +149,16 @@
       return data;
     },
 
+    async updatePartner(id, { nameAr, nameEn }) {
+      const sb = getClient();
+      if (!sb) throw new Error('Supabase غير متصل');
+      const { error } = await sb
+        .from('partners')
+        .update({ name_ar: nameAr || '', name_en: nameEn || '' })
+        .eq('id', id);
+      if (error) throw error;
+    },
+
     async deletePartner(id) {
       const sb = getClient();
       if (!sb) throw new Error('Supabase غير متصل');

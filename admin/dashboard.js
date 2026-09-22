@@ -325,6 +325,7 @@
 
   // ---------------- Success partners tab ----------------
   let allPartners = [];
+  let editingPartnerId = null;
 
   function setupPartners() {
     document.getElementById('addPartnerBtn').addEventListener('click', () => openPartnerModal());
@@ -352,7 +353,11 @@
       row.className = 'partner-admin-row';
       row.innerHTML = `
         <span class="partner-admin-name">${escapeHtml(p.nameAr || 'No name')}</span>
-        <button class="link-danger" data-action="delete" type="button">Delete</button>`;
+        <span class="partner-admin-actions">
+          <button class="link-edit" data-action="edit" type="button">Edit</button>
+          <button class="link-danger" data-action="delete" type="button">Delete</button>
+        </span>`;
+      row.querySelector('[data-action="edit"]').addEventListener('click', () => openPartnerModal(p));
       row.querySelector('[data-action="delete"]').addEventListener('click', async () => {
         if (!confirm('Delete this partner from the list?')) return;
         await window.mijdafData.deletePartner(p.id);
@@ -363,13 +368,21 @@
     });
   }
 
-  function openPartnerModal() {
+  function openPartnerModal(partner) {
     document.getElementById('partnerForm').reset();
     document.getElementById('partnerFormError').hidden = true;
+
+    editingPartnerId = partner ? partner.id : null;
+    document.getElementById('partnerModalTitle').textContent = partner ? 'Edit success partner' : 'Add success partner';
+    document.getElementById('partnerFormSubmit').textContent = partner ? 'Save changes' : 'Save partner';
+    document.getElementById('prtNameAr').value = partner ? (partner.nameAr || '') : '';
+    document.getElementById('prtNameEn').value = partner ? (partner.nameEn || '') : '';
+
     document.getElementById('partnerModalOverlay').classList.add('open');
   }
   function closePartnerModal() {
     document.getElementById('partnerModalOverlay').classList.remove('open');
+    editingPartnerId = null;
   }
 
   async function submitPartnerForm(e) {
@@ -387,7 +400,11 @@
     }
 
     try {
-      await window.mijdafData.addPartner({ nameAr, nameEn, sortOrder: allPartners.length });
+      if (editingPartnerId) {
+        await window.mijdafData.updatePartner(editingPartnerId, { nameAr, nameEn });
+      } else {
+        await window.mijdafData.addPartner({ nameAr, nameEn, sortOrder: allPartners.length });
+      }
       closePartnerModal();
       await loadPartners();
     } catch (err) {

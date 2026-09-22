@@ -116,7 +116,7 @@
   <div class="overlay" id="partnerModalOverlay">
     <div class="modal">
       <button class="modal-close" id="partnerModalClose" type="button">×</button>
-      <h3>Add success partner</h3>
+      <h3 id="partnerModalTitle">Add success partner</h3>
       <form id="partnerForm" class="stack">
         <label>Company name (Arabic)
           <input type="text" id="prtNameAr" required>
@@ -125,7 +125,7 @@
           <input type="text" id="prtNameEn">
         </label>
         <p class="error" id="partnerFormError" hidden></p>
-        <button type="submit" class="btn-primary">Save partner</button>
+        <button type="submit" class="btn-primary" id="partnerFormSubmit">Save partner</button>
       </form>
     </div>
   </div>

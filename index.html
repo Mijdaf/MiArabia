@@ -910,7 +910,7 @@
             <div><span class="lbl" data-en="Location">الموقع</span><span class="val" data-en="Riyadh, Saudi Arabia">الرياض، المملكة العربية السعودية</span></div>
             <span class="row-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
           </a>
-          <a class="row" href="mailto:info@miarabia.sa" data-ripple>
+          <a class="row" id="email-contact-link" href="https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=info@miarabia.sa&su=%D8%B7%D9%84%D8%A8%20%D9%85%D9%86%20%D8%A7%D9%84%D9%85%D9%88%D9%82%D8%B9" target="_blank" rel="noopener" data-ripple>
             <span class="ic"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z" style="display:none"/><path d="M22 6l-10 7L2 6"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg></span>
             <div><span class="lbl" data-en="Email">البريد الإلكتروني</span><span class="val">info@miarabia.sa</span></div>
             <span class="row-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
@@ -1394,5 +1394,60 @@
   })();
 </script>
 <script src="assets/js/welder.js?v=13"></script>
+<script>
+  // Email row: try opening the Gmail app on phones first; if it's not
+  // installed (or on desktop), fall back to the Gmail website compose page.
+  (function () {
+    var link = document.getElementById('email-contact-link');
+    if (!link) return;
+
+    var to = 'info@miarabia.sa';
+    var subject = 'طلب من الموقع';
+    var webComposeUrl = link.href; // https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=...&su=...
+    var ua = navigator.userAgent || '';
+    var isAndroid = /Android/i.test(ua);
+    var isIOS = /iPhone|iPad|iPod/i.test(ua);
+
+    link.addEventListener('click', function (e) {
+      if (isAndroid) {
+        // Android intent link: opens the Gmail app directly, and the OS
+        // automatically falls back to the browser URL if it's not installed.
+        e.preventDefault();
+        var intentUrl =
+          'intent://mail.google.com/mail/?view=cm&fs=1&tf=1&to=' + encodeURIComponent(to) +
+          '&su=' + encodeURIComponent(subject) +
+          '#Intent;scheme=https;package=com.google.android.gm;S.browser_fallback_url=' +
+          encodeURIComponent(webComposeUrl) + ';end';
+        window.location.href = intentUrl;
+        return;
+      }
+
+      if (isIOS) {
+        // iOS Gmail app custom URL scheme, with a timed fallback to the
+        // website if the app isn't installed (the page stays visible).
+        e.preventDefault();
+        var appUrl = 'googlegmail:///co?to=' + encodeURIComponent(to) +
+          '&subject=' + encodeURIComponent(subject);
+        var fellBack = false;
+        var fallback = function () {
+          if (fellBack || document.hidden) return;
+          fellBack = true;
+          window.open(webComposeUrl, '_blank');
+        };
+        var timer = setTimeout(fallback, 1000);
+        document.addEventListener('visibilitychange', function onVis() {
+          if (document.hidden) {
+            clearTimeout(timer);
+            document.removeEventListener('visibilitychange', onVis);
+          }
+        });
+        window.location.href = appUrl;
+        return;
+      }
+
+      // Desktop / other: default behaviour already opens the Gmail website.
+    });
+  })();
+</script>
 </body>
 </html>
