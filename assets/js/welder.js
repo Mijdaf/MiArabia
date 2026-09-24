@@ -414,18 +414,9 @@
 
   hideAll();
 
-  // wait for the splash screen to leave (and the pill to finish dropping in), then start
+  // wait for the pill to finish dropping in, then start
   function armStart() { setTimeout(begin, 1100); }
-  var splash = document.getElementById('splash');
-  if (splash) {
-    var mo = new MutationObserver(function () {
-      if (!document.getElementById('splash')) { mo.disconnect(); armStart(); }
-    });
-    mo.observe(document.body, { childList: true });
-    setTimeout(function () { if (!tl) armStart(); }, 7000);        // safety net
-  } else {
-    armStart();
-  }
+  armStart();
 
   // test / preview hook
   window.__qaWelder = {

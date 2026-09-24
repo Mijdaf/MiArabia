@@ -3723,6 +3723,13 @@
       border-top:1px solid var(--border-strong);
       margin-top:32px; padding-top:32px;
     }
+    /* the card already has its own border + padding on every edge, so drop
+       the stacked hairline/padding the rule above adds and just keep the
+       vertical gap before it */
+    .stat:not([hidden]) ~ .stat-partners:not([hidden]){
+      border-top:0;
+      padding-top:28px;
+    }
   }
   @media (prefers-reduced-motion: reduce){
     .stat-rule{ transform:none; transition:none; }
@@ -3738,7 +3745,19 @@
      back-to-back and the CSS animation loops 0 -> -50%, so the seam is
      invisible), and script.js continuously fades every name in/out by its
      distance from the middle so the centred one reads clearly. */
-  .stat-partners{ display:flex; flex-direction:column; }
+  .stat-partners{
+    display:flex; flex-direction:column;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:28px clamp(20px,4vw,32px);
+    box-shadow:0 16px 34px -22px rgba(0,0,0,.55);
+  }
+  /* the card carries its own full border on every side, so it must not
+     also pick up the plain hairline the generic sibling rule above draws
+     between the two number columns — same specificity, later in the
+     cascade, so this wins over it. */
+  .stat:not([hidden]) ~ .stat-partners:not([hidden]){ border-inline-start:1px solid var(--border); }
   /* unlike the two number stats (which anchor to the tape-measure's start
      edge), this column has no number/rule — its icon+label row should
      center under the centred, scrolling name reel instead of hugging the
@@ -4209,201 +4228,3 @@ header .logo{ cursor: pointer; }
     -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
   }
 
-  /* ---------- splash: the M mark is welded into place — needle knocks into the
-     frame, the impact launches both up, they settle back down, and the M is
-     revealed stroke by stroke; then the whole mark rises and the site opens ---------- */
-  html.splash-lock, html.splash-lock body{ overflow:hidden; }
-  .splash{
-    --spw-ease:cubic-bezier(.45,.08,.55,.92);
-    position:fixed; inset:0; z-index:10000;
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    background:
-      radial-gradient(55% 45% at 50% 58%, rgba(253,87,43,.13), transparent 70%),
-      #000032;
-    overflow:hidden;
-  }
-  .splash::before{
-    content:""; position:absolute; inset:0; pointer-events:none;
-    background-image:
-      linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
-    background-size:44px 44px;
-    -webkit-mask-image:radial-gradient(60% 55% at 50% 55%, #000, transparent 100%);
-            mask-image:radial-gradient(60% 55% at 50% 55%, #000, transparent 100%);
-  }
-  .splash-stage{ position:relative; display:flex; flex-direction:column; align-items:center; }
-
-  /* ---------- splash: animated M mark (needle, frame, letter) ---------- */
-  .splash-mark-wrap{
-    --WM:min(190px,46vw);
-    position:relative; width:var(--WM);
-    animation:spwGlow .8s ease 2.5s both, spMarkBreathe 2.2s cubic-bezier(.45,.1,.4,1) 2.85s infinite;
-  }
-  .splash-mark{
-    width:100%; transform-origin:50% 100%;
-    animation:spMarkPop .5s cubic-bezier(.2,1.4,.4,1) .1s both;
-  }
-  @keyframes spMarkPop{ from{ opacity:0; transform:scale(.72) rotate(-6deg); } to{ opacity:1; transform:scale(1) rotate(0); } }
-  @keyframes spwGlow{
-    0%,100%{ filter:drop-shadow(0 0 0 rgba(253,87,43,0)); }
-    45%    { filter:drop-shadow(0 0 18px rgba(253,87,43,.65)); }
-  }
-  @keyframes spMarkBreathe{
-    0%,100%{ transform:scale(1); }
-    50%    { transform:scale(1.02); }
-  }
-
-  .mm-logo{ display:block; width:100%; height:auto; overflow:visible; }
-
-  /* Layer 1 — the M: hidden until the needle and frame settle back down —
-     then it's welded into view stroke by stroke, from the right edge toward the left */
-  .mm-fill-m{
-    fill:#fff; opacity:1;
-    clip-path:inset(0 0 0 100%);
-    animation:mmLetterReveal 1s cubic-bezier(.16,.84,.3,1) 1.78s forwards;
-  }
-  @keyframes mmLetterReveal{
-    0%  { clip-path:inset(0 0 0 100%); }
-    100%{ clip-path:inset(0 0 0 0%); }
-  }
-
-  /* Layer 3 — the iron frame/socket: stays put while the needle flies in.
-     The IMPACT itself is what launches it upward (together with the needle) —
-     the hit's own force is what throws it up, it holds a beat, then falls
-     back down and seats itself. */
-  .mm-fill-frame{
-    fill:#fff;
-    transform-box:fill-box; transform-origin:50% 50%;
-    animation:mmFrameLift 1.5s cubic-bezier(.5,0,.35,1) .25s forwards;
-  }
-  @keyframes mmFrameLift{
-    0%,47%{ transform:translate(0,0) rotate(0deg) scale(1,1); }
-    /* the hit lands — frame jolts, absorbing the blow */
-    48%   { transform:translate(-1px,1px) rotate(-1deg) scale(1.1,.85); }
-    /* launched upward BY the impact — fast, with overshoot */
-    53%   { transform:translate(4px,-96px) rotate(-9deg) scale(1.04,.92); }
-    /* settles into the held-high position */
-    58%   { transform:translate(3px,-84px) rotate(-6deg) scale(1,1); }
-    74%   { transform:translate(3px,-84px) rotate(-6deg) scale(1,1); }
-    /* brought back down together, settling into its seat */
-    90%   { transform:translate(0,0) rotate(0deg) scale(1.28,.66); }
-    96%   { transform:translate(0,0) rotate(0deg) scale(.96,1.04); }
-    100%  { transform:translate(0,0) rotate(0deg) scale(1,1); }
-  }
-
-  /* Layer 2 — the needle: flies in from below-left and slams hard into the
-     socket — that same impact is the force that throws both pieces upward.
-     No pause between the hit and the lift: the blow IS the lift. */
-  .mm-needle{
-    fill:#fff;
-    transform-box:fill-box; transform-origin:50% 100%;
-    transform:translate(-170px,230px) rotate(-18deg); opacity:0;
-    animation:mmNeedleFly 1.5s cubic-bezier(.5,0,.35,1) .25s forwards;
-  }
-  @keyframes mmNeedleFly{
-    0%  { transform:translate(-170px,230px) rotate(-18deg) scale(1,1); opacity:0;
-          animation-timing-function:cubic-bezier(.3,0,.7,.35); }
-    3%  { opacity:1; }
-    /* still approaching from below-left — accelerating, but never past the target */
-    30% { transform:translate(-115px,155px) rotate(-11deg) scale(1,1); opacity:1;
-          animation-timing-function:cubic-bezier(.55,0,.85,.15); }
-    44% { transform:translate(-16px,22px) rotate(-2deg) scale(1,1); opacity:1;
-          animation-timing-function:cubic-bezier(.75,0,.95,.02); }
-    /* IMPACT: hard sudden stop, deep sharp compress — a strong hit */
-    48% { transform:translate(0,0) rotate(0deg) scale(1.42,.5); opacity:1;
-          animation-timing-function:cubic-bezier(.1,.9,.2,1); }
-    /* the force of that same hit launches it straight up, overshooting */
-    53% { transform:translate(4px,-96px) rotate(-9deg) scale(1.04,.92); opacity:1;
-          animation-timing-function:cubic-bezier(.3,0,.15,1); }
-    /* settles into the held-high position, no separate pause beforehand */
-    58% { transform:translate(3px,-84px) rotate(-6deg) scale(1,1); opacity:1; }
-    /* held high for a beat */
-    74% { transform:translate(3px,-84px) rotate(-6deg) scale(1,1); opacity:1; }
-    /* brought back down and set into its final seat — no bounce-back */
-    90% { transform:translate(0,0) rotate(0deg) scale(1.28,.66); opacity:1; }
-    96% { transform:translate(0,0) rotate(0deg) scale(.96,1.04); opacity:1; }
-    100%{ transform:translate(0,0) rotate(0deg) scale(1,1); opacity:1; }
-  }
-  /* idle beacon pulse once it's settled */
-  .mm-needle{ animation:mmNeedleFly 1.5s cubic-bezier(.5,0,.35,1) .25s forwards, mmChevronPulse 1s ease-in-out 1.78s infinite; }
-  @keyframes mmChevronPulse{
-    0%,100%{ filter:drop-shadow(0 0 0 rgba(253,87,43,0)); }
-    50%    { filter:drop-shadow(0 0 10px rgba(253,87,43,.9)); }
-  }
-
-  .splash-seam{ position:relative; width:var(--WM,190px); height:14px; margin-top:20px; }
-  .splash-seam.splash-seam-mark{ width:var(--WM,190px); margin-top:20px; }
-  .spw-plate, .spw-bead{ position:absolute; left:0; bottom:0; width:100%; height:4px; border-radius:2px; }
-  .spw-plate{ background:rgba(255,255,255,.14); }
-  .spw-bead{
-    background:linear-gradient(90deg,#c9391a,#fd572b);
-    box-shadow:0 0 10px rgba(253,87,43,.55);
-    transform-origin:right center;
-    transform:scaleX(0);
-    animation:spwBead 1.55s var(--spw-ease) .3s forwards;
-  }
-  @keyframes spwBead{ from{ transform:scaleX(0); } to{ transform:scaleX(1); } }
-
-  /* exit: the whole mark rises up and fades, opening onto the site behind it */
-  .splash.leaving .splash-stage{
-    animation:mmStageRise .55s cubic-bezier(.5,0,.2,1) forwards;
-  }
-  @keyframes mmStageRise{
-    to{ transform:translateY(-70px); opacity:0; }
-  }
-  .splash.leaving{ animation:spLeaveFade .6s ease .2s forwards; }
-  @keyframes spLeaveFade{
-    to{ opacity:0; visibility:hidden; }
-  }
-
-  /* ---------- splash backdrop: drifting light smoke ---------- */
-  .splash-bg{ position:absolute; inset:0; overflow:hidden; pointer-events:none; }
-
-  /* light smoke: soft blurred blobs rise slowly, spread and fade (negative delays = already drifting at load) */
-  .splash-smoke{ position:absolute; inset:0; overflow:hidden; }
-  .splash-smoke i{
-    position:absolute; bottom:-30%; left:var(--x);
-    width:min(var(--s), 92vw); aspect-ratio:1;
-    margin-left:calc(min(var(--s), 92vw) / -2);
-    border-radius:50%;
-    background:radial-gradient(circle at 50% 50%, rgba(255,255,255,.55), rgba(255,255,255,0) 70%);
-    filter:blur(6px);
-    opacity:0;
-    animation:spSmoke var(--t) linear var(--d) infinite;
-    will-change:transform, opacity;
-  }
-  @keyframes spSmoke{
-    0%  { opacity:0;                     transform:translate3d(0,0,0) scale(.7) rotate(var(--r0)); }
-    18% { opacity:var(--o); }
-    70% { opacity:calc(var(--o) * .6); }
-    100%{ opacity:0;                     transform:translate3d(var(--dx),-115vh,0) scale(1.55) rotate(var(--r1)); }
-  }
-
-  /* ---------- splash backdrop: twinkling brand-colored dots (echoes the site's glow-dots layer) ---------- */
-  .splash-dots{ position:absolute; inset:0; overflow:hidden; }
-  .splash-dots i{
-    position:absolute; top:var(--y); left:var(--x);
-    width:var(--sz); height:var(--sz); border-radius:50%;
-    background:rgba(var(--c),.95);
-    box-shadow:0 0 6px 1.5px rgba(var(--c),.7), 0 0 14px 4px rgba(var(--c),.25);
-    opacity:0;
-    animation:spDotTwinkle var(--t) ease-in-out var(--d) infinite;
-    will-change:opacity, transform;
-  }
-  @keyframes spDotTwinkle{
-    0%,100%{ opacity:0;   transform:scale(.5); }
-    50%    { opacity:1;   transform:scale(1); }
-  }
-  @media (prefers-reduced-motion: reduce){
-    .splash-dots i{ animation:none; opacity:.55; transform:scale(1); }
-  }
-
-  @media (prefers-reduced-motion: reduce){
-    .splash *{ animation:none !important; }
-    .mm-fill-m{ clip-path:none; }
-    .mm-fill-frame{ transform:none; }
-    .mm-needle{ opacity:1; transform:none; }
-    .spw-bead{ transform:none; }
-    .splash-smoke i{ opacity:calc(var(--o) * .8); transform:translateY(-45vh); }
-    .splash{ opacity:0; visibility:hidden; transition:opacity .3s ease; }
-  }

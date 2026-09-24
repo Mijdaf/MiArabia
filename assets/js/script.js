@@ -2550,7 +2550,7 @@
   new MutationObserver(applyLabels).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
   applyLabels();
 
-  // ---- start: wait for the splash to leave so slide 1 plays from its beginning ----
+  // ---- start: slide 1 plays from its beginning ----
   function start(){
     if (started) return;
     started = true;
@@ -2563,12 +2563,7 @@
     typeHeroTitle(0);
   }
   if (reduceMotion){ autoplay = false; pauseBtn && pauseBtn.classList.add('is-paused'); pauseBtn && pauseBtn.setAttribute('aria-pressed', 'true'); }
-  const splash = document.getElementById('splash');
-  if (splash){
-    const mo = new MutationObserver(() => { if (!document.getElementById('splash')){ mo.disconnect(); start(); } });
-    mo.observe(document.body, { childList: true });
-    setTimeout(start, 6500);     // safety net
-  } else { start(); }
+  start();
 })();
 
 // ---------- ticker: seamless, gap-free marquee ----------
