@@ -3658,30 +3658,24 @@
     background:color-mix(in srgb, var(--surface-2) 58%, transparent);
     border-top:1px solid var(--border);
   }
-  .stats-grid{ display:flex; justify-content:center; gap:24px; }
+  .stats-grid{ display:flex; justify-content:center; }
   .stat{
     position:relative;
     flex:1 1 0; min-width:0; max-width:520px;
-    display:flex; flex-direction:column; align-items:center;
-    text-align:center;
-    background:var(--surface);
-    border:1px solid var(--border);
-    border-radius:18px;
-    padding:28px clamp(20px,4vw,32px);
-    box-shadow:0 16px 34px -22px rgba(0,0,0,.55);
+    padding-inline:clamp(20px,5vw,72px);
   }
   .stat[hidden]{ display:none; }
+  /* hairline only between two visible figures */
+  .stat:not([hidden]) ~ .stat:not([hidden]){ border-inline-start:1px solid var(--border-strong); }
 
   .stat-num{
     display:block;
-    width:100%;
     font-size:clamp(68px,10vw,132px);
     font-weight:900;
     line-height:.95;
     letter-spacing:-.02em;
     color:var(--heading);
     font-variant-numeric:lining-nums tabular-nums;
-    text-align:center;
   }
 
   /* tape measure: minor tick every 8px, major every 40px, orange zero-hook at the start edge */
@@ -3701,9 +3695,16 @@
     transition:transform 1.6s cubic-bezier(.16,.84,.44,1);
   }
   html[dir="ltr"] .stat-rule{ --tape-dir:to right; --tape-x:left; transform-origin:left center; }
+  .stat-rule::before{
+    content:"";
+    position:absolute;
+    inset-block-end:0; inset-inline-start:0;
+    width:4px; height:16px;
+    background:var(--orange);
+  }
   .stats.is-live .stat-rule{ transform:scaleX(1); }
 
-  .stat-meta{ display:flex; align-items:center; justify-content:center; gap:12px; margin-top:16px; }
+  .stat-meta{ display:flex; align-items:center; gap:12px; margin-top:16px; }
   .stat-icon{ width:26px; height:26px; flex-shrink:0; color:var(--orange); }
   .stat-icon svg{ width:100%; height:100%; }
   .stat-label{
@@ -3715,8 +3716,20 @@
 
   @media (max-width:720px){
     .stats{ padding:60px 0; }
-    .stats-grid{ flex-direction:column; align-items:stretch; gap:20px; }
-    .stat{ max-width:none; }
+    .stats-grid{ flex-direction:column; align-items:stretch; }
+    .stat{ max-width:none; padding-inline:4px; }
+    .stat:not([hidden]) ~ .stat:not([hidden]){
+      border-inline-start:0;
+      border-top:1px solid var(--border-strong);
+      margin-top:32px; padding-top:32px;
+    }
+    /* the card already has its own border + padding on every edge, so drop
+       the stacked hairline/padding the rule above adds and just keep the
+       vertical gap before it */
+    .stat:not([hidden]) ~ .stat-partners:not([hidden]){
+      border-top:0;
+      padding-top:28px;
+    }
   }
   @media (prefers-reduced-motion: reduce){
     .stat-rule{ transform:none; transition:none; }
@@ -3732,8 +3745,25 @@
      back-to-back and the CSS animation loops 0 -> -50%, so the seam is
      invisible), and script.js continuously fades every name in/out by its
      distance from the middle so the centred one reads clearly. */
+  .stat-partners{
+    display:flex; flex-direction:column;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:28px clamp(20px,4vw,32px);
+    box-shadow:0 16px 34px -22px rgba(0,0,0,.55);
+  }
+  /* the card carries its own full border on every side, so it must not
+     also pick up the plain hairline the generic sibling rule above draws
+     between the two number columns — same specificity, later in the
+     cascade, so this wins over it. */
+  .stat:not([hidden]) ~ .stat-partners:not([hidden]){ border-inline-start:1px solid var(--border); }
+  /* unlike the two number stats (which anchor to the tape-measure's start
+     edge), this column has no number/rule — its icon+label row should
+     center under the centred, scrolling name reel instead of hugging the
+     column's start edge, or the whole column reads as mis-centred. */
+  .stat-partners .stat-meta{ justify-content:center; }
   .partners-reel-viewport{
-    width:100%;
     position:relative;
     height:clamp(112px, 13vw, 168px);
     overflow:hidden;
