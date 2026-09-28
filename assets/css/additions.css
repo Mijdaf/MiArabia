@@ -1,0 +1,59 @@
+/* Additions only — new sections (Mission, Support Service). Does not modify any existing rule. */
+
+  /* ---------- Our Mission (inside Our Approach) — sizes inherited from .section-head ---------- */
+  .mission-head{
+    margin-top:72px;
+    margin-bottom:0;
+    padding-top:48px;
+    border-top:1px solid rgba(253,87,43,0.25);
+  }
+  @media (max-width:900px){
+    .mission-head{margin-top:48px; padding-top:32px;}
+  }
+
+  /* ---------- Support Service (below Our Services) ---------- */
+  .support{
+    background:var(--surface);
+    padding-top:56px;
+  }
+  html[data-theme="dark"] .support{background:color-mix(in srgb, var(--surface-2) 40%, transparent);}
+  .support-head{margin-bottom:28px;}
+  .support-head h2{margin-top:0;}
+  .support-card{
+    position:relative;
+    display:grid;
+    grid-template-columns:auto minmax(150px,220px) 1fr;
+    align-items:center;
+    gap:28px;
+    padding:30px 34px;
+    border-radius:20px;
+    background:rgba(253,87,43,0.06);
+    border:1.5px dashed rgba(253,87,43,0.45);
+    overflow:hidden;
+    transition:border-color .35s ease, box-shadow .35s ease, transform .35s ease;
+  }
+  .support-card::before{
+    content:"";
+    position:absolute; inset-inline-start:0; top:0; bottom:0; width:5px;
+    background:var(--orange);
+  }
+  .support-card:hover{
+    border-color:var(--orange);
+    box-shadow:0 16px 34px -16px rgba(253,87,43,0.4);
+  }
+  .support-icon{
+    width:58px; height:58px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--orange); color:var(--white);
+    transition:transform .4s ease;
+  }
+  .support-card:hover .support-icon{transform:rotate(-14deg) scale(1.06);}
+  .support-icon svg{width:26px; height:26px;}
+  .support-text{margin:0; font-size:16px; color:var(--text-soft); line-height:1.7;}
+  html[data-theme="dark"] .support-card{background:rgba(253,87,43,0.09);}
+  @media (max-width:760px){
+    .support-card{grid-template-columns:auto 1fr; gap:16px 18px; padding:24px 22px;}
+    .support-text{grid-column:1 / -1;}
+  }
+  /* Arabic: no letter-spacing / uppercase on service names (keeps letters joined) */
+  html[dir="rtl"] .service-name{letter-spacing:0; text-transform:none;}

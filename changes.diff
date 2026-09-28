@@ -1,0 +1,246 @@
+--- a/index.html	2026-09-26 16:54:56.000000000 +0000
++++ b/index.html	2026-09-28 04:56:01.567014101 +0000
+@@ -60,7 +60,7 @@
+       </a>
+       <a href="#focus" class="nav-link-mobile-only">
+         <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.4"/><circle cx="12" cy="12" r=".6" fill="currentColor" stroke="none"/></svg></span>
+-        <span class="nav-label" data-en="Our Focus">تركيزنا</span>
++        <span class="nav-label" data-en="Our Vision">رؤيتنا</span>
+       </a>
+       <a href="#gallery">
+         <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.7"/><path d="m21 15-5-5L5 21"/></svg></span>
+@@ -302,72 +302,9 @@
+     <div class="wrap">
+       <div class="section-head reveal">
+         <div class="eyebrow" data-en="Why Us?">لماذا نحن؟</div>
+-        <h2 data-en="Because great work starts with the right foundation.">لأن العمل الجيد يبدأ من أساس صحيح.</h2>
+-        <p data-en-html="Mi Arabia was founded with a clear vision:<br>to build a contracting company on a strong professional foundation and deliver work that clients can rely on. We believe that quality execution does not begin on site. It begins long before that—with understanding requirements, precise planning, thorough preparation, and attention to detail.">بدأت Mi Arabia برؤية واضحة:<br>بناء مؤسسة مقاولات تقوم على أساس مهني، وتقدم أعمالًا يمكن الاعتماد عليها. نؤمن أن جودة التنفيذ لا تبدأ عند الموقع، بل قبل ذلك؛ في فهم المتطلبات، ودقة التخطيط، والاستعداد الجيد، والاهتمام بالتفاصيل.</p>
++        <h2 data-en="Behind every oar lies a guiding hand; behind every hand, a self-assured individual who understands their purpose before facing the waves.">خلف كل مجداف، يدٌ تحرّكه. وخلف كل يدٍ، إنسانٌ يثق بمن يجدّف بجانبه قبل أن يواجه الموج.</h2>
++        <p data-en="This is the foundation upon which we built Mijdaf Al-Arabia: a team united by confidence and driven by integrity.">هذا ما بنينا عليه مجداف العربية: أناسٌ آمنوا ببعضهم — تجمعهم الثقة، وتقودهم الأمانة.</p>
+       </div>
+-
+-      <p class="why-caption reveal" data-en="We are at the beginning of our journey, and that is why our focus is on building the right foundation:">نحن في بداية رحلتنا، ولذلك نركز على بناء الأساس الصحيح:</p>
+-
+-      <div class="why-list">
+-        <div class="why-row why-reveal" style="--i:0">
+-          <span class="why-index">01</span>
+-          <div class="why-row-body">
+-            <div class="why-row-head">
+-              <h4 data-en="A team we develop.">فريق نطوره.</h4>
+-              <button type="button" class="why-icon" aria-expanded="false" aria-controls="why-details-0">
+-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 12l2 2 4-4M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+-              </button>
+-            </div>
+-            <div class="why-row-details" id="why-details-0">
+-              <p data-en="We invest in training and developing our people at every level.">نستثمر في تدريب وتطوير كوادرنا على كل المستويات.</p>
+-            </div>
+-          </div>
+-        </div>
+-        <div class="why-row why-reveal" style="--i:1">
+-          <span class="why-index">02</span>
+-          <div class="why-row-body">
+-            <div class="why-row-head">
+-              <h4 data-en="Capabilities we build.">قدرات نبنيها.</h4>
+-              <button type="button" class="why-icon" aria-expanded="false" aria-controls="why-details-1">
+-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="7" r="4"/><path d="M2 21v-2a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v2"/><path d="M18 8a3 3 0 0 1 0 6M21 21v-2a4 4 0 0 0-3-3.87"/></svg>
+-              </button>
+-            </div>
+-            <div class="why-row-details" id="why-details-1">
+-              <p data-en="Building the technical and operational capabilities projects require.">نبني القدرات الفنية والتشغيلية التي تتطلبها المشاريع.</p>
+-            </div>
+-          </div>
+-        </div>
+-        <div class="why-row why-reveal" style="--i:2">
+-          <span class="why-index">03</span>
+-          <div class="why-row-body">
+-            <div class="why-row-head">
+-              <h4 data-en="Systems we establish.">أنظمة نؤسسها.</h4>
+-              <button type="button" class="why-icon" aria-expanded="false" aria-controls="why-details-2">
+-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2l8 4v6c0 5-3.4 8.4-8 10-4.6-1.6-8-5-8-10V6l8-4z"/></svg>
+-              </button>
+-            </div>
+-            <div class="why-row-details" id="why-details-2">
+-              <p data-en="Clear systems and processes that keep every project on track.">أنظمة وعمليات واضحة تضمن سير كل مشروع بانتظام.</p>
+-            </div>
+-          </div>
+-        </div>
+-        <div class="why-row why-reveal" style="--i:3">
+-          <span class="why-index">04</span>
+-          <div class="why-row-body">
+-            <div class="why-row-head">
+-              <h4 data-en="Relationships we nurture.">علاقات ننميها.</h4>
+-              <button type="button" class="why-icon" aria-expanded="false" aria-controls="why-details-3">
+-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>
+-              </button>
+-            </div>
+-            <div class="why-row-details" id="why-details-3">
+-              <p data-en="Long-term relationships built on trust with every client.">علاقات طويلة الأمد مبنية على الثقة مع كل عميل.</p>
+-            </div>
+-          </div>
+-        </div>
+-      </div>
+-
+-      <p class="why-closing reveal" data-en="We want to build a foundation worth growing on.">نريد أن نبني أساسًا يستحق أن ننمو عليه.</p>
+     </div>
+   </section>
+ 
+@@ -451,7 +388,7 @@
+   <section id="services" class="dot-field">
+     <div class="wrap">
+       <div class="section-head reveal">
+-        <div class="eyebrow" data-en="What We Do?">ماذا نفعل؟</div>
++        <div class="eyebrow" data-en="Our Services">خدماتنا</div>
+         <h2 data-en="General contracting. With clear focus.">مقاولات عامة بتركيز واضح.</h2>
+         <p data-en="Mi Arabia operates in general contracting, with a core focus on three areas:">تعمل Mi Arabia في مجال المقاولات العامة، مع تركيز أساسي على ثلاثة مجالات:</p>
+       </div>
+@@ -467,9 +404,9 @@
+                   <svg viewBox="0 0 24 24"><path d="M3 8h6a3 3 0 0 1 3 3v7M3 8V4M21 16h-6a3 3 0 0 0-3 3v0M21 16v4M9 4h6M15 20h6"/></svg>
+                 </div>
+               </div>
+-              <span class="service-name service-name-lg" data-en="PIPING">PIPING</span>
++              <span class="service-name service-name-lg" data-en="Piping">PIPING — الأنابيب</span>
+               <h3 class="service-subtitle" data-en="Every joint matters.">كل وصلة لها أهمية.</h3>
+-              <p data-en="Installation and assembly of pipelines and their components in line with drawings, specifications and project requirements.">تركيب وتجميع الأنابيب ومكوناتها وفق الرسومات والمواصفات ومتطلبات المشروع.</p>
++              <p data-en="Precision installation and connection, in accordance with drawings and specifications.">تركيب وتوصيل بدقة، وفق الرسومات والمواصفات.</p>
+               <span class="service-expand-hint">
+                 <span data-en="Explore the scope">استعرض النطاق</span>
+                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+@@ -502,9 +439,9 @@
+                   <svg viewBox="0 0 24 24"><path d="M14 4l6 6-8.5 8.5a3 3 0 1 1-4-4L16 5"/><path d="M3 21l3-3M6 3l3 3"/></svg>
+                 </div>
+               </div>
+-              <span class="service-name service-name-lg" data-en="WELDING">WELDING</span>
++              <span class="service-name service-name-lg" data-en="Welding">WELDING — اللحام</span>
+               <h3 class="service-subtitle" data-en="Precision starts at the joint.">الدقة تبدأ من الوصلة.</h3>
+-              <p data-en="Execution of welding works for metal components and systems in line with project requirements and relevant work procedures.">تنفيذ أعمال اللحام للمكونات والأنظمة المعدنية وفق متطلبات المشروع وإجراءات العمل ذات العلاقة.</p>
++              <p data-en="Execution adhering to the highest quality and safety standards.">تنفيذ وفق أعلى معايير الجودة والسلامة.</p>
+               <span class="service-expand-hint">
+                 <span data-en="Explore the scope">استعرض النطاق</span>
+                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+@@ -537,9 +474,9 @@
+                   <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82A1.65 1.65 0 0 0 3 13.09H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                 </div>
+               </div>
+-              <span class="service-name service-name-lg" data-en="FABRICATION">FABRICATION</span>
++              <span class="service-name service-name-lg" data-en="Fabrication">FABRICATION — التلفيق</span>
+               <h3 class="service-subtitle" data-en="From material to component.">من المادة إلى المكوّن.</h3>
+-              <p data-en="Fabrication and preparation of components, structures and metal works related to the project scope.">تصنيع وتجهيز المكونات والهياكل والأعمال المعدنية المرتبطة بنطاق المشروع.</p>
++              <p data-en="Assembly and finishing performed with precision that reflects the team&#39;s craftsmanship.">تجميع وتشطيب بدقة تعكس حرفية الفريق.</p>
+               <span class="service-expand-hint">
+                 <span data-en="Explore the scope">استعرض النطاق</span>
+                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+@@ -565,17 +502,32 @@
+     </div>
+   </section>
+ 
++  <!-- SUPPORT SERVICE -->
++  <section class="support" id="support">
++    <div class="wrap">
++      <div class="section-head support-head reveal">
++        <h2 data-en="Support Service">خدمة مساندة</h2>
++      </div>
+ 
+-  <!-- OUR FOCUS -->
++      <div class="support-card reveal">
++        <span class="support-icon" aria-hidden="true">
++          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/></svg>
++        </span>
++        <span class="service-name service-name-lg support-name" data-en="Maintenance">الصيانة</span>
++        <p class="support-text" data-en="We deploy specialized maintenance teams—for short- or long-term contracts—tailored to the scope and requirements of each facility.">نقوم بتجهيز فرق صيانة متخصصة — لعقود قصيرة أو طويلة الأمد — حسب نطاق كل منشأة ومتطلباتها.</p>
++      </div>
++    </div>
++  </section>
++
++
++  <!-- OUR VISION -->
+   <section class="focus" id="focus">
+     <div class="wrap">
+       <div class="focus-copy reveal stagger-children">
+-        <div class="eyebrow" data-en="Our Focus">تركيزنا</div>
+-        <h2 data-en="Focus makes the difference.">التركيز يصنع الفرق.</h2>
+-        <p data-en="We chose to start with Piping &amp; Welding &amp; Fabrication because we want to build real capability around clear areas.">اخترنا أن نبدأ من Piping &amp; Welding &amp; Fabrication لأننا نريد أن نبني قدرات حقيقية حول مجالات واضحة.</p>
+-        <p data-en="We don't want to be a company that claims to do everything.">لا نريد أن نكون جهة تقول إنها تفعل كل شيء.</p>
+-        <p data-en="We want to know what we do, grow our ability in it, then widen our scope as our expertise and resources grow.">نريد أن نعرف ما نفعله، ونطوّر قدرتنا عليه، ثم نوسع نطاقنا مع نمو خبرتنا ومواردنا.</p>
+-        <p class="focus-highlight" data-en="We start with clear focus. And grow with real capability.">نبدأ بتركيز واضح وننمو بقدرة حقيقية.</p>
++        <div class="eyebrow" data-en="Our Vision">رؤيتنا</div>
++        <h2 data-en="To see our reputation grow in tandem with our capabilities.">أن يكبر الاسم بقدر ما تكبر القدرة.</h2>
++        <p data-en="For MI Arabia to become a trusted name in piping, welding, and fabrication, and a genuine contributor to the Kingdom’s development journey under Vision 2030.">أن تكون MI Arabia اسماً موثوقاً في أعمال الأنابيب واللحام والتلفيق، ومساهماً حقيقياً في مسيرة التنمية التي تشهدها المملكة ضمن رؤية 2030.</p>
++        <p class="focus-highlight" data-en="We aspire to extend our impact in the future to more complex and specialized industrial sectors.">نطمح أن يمتد أثرنا مستقبلاً إلى قطاعات صناعية أكثر تعقيداً وتخصصاً.</p>
+       </div>
+     </div>
+   </section>
+@@ -821,6 +773,13 @@
+         </div>
+ 
+       </div>
++
++      <!-- OUR MISSION (part of Our Approach, no nav link) -->
++      <div class="section-head mission-head reveal">
++        <div class="eyebrow" data-en="Our Mission">رسالتنا</div>
++        <h2 data-en="Our commitment in every project.">التزامنا في كل مشروع.</h2>
++        <p data-en="MI Arabia is committed to executing piping, welding, and fabrication work to the highest standards of quality and safety, with integrity in every detail—from planning through to delivery.">تلتزم MI Arabia بتنفيذ أعمال الأنابيب واللحام والتلفيق بأعلى معايير الجودة والسلامة، وبالأمانة في كل تفصيل — من التخطيط وحتى التسليم.</p>
++      </div>
+     </div>
+   </section>
+ 
+--- a/assets/css/style.css	2026-09-26 16:54:56.000000000 +0000
++++ b/assets/css/style.css	2026-09-28 04:56:01.568180171 +0000
+@@ -4198,3 +4198,58 @@
+     -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
+   }
+ 
++  /* ---------- Our Mission (inside Our Approach) — sizes inherited from .section-head ---------- */
++  .mission-head{
++    margin-top:72px;
++    margin-bottom:0;
++    padding-top:48px;
++    border-top:1px solid rgba(253,87,43,0.25);
++  }
++  @media (max-width:900px){
++    .mission-head{margin-top:48px; padding-top:32px;}
++  }
++
++  /* ---------- Support Service (below Our Services) ---------- */
++  .support{
++    background:var(--surface);
++    padding-top:56px;
++  }
++  html[data-theme="dark"] .support{background:color-mix(in srgb, var(--surface-2) 40%, transparent);}
++  .support-head{margin-bottom:28px;}
++  .support-head h2{margin-top:0;}
++  .support-card{
++    position:relative;
++    display:grid;
++    grid-template-columns:auto minmax(150px,220px) 1fr;
++    align-items:center;
++    gap:28px;
++    padding:30px 34px;
++    border-radius:20px;
++    background:rgba(253,87,43,0.06);
++    border:1.5px dashed rgba(253,87,43,0.45);
++    overflow:hidden;
++    transition:border-color .35s ease, box-shadow .35s ease, transform .35s ease;
++  }
++  .support-card::before{
++    content:"";
++    position:absolute; inset-inline-start:0; top:0; bottom:0; width:5px;
++    background:var(--orange);
++  }
++  .support-card:hover{
++    border-color:var(--orange);
++    box-shadow:0 16px 34px -16px rgba(253,87,43,0.4);
++  }
++  .support-icon{
++    width:58px; height:58px; border-radius:50%;
++    display:flex; align-items:center; justify-content:center;
++    background:var(--orange); color:var(--white);
++    transition:transform .4s ease;
++  }
++  .support-card:hover .support-icon{transform:rotate(-14deg) scale(1.06);}
++  .support-icon svg{width:26px; height:26px;}
++  .support-text{margin:0; font-size:16px; color:var(--text-soft); line-height:1.7;}
++  html[data-theme="dark"] .support-card{background:rgba(253,87,43,0.09);}
++  @media (max-width:760px){
++    .support-card{grid-template-columns:auto 1fr; gap:16px 18px; padding:24px 22px;}
++    .support-text{grid-column:1 / -1;}
++  }
