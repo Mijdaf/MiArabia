@@ -58,7 +58,7 @@
 }
 .k3d .spec-pill[data-anchor]::before{display:none;}
 .k3d .spec-pill[data-anchor] .spec-pill-label{
-  text-shadow:0 1px 0 #d9450f, 0 2px 0 #c23c0b, 0 3px 0 #a93309, 0 4px 0 #8f2b07, 0 5px 0 #762306, 0 14px 18px rgba(0,0,0,.45);
+  text-shadow:none;
 }
 @keyframes k3dAnchor{
   0%,11%,17%,100%{transform:translate3d(0,-16px,46px);}

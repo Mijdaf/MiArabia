@@ -4994,19 +4994,6 @@ footer ul a{font-size:14.27px;}
   .partner-name{ font-size:14px; }
 }
 
-
-/* every heading that sits under an eyebrow gets the orange depth line under the letters */
-html body .eyebrow + h2,
-html body .eyebrow + h3{
-  text-shadow:
-    0 1px 0 rgba(253,87,43,.55),
-    0 2px 0 rgba(253,87,43,.38),
-    0 3px 0 rgba(253,87,43,.22),
-    0 12px 20px rgba(0,0,0,.30);
-}
-
-
-
 /* STATS — desktop only: pull the outer (left / right) cards a little toward the centre */
 @media (min-width:721px){
   .stats-grid{ padding-inline:clamp(40px,7vw,140px); }
@@ -5017,4 +5004,17 @@ html body .eyebrow + h3{
 @media (max-width:720px){
   html body .eyebrow{ padding-block:11px 8px !important; }
   html body .eyebrow::before{ margin-top:1px; }
+}
+
+
+/* IDENTITY focus: gentle snap instead of forced scrolling.
+   `proximity` only settles when scrolling comes to rest close to the section,
+   so it never traps or fights the scroll. */
+html{ scroll-snap-type:y proximity; }
+.identity{ scroll-snap-align:start; scroll-snap-stop:normal; }
+#about, #why{ transition:opacity .6s ease; }
+body.identity-focus #about,
+body.identity-focus #why{ opacity:.06; }
+@media (max-width:720px){
+  html{ scroll-snap-type:none; }  /* phones: momentum scrolling stays completely free */
 }

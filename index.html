@@ -25,9 +25,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=65">
-<link rel="stylesheet" href="assets/css/kicker-3d.css?v=5">
-<link rel="stylesheet" href="assets/css/process-3d.css?v=4">
+<link rel="stylesheet" href="assets/css/style.css?v=67">
+<link rel="stylesheet" href="assets/css/kicker-3d.css?v=6">
+<link rel="stylesheet" href="assets/css/process-3d.css?v=5">
 </head>
 <body>
 
@@ -1546,11 +1546,13 @@
   })();
 </script>
 <script>
-/* Identity focus: when the 3 icons fill the screen, hide the sections above/below
-   and (after scrolling stops) settle the section flush to the top. */
+/* Identity focus: while the 3 icons fill the screen, the sections above/below fade back.
+   No forced auto-scroll any more (it fought the user's finger/wheel) - the soft CSS
+   snap on .identity does the settling, and only when scrolling comes to rest near it.
+   Hysteresis (enter >=0.6, leave <0.4) stops the focus from flickering on/off. */
 (function(){
   var sec=document.getElementById('identity'); if(!sec) return;
-  var timer=null, ticking=false;
+  var ticking=false, on=false;
   function ratio(){
     var r=sec.getBoundingClientRect(), vh=window.innerHeight||document.documentElement.clientHeight;
     var vis=Math.min(r.bottom,vh)-Math.max(r.top,0);
@@ -1558,18 +1560,11 @@
   }
   function update(){
     ticking=false;
-    document.body.classList.toggle('identity-focus', ratio()>=0.5);
+    var q=ratio();
+    if(!on && q>=0.6) on=true; else if(on && q<0.4) on=false;
+    document.body.classList.toggle('identity-focus', on);
   }
-  function settle(){
-    var q=ratio(), r=sec.getBoundingClientRect();
-    if(q>=0.5 && q<0.99 && Math.abs(r.top)>4 && r.height<=window.innerHeight+2){
-      window.scrollTo({top:window.pageYOffset+r.top, behavior:'smooth'});
-    }
-  }
-  function onScroll(){
-    if(!ticking){ticking=true;requestAnimationFrame(update);}
-    clearTimeout(timer); timer=setTimeout(settle,160);
-  }
+  function onScroll(){ if(!ticking){ticking=true;requestAnimationFrame(update);} }
   window.addEventListener('scroll',onScroll,{passive:true});
   window.addEventListener('resize',onScroll);
   update();
