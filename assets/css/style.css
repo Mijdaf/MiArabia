@@ -4690,3 +4690,92 @@ html[dir="rtl"] .eyebrow{ --eb-fade:270deg; }
 /* centred / block-level eyebrows keep their tag width */
 .id-head .eyebrow,
 .id-modal-box .eyebrow{ width:fit-content; margin-inline:auto; }
+
+
+/* =====================================================================
+   STATS CARDS — phone layout fix
+   Cards were fit-content wide (three different widths, staggered
+   left/right) and the float animation tilted them. On phones: one
+   column, all cards the same full width, calm vertical-only float.
+   ===================================================================== */
+@media (max-width:720px){
+  .stats{ padding:48px 0; overflow:hidden; }
+  .stats-grid{
+    display:grid; grid-template-columns:minmax(0,1fr);
+    gap:16px; width:100%; margin-inline:auto;
+    perspective:none;
+  }
+  .stat{
+    width:100%; max-width:100%; min-width:0;
+    margin:0; box-sizing:border-box;
+    padding:28px 20px 26px;
+    border-radius:16px;
+    justify-content:center;
+  }
+  .stat-num{ font-size:clamp(44px,14vw,64px); }
+  .stat-rule{ margin-top:14px; width:100%; }
+  .stat-meta{ margin-top:14px; width:100%; }
+  .stat-label{ font-size:16px; }
+  .stat::before{
+    background-size:28px 28px;
+    -webkit-mask-image:radial-gradient(ellipse 60% 40% at 50% 33%, #000 30%, transparent 100%);
+    mask-image:radial-gradient(ellipse 60% 40% at 50% 33%, #000 30%, transparent 100%);
+  }
+  /* partners card: same width, reel fills the card width */
+  .stat-partners{ padding-top:18px; }
+  .partners-reel-viewport{ height:112px; }
+  .partner-name{ font-size:15px; }
+
+  /* gentle float: vertical only (no tilt / no sideways drift) */
+  .stats.is-live .stat{
+    animation:
+      statIn 1s var(--ease) calc(var(--n,0) * .14s) backwards,
+      statFloatPhone 6s ease-in-out calc(1.2s + var(--n,0) * .5s) infinite;
+  }
+  @keyframes statFloatPhone{
+    0%,100%{ translate:0 0; rotate:none; }
+    50%    { translate:0 -5px; rotate:none; }
+  }
+  @keyframes statIn{
+    from{ opacity:0; transform:translateY(40px) scale(.96); }
+    to  { opacity:1; transform:none; }
+  }
+}
+@media (max-width:720px) and (prefers-reduced-motion: reduce){
+  .stats.is-live .stat{ animation:none; }
+}
+
+
+/* STATS — phone: three cards side by side in one row */
+@media (max-width:720px){
+  .stats{ padding:40px 0; }
+  .stats .wrap{ padding-inline:12px; }
+  .stats-grid{
+    display:grid; grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:8px; align-items:stretch;
+  }
+  .stat{
+    padding:20px 6px 16px; border-radius:14px;
+    justify-content:flex-start;
+  }
+  .stat-num{ font-size:clamp(28px,9.5vw,42px); }
+  .stat-rule{ margin-top:10px; height:12px; }
+  .stat-meta{
+    flex-direction:column; gap:6px; margin-top:10px;
+    flex:1; justify-content:flex-start;
+  }
+  .stat-icon{ width:18px; height:18px; }
+  .stat-label{ font-size:12.5px; line-height:1.35; text-wrap:balance; }
+  .stat::before{ background-size:22px 22px; }
+  /* partners card */
+  .stat-partners{ padding-top:20px; }
+  .partners-reel-viewport{ height:76px; }
+  .partner-row{ padding:6px 2px; }
+  .partner-name{ font-size:12px; line-height:1.3; }
+}
+@media (max-width:360px){
+  .stats .wrap{ padding-inline:8px; }
+  .stats-grid{ gap:6px; }
+  .stat-label{ font-size:11.5px; }
+  .partner-name{ font-size:11px; }
+}

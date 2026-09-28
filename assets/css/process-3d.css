@@ -1,0 +1,171 @@
+/* ===== "كيف نعمل؟" — 3D coins, flow wave, depth headings ===== */
+#process .wrap{perspective:1300px;}
+
+/* ---------- headings: pointer-driven depth ---------- */
+#process .section-head > *{
+  transform-origin:100% 50%;
+  transition:transform .35s cubic-bezier(.2,.7,.3,1), text-shadow .35s ease;
+  will-change:transform;
+}
+html[lang="en"] #process .section-head > *{transform-origin:0% 50%;}
+#process .section-head .eyebrow{
+  transform:perspective(900px) translate3d(calc(var(--mx,0)*7px), calc(var(--my,0)*5px), 26px) rotateY(calc(var(--mx,0)*7deg)) rotateX(calc(var(--my,0)*-5deg));
+}
+#process .section-head h2{
+  transform:perspective(900px) translate3d(calc(var(--mx,0)*12px), calc(var(--my,0)*8px), 48px) rotateY(calc(var(--mx,0)*9deg)) rotateX(calc(var(--my,0)*-6deg));
+  text-shadow:
+    calc(var(--mx,0)*-1px) calc(1px + var(--my,0)*-.6px) 0 rgba(253,87,43,.55),
+    calc(var(--mx,0)*-2px) calc(2px + var(--my,0)*-1px) 0 rgba(253,87,43,.38),
+    calc(var(--mx,0)*-3px) calc(3px + var(--my,0)*-1.4px) 0 rgba(253,87,43,.22),
+    calc(var(--mx,0)*-10px) calc(14px + var(--my,0)*-4px) 22px rgba(0,0,0,.4);
+}
+#process .section-head > p{
+  transform:perspective(900px) translate3d(calc(var(--mx,0)*5px), calc(var(--my,0)*3px), 14px) rotateY(calc(var(--mx,0)*4deg)) rotateX(calc(var(--my,0)*-3deg));
+}
+
+/* ---------- coins ---------- */
+#process .process-circles{position:relative;}
+#process .process-circle{
+  --r:88px; position:relative; z-index:1;
+  transform:perspective(900px) translateY(46px) translateZ(-220px) rotateX(-58deg);
+  transition:opacity .8s cubic-bezier(.16,.84,.44,1), transform .95s cubic-bezier(.2,.9,.25,1.1);
+  transition-delay:calc(var(--i) * .11s);
+}
+#process .process-circle.in{transform:perspective(900px) translateY(0) translateZ(0) rotateX(0);}
+
+.p3d-scene{
+  position:relative; width:var(--r); height:var(--r); flex:0 0 auto;
+  perspective:700px; transform-style:preserve-3d;
+  transform:rotateX(var(--tx,0deg)) rotateY(var(--ty,0deg));
+  transition:transform .25s cubic-bezier(.2,.7,.3,1), translate .4s cubic-bezier(.34,1.56,.64,1);
+}
+.p3d-float{
+  position:relative; width:100%; height:100%; transform-style:preserve-3d;
+  transform-origin:50% 50% -8px;
+  animation:p3dFloat 6.4s ease-in-out infinite, p3dFlip 8s linear infinite;
+  animation-delay:calc(var(--i) * -1.3s), calc(var(--i) * .6s);
+}
+@keyframes p3dFloat{
+  0%,100%{transform:translateY(0) rotateY(-16deg) rotateX(5deg);}
+  50%{transform:translateY(-9px) rotateY(16deg) rotateX(-4deg);}
+}
+/* the wave: each coin lifts toward the viewer and spins once as the pulse passes */
+@keyframes p3dFlip{
+  0%{translate:0 0 0; rotate:0 1 0 0deg;}
+  5%{translate:0 -10px 46px;}
+  14%{translate:0 -6px 30px; rotate:0 1 0 360deg;}
+  20%,100%{translate:0 0 0; rotate:0 1 0 360deg;}
+}
+
+/* coin thickness */
+.p3d-layer{
+  position:absolute; inset:0; border-radius:50%; pointer-events:none;
+  transform:translateZ(calc(var(--n) * -2px));
+  background:hsl(14 88% calc(47% - var(--n) * 3.2%));
+}
+.p3d-glow{
+  position:absolute; inset:-26px; border-radius:50%; pointer-events:none;
+  background:radial-gradient(circle, rgba(253,87,43,.55), transparent 66%);
+  transform:translateZ(-22px); opacity:0;
+  animation:p3dGlow 8s ease-in-out infinite; animation-delay:calc(var(--i) * .6s);
+}
+@keyframes p3dGlow{0%{opacity:0;} 6%{opacity:1;} 22%,100%{opacity:0;}}
+
+/* front face + lifted icon */
+#process .process-circle-ring{transform-style:preserve-3d;}
+#process .process-circle-ring svg{
+  translate:0 0 26px; filter:drop-shadow(0 7px 4px rgba(0,0,0,.45));
+  transition:translate .4s cubic-bezier(.34,1.56,.64,1);
+}
+#process .process-circle-ring::after{
+  content:""; position:absolute; inset:0; border-radius:50%; pointer-events:none;
+  background:linear-gradient(115deg, transparent 32%, rgba(255,255,255,.5) 48%, transparent 64%);
+  background-size:260% 100%; background-position:160% 0;
+  animation:p3dSheen 8s ease-in-out infinite; animation-delay:calc(var(--i) * .6s);
+}
+@keyframes p3dSheen{0%{background-position:160% 0;} 16%,100%{background-position:-60% 0;}}
+
+/* orbiting satellite on a tilted plane */
+.p3d-orbit{
+  position:absolute; inset:-14px; border-radius:50%; pointer-events:none;
+  border:1px dashed rgba(253,87,43,.38);
+  transform:rotateX(74deg) rotateY(-14deg); transform-style:preserve-3d;
+}
+.p3d-orbit b{position:absolute; inset:0; animation:p3dSpin 4.6s linear infinite; animation-delay:calc(var(--i) * -.9s);}
+.p3d-orbit b::after{
+  content:""; position:absolute; left:50%; top:-3.5px; width:7px; height:7px; margin-left:-3.5px; border-radius:50%;
+  background:#ffd2bd; box-shadow:0 0 9px 2px #fd572b;
+}
+@keyframes p3dSpin{to{transform:rotate(360deg);}}
+
+/* badge floats in front of the coin */
+#process .p3d-float .process-circle-num{
+  top:-4px; inset-inline-end:-26px; z-index:2; translate:0 0 40px;
+}
+
+/* floor shadow reacts to the float */
+.p3d-shadow{
+  position:absolute; left:50%; top:calc(var(--r) + 2px); width:calc(var(--r) * .8); height:16px; margin-left:calc(var(--r) * -.4);
+  border-radius:50%; pointer-events:none;
+  background:radial-gradient(ellipse, rgba(253,87,43,.42), transparent 70%);
+  animation:p3dShadow 6.4s ease-in-out infinite; animation-delay:calc(var(--i) * -1.3s);
+}
+@keyframes p3dShadow{0%,100%{transform:scale(1); opacity:.9;} 50%{transform:scale(.72); opacity:.5;}}
+
+/* hover / focus: coin comes forward */
+#process .process-circle:hover .p3d-scene,
+#process .process-circle:focus-visible .p3d-scene{translate:0 0 40px;}
+#process .process-circle:hover .process-circle-ring,
+#process .process-circle:focus-visible .process-circle-ring{transform:none;}
+#process .process-circle:hover .process-circle-ring svg{translate:0 0 38px;}
+#process .process-circle:active .p3d-scene{translate:0 0 8px;}
+
+/* flow rail behind the coins (wide screens only) */
+.p3d-rail{
+  position:absolute; height:2px; z-index:0; pointer-events:none; display:none;
+  background:linear-gradient(90deg, transparent, rgba(253,87,43,.35) 8%, rgba(253,87,43,.35) 92%, transparent);
+  transform:translateZ(-40px);
+}
+.p3d-rail i{
+  position:absolute; top:-3px; width:8px; height:8px; margin-inline-start:-4px; border-radius:50%;
+  background:#ffd2bd; box-shadow:0 0 12px 4px #fd572b; inset-inline-start:0; opacity:0;
+  animation:p3dRail 8s linear infinite;
+}
+@keyframes p3dRail{
+  0%{inset-inline-start:0; opacity:0;}
+  2%{opacity:1;}
+  30%{inset-inline-start:100%; opacity:1;}
+  33%,100%{inset-inline-start:100%; opacity:0;}
+}
+@media (min-width:1000px){ .p3d-rail{display:block;} }
+
+/* closing sentence + popup icon */
+#process .process-closing{
+  rotate:1 0 0 calc(var(--my,0) * -4deg); transition:opacity .95s var(--ease), transform .95s var(--ease), rotate .35s ease;
+  text-shadow:0 1px 0 rgba(253,87,43,.35), 0 2px 0 rgba(253,87,43,.2), 0 12px 22px rgba(0,0,0,.35);
+}
+#process .process-closing::before{animation:p3dBar 3.6s ease-in-out infinite; transform-origin:50% 50%;}
+@keyframes p3dBar{0%,100%{width:64px; box-shadow:0 0 0 rgba(253,87,43,0);} 50%{width:112px; box-shadow:0 0 16px rgba(253,87,43,.7);}}
+.process-modal-icon{animation:p3dModalIcon .8s cubic-bezier(.2,.9,.3,1.2) both;}
+@keyframes p3dModalIcon{from{transform:perspective(500px) rotateY(-200deg) scale(.4); opacity:0;} to{transform:perspective(500px) rotateY(0) scale(1); opacity:1;}}
+
+/* small screens */
+@media (max-width:520px){
+  #process .process-circle{--r:72px;}
+  #process .process-circle-ring{animation:none !important;}
+  #process .process-circle:hover .process-circle-ring{transform:none;}
+}
+.p3d-paused .p3d-float, .p3d-paused .p3d-glow, .p3d-paused .p3d-orbit b, .p3d-paused .p3d-shadow,
+.p3d-paused .process-circle-ring::after, .p3d-paused .p3d-rail i{animation-play-state:paused;}
+
+@media (prefers-reduced-motion: reduce){
+  .p3d-float, .p3d-glow, .p3d-orbit b, .p3d-shadow, .p3d-rail i, #process .process-circle-ring::after,
+  #process .process-closing::before, .process-modal-icon{animation:none !important;}
+  .p3d-float{transform:rotateY(-10deg) rotateX(3deg);}
+  #process .process-circle, #process .process-circle.in{transition:opacity .4s ease;}
+  #process .section-head > *{transform:none !important;}
+}
+
+
+/* remove the solid orange coin-thickness layers behind the rings */
+.p3d-layer{display:none !important;}
