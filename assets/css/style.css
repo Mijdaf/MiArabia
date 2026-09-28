@@ -5005,3 +5005,16 @@ html body .eyebrow + h3{
     0 12px 20px rgba(0,0,0,.30);
 }
 
+
+
+/* STATS — desktop only: pull the outer (left / right) cards a little toward the centre */
+@media (min-width:721px){
+  .stats-grid{ padding-inline:clamp(40px,7vw,140px); }
+}
+
+
+/* eyebrow: phone only — lower the word a little (desktop keeps its own padding) */
+@media (max-width:720px){
+  html body .eyebrow{ padding-block:11px 8px !important; }
+  html body .eyebrow::before{ margin-top:1px; }
+}
