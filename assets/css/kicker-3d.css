@@ -1,0 +1,138 @@
+/* ===== 3D capability tree (مقاولات عامة) ===== */
+@property --lift{syntax:'<length>'; inherits:false; initial-value:0px;}
+@property --depth{syntax:'<length>'; inherits:false; initial-value:3px;}
+
+.k3d{perspective:1100px; overflow:visible;}
+.k3d-stage{
+  position:relative; display:flex; flex-direction:column; align-items:center;
+  gap:90px; width:100%; transform-style:preserve-3d; will-change:transform;
+}
+.k3d-stage > .spec-pill, .k3d-stage > .about-kicker-sub{position:relative;}
+.k3d-stage > .about-kicker-sub{transform-style:preserve-3d;}
+.k3d .kicker-lines[data-kicker-lines]{display:none;}
+
+/* connection lines sit behind every pill slab */
+.k3d-lines{position:absolute; inset:0; width:100%; height:100%; overflow:visible; pointer-events:none; transform:translateZ(-14px);}
+.k3d-line{
+  fill:none; stroke:rgba(253,87,43,.6); stroke-width:2; stroke-linecap:round;
+  stroke-dasharray:1; stroke-dashoffset:1;
+  transition:stroke-dashoffset 1s ease-out calc(.15s + var(--i,0) * .12s);
+  filter:drop-shadow(0 0 4px rgba(253,87,43,.5));
+}
+.k3d-in .k3d-line{stroke-dashoffset:0;}
+.k3d-pulse{fill:#ffc2a6; filter:drop-shadow(0 0 6px #fd572b) drop-shadow(0 0 12px #fd572b);}
+.k3d:not(.k3d-in) .k3d-pulse{display:none;}
+
+/* core: glowing orb + two gyroscope rings */
+.k3d-core{position:absolute; width:0; height:0; transform:translateZ(24px); transform-style:preserve-3d; pointer-events:none; scale:0;}
+.k3d-in .k3d-core{scale:1; transition:scale .7s cubic-bezier(.34,1.56,.64,1);}
+.k3d-orb{
+  position:absolute; left:-7px; top:-7px; width:14px; height:14px; border-radius:50%;
+  background:radial-gradient(circle at 32% 30%, #ffd9c8, #fd572b 45%, #a5240a);
+  box-shadow:0 0 18px 4px rgba(253,87,43,.65);
+}
+.k3d-ring{
+  position:absolute; left:-24px; top:-24px; width:48px; height:48px; border-radius:50%;
+  border:1.5px solid rgba(253,87,43,.8); transform-style:preserve-3d;
+  animation:k3dSpinY 5.5s linear infinite;
+}
+.k3d-ring.r2{left:-18px; top:-18px; width:36px; height:36px; border-color:rgba(255,160,120,.65); animation:k3dSpinX 4.2s linear infinite;}
+.k3d-ring::after{
+  content:""; position:absolute; left:50%; top:-3.5px; width:6px; height:6px; margin-left:-3px;
+  border-radius:50%; background:#fff; box-shadow:0 0 8px 2px #fd572b;
+}
+@keyframes k3dSpinY{to{transform:rotateY(360deg);}}
+@keyframes k3dSpinX{from{transform:rotateX(0) rotateZ(35deg);} to{transform:rotateX(360deg) rotateZ(35deg);}}
+
+/* floating depth dust */
+.k3d-dust{
+  position:absolute; border-radius:50%; background:#ff8a5c; box-shadow:0 0 8px rgba(253,87,43,.8);
+  pointer-events:none; animation:k3dDrift 8s ease-in-out infinite alternate;
+}
+@keyframes k3dDrift{from{translate:0 0;} to{translate:10px -22px;}}
+
+/* anchor: extruded 3D title that pops toward the viewer */
+.k3d .spec-pill[data-anchor]{
+  transform-style:preserve-3d;
+  animation:k3dAnchor 5s ease-in-out infinite;
+}
+.k3d .spec-pill[data-anchor]::before{display:none;}
+.k3d .spec-pill[data-anchor] .spec-pill-label{
+  text-shadow:0 1px 0 #d9450f, 0 2px 0 #c23c0b, 0 3px 0 #a93309, 0 4px 0 #8f2b07, 0 5px 0 #762306, 0 14px 18px rgba(0,0,0,.45);
+}
+@keyframes k3dAnchor{
+  0%,11%,17%,100%{transform:translate3d(0,-16px,46px);}
+  5%{transform:translate3d(0,-46px,96px);}
+  14%{transform:translate3d(0,-26px,66px);}
+}
+
+/* pills: real slabs with thickness */
+.k3d .about-kicker-sub .spec-pill{
+  overflow:visible; transform-style:preserve-3d; animation:none; box-shadow:none;
+  --depth:3px;
+  transform:translate3d(0, var(--bob,0px), var(--lift,0px));
+  transition:--lift .9s cubic-bezier(.16,.84,.3,1), --depth .35s ease, opacity .6s ease, color .3s ease;
+}
+.k3d .about-kicker-sub .spec-pill.is-active::after{border-radius:inherit; transform:translateZ(1px);}
+.k3d-slab{
+  position:absolute; inset:0; border-radius:999px; pointer-events:none;
+  transform:translateZ(calc(var(--n) * var(--depth)));
+  background:hsl(14 92% calc(56% + var(--n) * 4%));
+}
+.k3d-slab[style*="-4"]{box-shadow:0 26px 34px -10px rgba(253,87,43,.55);}
+.k3d .spec-pill-icon{transform:translateZ(12px); box-shadow:0 3px 8px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.35);}
+.k3d .about-kicker-sub .spec-pill-label{transform:translateZ(8px); text-shadow:0 2px 4px rgba(120,30,0,.35);}
+.k3d .about-kicker-sub .spec-pill:hover{--lift:18px; --depth:5px;}
+.k3d .about-kicker-sub .spec-pill:active{--lift:-6px; --depth:1.5px; transform:translate3d(0, var(--bob,0px), var(--lift));}
+
+/* one orchestrated entrance: pills fly in from depth */
+.k3d:not(.k3d-in) .about-kicker-sub .spec-pill{opacity:0; --lift:-260px;}
+.k3d-in .about-kicker-sub .spec-pill{opacity:1; --lift:0px; transition-delay:calc(.55s + var(--i,0) * .14s);}
+.k3d-in.k3d-done .about-kicker-sub .spec-pill{transition-delay:0s;}
+.k3d-in.k3d-done .about-kicker-sub .spec-pill:hover{--lift:18px;}
+
+@media (max-width:900px){
+  .k3d{perspective:800px;}
+  .k3d-stage{gap:64px;}
+  .k3d .about-kicker-sub .spec-pill{--depth:2px;}
+}
+@media (prefers-reduced-motion: reduce){
+  .k3d-ring, .k3d-dust, .k3d .spec-pill[data-anchor]{animation:none;}
+  .k3d .spec-pill[data-anchor]{transform:translate3d(0,-16px,46px);}
+  .k3d-pulse{display:none;}
+  .k3d-line, .k3d-core, .k3d .about-kicker-sub .spec-pill{transition:none;}
+}
+
+/* breathing room between the intro paragraph and the tree (title pops upward on its bounce) */
+.about .about-kicker.k3d{margin-top:56px;}
+
+@media (max-width:900px){
+  .about .about-kicker.k3d{margin-top:84px;}
+
+  /* tidy 2x2 grid: equal cells, equal heights */
+  .about .about-kicker.k3d .about-kicker-sub{
+    display:grid; grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:16px 12px; width:100%; max-width:560px; margin-inline:auto; align-items:stretch;
+  }
+  .about .about-kicker.k3d .about-kicker-sub .spec-pill{
+    flex:none; width:auto; min-width:0; min-height:64px;
+    padding-block:8px; padding-inline:8px 14px; gap:8px;
+    align-items:center; justify-content:flex-start;
+  }
+  /* icon: fixed size, centred on the text block; text fills the rest and centres */
+  .about .about-kicker.k3d .about-kicker-sub .spec-pill-icon{
+    width:32px; height:32px; flex:0 0 32px; margin:0; align-self:center;
+    transform:translateZ(5px);
+  }
+  .about .about-kicker.k3d .about-kicker-sub .spec-pill-icon svg{width:16px; height:16px; display:block;}
+  .about .about-kicker.k3d .about-kicker-sub .spec-pill-label{
+    flex:1 1 auto; min-width:0; text-align:center; white-space:normal;
+    font-size:15.5px; line-height:1.35; text-wrap:balance; transform:translateZ(3px);
+  }
+}
+@media (max-width:360px){
+  .about .about-kicker.k3d .about-kicker-sub .spec-pill{padding-inline:6px 10px; gap:6px; min-height:60px;}
+  .about .about-kicker.k3d .about-kicker-sub .spec-pill-icon{width:28px; height:28px; flex-basis:28px;}
+  .about .about-kicker.k3d .about-kicker-sub .spec-pill-icon svg{width:14px; height:14px;}
+  .about .about-kicker.k3d .about-kicker-sub .spec-pill-label{font-size:14px;}
+}
