@@ -127,12 +127,12 @@
   .about .about-kicker.k3d .about-kicker-sub .spec-pill-icon svg{width:16px; height:16px; display:block;}
   .about .about-kicker.k3d .about-kicker-sub .spec-pill-label{
     flex:1 1 auto; min-width:0; text-align:center; white-space:normal;
-    font-size:15.5px; line-height:1.35; text-wrap:balance; transform:translateZ(3px);
+    font-size:14.26px; line-height:1.35; text-wrap:balance; transform:translateZ(3px);
   }
 }
 @media (max-width:360px){
   .about .about-kicker.k3d .about-kicker-sub .spec-pill{padding-inline:6px 10px; gap:6px; min-height:60px;}
   .about .about-kicker.k3d .about-kicker-sub .spec-pill-icon{width:28px; height:28px; flex-basis:28px;}
   .about .about-kicker.k3d .about-kicker-sub .spec-pill-icon svg{width:14px; height:14px;}
-  .about .about-kicker.k3d .about-kicker-sub .spec-pill-label{font-size:14px;}
+  .about .about-kicker.k3d .about-kicker-sub .spec-pill-label{font-size:12.88px;}
 }

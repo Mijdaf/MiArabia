@@ -169,3 +169,6 @@ html[lang="en"] #process .section-head > *{transform-origin:0% 50%;}
 
 /* remove the solid orange coin-thickness layers behind the rings */
 .p3d-layer{display:none !important;}
+
+/* remove the faint orange halo behind the rings */
+.p3d-glow{display:none !important;}
