@@ -5142,3 +5142,24 @@ html[data-theme="dark"] .cv-card{
   .cv-title{ font-size:22px; }
   .cv-text{ font-size:15.5px; }
 }
+
+
+/* PHONE ONLY — eyebrow: word sits right next to the diamond */
+@media (max-width:720px){
+  html[dir="rtl"] body .eyebrow{
+    letter-spacing:0;
+    gap:4px;
+    padding-inline:12px !important;
+  }
+  html[dir="rtl"] body .eyebrow::before{ margin-inline:0; }
+}
+
+
+/* WHO WE ARE (#why) — centred heading block (PHONE ONLY) */
+@media (max-width:720px){
+  .why .section-head{ text-align:center; }
+  .why .section-head .eyebrow{ display:flex !important; margin-inline:auto !important; align-self:center; }
+  .why .section-head h2{ margin-inline:auto; text-wrap:balance; }
+  .why .section-head h2::after{ margin-inline:auto; transform-origin:center; }
+  .why .section-head p{ margin-inline:auto; text-wrap:pretty; }
+}
