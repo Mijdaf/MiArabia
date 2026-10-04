@@ -75,30 +75,41 @@ whenIdle(function () {
 
   /* ---------- palette ---------- */
   const STEEL = new THREE.Color(0x8b93ab);
-  const ORANGE = new THREE.Color(0xfd572b);
+  const ORANGE = new THREE.Color(0xfd572b); // accent: orange in dark theme, blue in light theme
 
   const steelMat = new THREE.MeshLambertMaterial({ color: STEEL, transparent: true, opacity: 0.55 });
   const pipeMat = new THREE.MeshLambertMaterial({ color: STEEL.clone().lerp(new THREE.Color(0xffffff), 0.15), transparent: true, opacity: 0.4 });
   const jointMat = new THREE.MeshBasicMaterial({ color: ORANGE, transparent: true, opacity: 0.95 });
 
   /* ---------- cheap bloom substitute for the joint glow ---------- */
-  function makeGlowTexture() {
+  function makeGlowTexture(stops) {
     const size = 128;
     const c = document.createElement('canvas');
     c.width = c.height = size;
     const ctx = c.getContext('2d');
     const g = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
-    g.addColorStop(0, 'rgba(255,180,120,0.95)');
-    g.addColorStop(0.35, 'rgba(253,87,43,0.4)');
-    g.addColorStop(1, 'rgba(253,87,43,0)');
+    g.addColorStop(0, stops[0]);
+    g.addColorStop(0.35, stops[1]);
+    g.addColorStop(1, stops[2]);
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, size, size);
     const tex = new THREE.CanvasTexture(c);
     tex.needsUpdate = true;
     return tex;
   }
-  const glowTex = makeGlowTexture();
+  const glowTexOrange = makeGlowTexture(['rgba(255,180,120,0.95)', 'rgba(253,87,43,0.4)', 'rgba(253,87,43,0)']);
+  const glowTexBlue = makeGlowTexture(['rgba(150,150,255,0.95)', 'rgba(0,0,170,0.4)', 'rgba(0,0,170,0)']);
+  let glowTex = glowTexBlue;
   const glowSprites = [];
+  const _rackRoot = document.documentElement;
+  const _applyRackTheme = () => {
+    const dark = _rackRoot.getAttribute('data-theme') === 'dark';
+    ORANGE.set(dark ? 0xfd572b : 0x0000aa);
+    glowTex = dark ? glowTexOrange : glowTexBlue;
+    jointMat.color.copy(ORANGE);
+    glowSprites.forEach((sp) => { sp.material.map = glowTex; sp.material.color.copy(ORANGE); sp.material.needsUpdate = true; });
+  };
+  new MutationObserver(_applyRackTheme).observe(_rackRoot, { attributes: true, attributeFilter: ['data-theme'] });
 
   /* ---------- structure builder ---------- */
   function rod(p1, p2, radius, material, segments) {
@@ -149,6 +160,7 @@ whenIdle(function () {
       sprite.position.copy(pos);
       rig.add(sprite);
       glowSprites.push(sprite);
+      _applyRackTheme();
 
       jointDots.push({ mesh: dot, sprite, basePos: pos.clone(), phase: Math.random() * Math.PI * 2 });
     });

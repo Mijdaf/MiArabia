@@ -27,12 +27,23 @@
   if (!ctx) return;
 
   /* ---------- palette: cools from white-hot core → brand orange → dark ember ---------- */
-  const STOPS = [
+  const STOPS_ORANGE = [
     { t: 0.00, r: 255, g: 250, b: 235 }, // white-hot
     { t: 0.35, r: 253, g: 165, b: 87 },  // hot orange
     { t: 0.70, r: 253, g: 87,  b: 43 },  // brand orange (#fd572b)
     { t: 1.00, r: 90,  g: 24,  b: 10 },  // dying ember
   ];
+  const STOPS_BLUE = [                    // light theme: same cooling curve in blue
+    { t: 0.00, r: 240, g: 240, b: 255 }, // white-hot
+    { t: 0.35, r: 110, g: 110, b: 255 }, // hot light-blue
+    { t: 0.70, r: 0,   g: 0,   b: 170 }, // brand blue (#0000aa)
+    { t: 1.00, r: 0,   g: 0,   b: 70 },  // dying ember
+  ];
+  let STOPS = STOPS_BLUE;
+  const _sparksRoot = document.documentElement;
+  const _applySparksTheme = () => { STOPS = _sparksRoot.getAttribute('data-theme') === 'dark' ? STOPS_ORANGE : STOPS_BLUE; };
+  _applySparksTheme();
+  new MutationObserver(_applySparksTheme).observe(_sparksRoot, { attributes: true, attributeFilter: ['data-theme'] });
   function colorAt(t) {
     t = t < 0 ? 0 : t > 1 ? 1 : t;
     let a = STOPS[0], b = STOPS[STOPS.length - 1];

@@ -14,13 +14,13 @@
 /* connection lines sit behind every pill slab */
 .k3d-lines{position:absolute; inset:0; width:100%; height:100%; overflow:visible; pointer-events:none; transform:translateZ(-14px);}
 .k3d-line{
-  fill:none; stroke:rgba(253,87,43,.6); stroke-width:2; stroke-linecap:round;
+  fill:none; stroke:rgba(var(--orange-rgb),.6); stroke-width:2; stroke-linecap:round;
   stroke-dasharray:1; stroke-dashoffset:1;
   transition:stroke-dashoffset 1s ease-out calc(.15s + var(--i,0) * .12s);
-  filter:drop-shadow(0 0 4px rgba(253,87,43,.5));
+  filter:drop-shadow(0 0 4px rgba(var(--orange-rgb),.5));
 }
 .k3d-in .k3d-line{stroke-dashoffset:0;}
-.k3d-pulse{fill:#ffc2a6; filter:drop-shadow(0 0 6px #fd572b) drop-shadow(0 0 12px #fd572b);}
+.k3d-pulse{fill:#ffc2a6; filter:drop-shadow(0 0 6px var(--orange)) drop-shadow(0 0 12px var(--orange));}
 .k3d:not(.k3d-in) .k3d-pulse{display:none;}
 
 /* core: glowing orb + two gyroscope rings */
@@ -28,25 +28,25 @@
 .k3d-in .k3d-core{scale:1; transition:scale .7s cubic-bezier(.34,1.56,.64,1);}
 .k3d-orb{
   position:absolute; left:-7px; top:-7px; width:14px; height:14px; border-radius:50%;
-  background:radial-gradient(circle at 32% 30%, #ffd9c8, #fd572b 45%, #a5240a);
-  box-shadow:0 0 18px 4px rgba(253,87,43,.65);
+  background:radial-gradient(circle at 32% 30%, #ffd9c8, var(--orange) 45%, #a5240a);
+  box-shadow:0 0 18px 4px rgba(var(--orange-rgb),.65);
 }
 .k3d-ring{
   position:absolute; left:-24px; top:-24px; width:48px; height:48px; border-radius:50%;
-  border:1.5px solid rgba(253,87,43,.8); transform-style:preserve-3d;
+  border:1.5px solid rgba(var(--orange-rgb),.8); transform-style:preserve-3d;
   animation:k3dSpinY 5.5s linear infinite;
 }
-.k3d-ring.r2{left:-18px; top:-18px; width:36px; height:36px; border-color:rgba(255,160,120,.65); animation:k3dSpinX 4.2s linear infinite;}
+.k3d-ring.r2{left:-18px; top:-18px; width:36px; height:36px; border-color:rgba(var(--accent-soft-rgb),.65); animation:k3dSpinX 4.2s linear infinite;}
 .k3d-ring::after{
   content:""; position:absolute; left:50%; top:-3.5px; width:6px; height:6px; margin-left:-3px;
-  border-radius:50%; background:#fff; box-shadow:0 0 8px 2px #fd572b;
+  border-radius:50%; background:#fff; box-shadow:0 0 8px 2px var(--orange);
 }
 @keyframes k3dSpinY{to{transform:rotateY(360deg);}}
 @keyframes k3dSpinX{from{transform:rotateX(0) rotateZ(35deg);} to{transform:rotateX(360deg) rotateZ(35deg);}}
 
 /* floating depth dust */
 .k3d-dust{
-  position:absolute; border-radius:50%; background:#ff8a5c; box-shadow:0 0 8px rgba(253,87,43,.8);
+  position:absolute; border-radius:50%; background:var(--accent-glow); box-shadow:0 0 8px rgba(var(--orange-rgb),.8);
   pointer-events:none; animation:k3dDrift 8s ease-in-out infinite alternate;
 }
 @keyframes k3dDrift{from{translate:0 0;} to{translate:10px -22px;}}
@@ -77,9 +77,9 @@
 .k3d-slab{
   position:absolute; inset:0; border-radius:999px; pointer-events:none;
   transform:translateZ(calc(var(--n) * var(--depth)));
-  background:hsl(14 92% calc(56% + var(--n) * 4%));
+  background:hsl(var(--accent-hue) var(--accent-sat-a) calc(56% + var(--n) * 4%));
 }
-.k3d-slab[style*="-4"]{box-shadow:0 26px 34px -10px rgba(253,87,43,.55);}
+.k3d-slab[style*="-4"]{box-shadow:0 26px 34px -10px rgba(var(--orange-rgb),.55);}
 .k3d .spec-pill-icon{transform:translateZ(12px); box-shadow:0 3px 8px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.35);}
 .k3d .about-kicker-sub .spec-pill-label{transform:translateZ(8px); text-shadow:0 2px 4px rgba(120,30,0,.35);}
 .k3d .about-kicker-sub .spec-pill:hover{--lift:18px; --depth:5px;}

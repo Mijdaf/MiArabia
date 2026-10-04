@@ -21,8 +21,16 @@
   if (!ctx) return;
 
   /* brand palette: warm orange, steel blue, soft white */
+  const ACCENT = { r: 253, g: 87, b: 43 }; // orange in dark theme, blue in light theme (mutated live)
+  const _glowRoot = document.documentElement;
+  const _applyGlowTheme = () => {
+    const dark = _glowRoot.getAttribute('data-theme') === 'dark';
+    ACCENT.r = dark ? 253 : 0; ACCENT.g = dark ? 87 : 0; ACCENT.b = dark ? 43 : 170;
+  };
+  _applyGlowTheme();
+  new MutationObserver(_applyGlowTheme).observe(_glowRoot, { attributes: true, attributeFilter: ['data-theme'] });
   const COLORS = [
-    { r: 253, g: 87,  b: 43  }, // orange
+    ACCENT,                              // accent (orange / blue)
     { r: 22,  g: 77,  b: 204 }, // steel
     { r: 255, g: 255, b: 255 }, // white
   ];

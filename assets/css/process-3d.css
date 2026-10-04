@@ -57,11 +57,11 @@ html[lang="en"] #process .section-head > *{transform-origin:0% 50%;}
 .p3d-layer{
   position:absolute; inset:0; border-radius:50%; pointer-events:none;
   transform:translateZ(calc(var(--n) * -2px));
-  background:hsl(14 88% calc(47% - var(--n) * 3.2%));
+  background:hsl(var(--accent-hue) var(--accent-sat-b) calc(47% - var(--n) * 3.2%));
 }
 .p3d-glow{
   position:absolute; inset:-26px; border-radius:50%; pointer-events:none;
-  background:radial-gradient(circle, rgba(253,87,43,.55), transparent 66%);
+  background:radial-gradient(circle, rgba(var(--orange-rgb),.55), transparent 66%);
   transform:translateZ(-22px); opacity:0;
   animation:p3dGlow 8s ease-in-out infinite; animation-delay:calc(var(--i) * .6s);
 }
@@ -84,13 +84,13 @@ html[lang="en"] #process .section-head > *{transform-origin:0% 50%;}
 /* orbiting satellite on a tilted plane */
 .p3d-orbit{
   position:absolute; inset:-14px; border-radius:50%; pointer-events:none;
-  border:1px dashed rgba(253,87,43,.38);
+  border:1px dashed rgba(var(--orange-rgb),.38);
   transform:rotateX(74deg) rotateY(-14deg); transform-style:preserve-3d;
 }
 .p3d-orbit b{position:absolute; inset:0; animation:p3dSpin 4.6s linear infinite; animation-delay:calc(var(--i) * -.9s);}
 .p3d-orbit b::after{
   content:""; position:absolute; left:50%; top:-3.5px; width:7px; height:7px; margin-left:-3.5px; border-radius:50%;
-  background:#ffd2bd; box-shadow:0 0 9px 2px #fd572b;
+  background:var(--accent-tint-2); box-shadow:0 0 9px 2px var(--orange);
 }
 @keyframes p3dSpin{to{transform:rotate(360deg);}}
 
@@ -103,7 +103,7 @@ html[lang="en"] #process .section-head > *{transform-origin:0% 50%;}
 .p3d-shadow{
   position:absolute; left:50%; top:calc(var(--r) + 2px); width:calc(var(--r) * .8); height:16px; margin-left:calc(var(--r) * -.4);
   border-radius:50%; pointer-events:none;
-  background:radial-gradient(ellipse, rgba(253,87,43,.42), transparent 70%);
+  background:radial-gradient(ellipse, rgba(var(--orange-rgb),.42), transparent 70%);
   animation:p3dShadow 6.4s ease-in-out infinite; animation-delay:calc(var(--i) * -1.3s);
 }
 @keyframes p3dShadow{0%,100%{transform:scale(1); opacity:.9;} 50%{transform:scale(.72); opacity:.5;}}
@@ -119,12 +119,12 @@ html[lang="en"] #process .section-head > *{transform-origin:0% 50%;}
 /* flow rail behind the coins (wide screens only) */
 .p3d-rail{
   position:absolute; height:2px; z-index:0; pointer-events:none; display:none;
-  background:linear-gradient(90deg, transparent, rgba(253,87,43,.35) 8%, rgba(253,87,43,.35) 92%, transparent);
+  background:linear-gradient(90deg, transparent, rgba(var(--orange-rgb),.35) 8%, rgba(var(--orange-rgb),.35) 92%, transparent);
   transform:translateZ(-40px);
 }
 .p3d-rail i{
   position:absolute; top:-3px; width:8px; height:8px; margin-inline-start:-4px; border-radius:50%;
-  background:#ffd2bd; box-shadow:0 0 12px 4px #fd572b; inset-inline-start:0; opacity:0;
+  background:var(--accent-tint-2); box-shadow:0 0 12px 4px var(--orange); inset-inline-start:0; opacity:0;
   animation:p3dRail 8s linear infinite;
 }
 @keyframes p3dRail{
@@ -138,10 +138,10 @@ html[lang="en"] #process .section-head > *{transform-origin:0% 50%;}
 /* closing sentence + popup icon */
 #process .process-closing{
   rotate:1 0 0 calc(var(--my,0) * -4deg); transition:opacity .95s var(--ease), transform .95s var(--ease), rotate .35s ease;
-  text-shadow:0 1px 0 rgba(253,87,43,.35), 0 2px 0 rgba(253,87,43,.2), 0 12px 22px rgba(0,0,0,.35);
+  text-shadow:0 1px 0 rgba(var(--orange-rgb),.35), 0 2px 0 rgba(var(--orange-rgb),.2), 0 12px 22px rgba(0,0,0,.35);
 }
 #process .process-closing::before{animation:p3dBar 3.6s ease-in-out infinite; transform-origin:50% 50%;}
-@keyframes p3dBar{0%,100%{width:64px; box-shadow:0 0 0 rgba(253,87,43,0);} 50%{width:112px; box-shadow:0 0 16px rgba(253,87,43,.7);}}
+@keyframes p3dBar{0%,100%{width:64px; box-shadow:0 0 0 rgba(var(--orange-rgb),0);} 50%{width:112px; box-shadow:0 0 16px rgba(var(--orange-rgb),.7);}}
 .process-modal-icon{animation:p3dModalIcon .8s cubic-bezier(.2,.9,.3,1.2) both;}
 @keyframes p3dModalIcon{from{transform:perspective(500px) rotateY(-200deg) scale(.4); opacity:0;} to{transform:perspective(500px) rotateY(0) scale(1); opacity:1;}}
 

@@ -90,7 +90,15 @@ whenIdle(function () {
   /* ---------- palette ---------- */
   const BLUE = new THREE.Color(0x2f63e0);
   const BLUE_LIGHT = new THREE.Color(0x5a8bff);
-  const ORANGE = new THREE.Color(0xfd572b);
+  const ORANGE = new THREE.Color(0xfd572b); // accent: orange in dark theme, blue in light theme
+  const ACCENT_MATS = [];
+  const _bgRoot = document.documentElement;
+  const _applyAccent = () => {
+    ORANGE.set(_bgRoot.getAttribute('data-theme') === 'dark' ? 0xfd572b : 0x0000aa);
+    ACCENT_MATS.forEach((m) => m.color.copy(ORANGE));
+  };
+  new MutationObserver(_applyAccent).observe(_bgRoot, { attributes: true, attributeFilter: ['data-theme'] });
+  _applyAccent();
 
   /* ---------- glow sprite texture (cheap bloom substitute) ---------- */
   function makeGlowTexture() {
@@ -134,6 +142,7 @@ whenIdle(function () {
       transparent: true,
       opacity: 0.92
     });
+    if (isAccent) ACCENT_MATS.push(mat);
     const geo = Math.random() < 0.5 ? geoA : geoB;
     const mesh = new THREE.Mesh(geo, mat);
     mesh.scale.setScalar(scale);
@@ -155,6 +164,7 @@ whenIdle(function () {
       depthWrite: false,
       blending: THREE.AdditiveBlending
     });
+    if (isAccent) ACCENT_MATS.push(glowMat);
     const glow = new THREE.Sprite(glowMat);
     const glowScale = scale * (isAccent ? 7 : 5.2);
     glow.scale.set(glowScale, glowScale, 1);
