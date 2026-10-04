@@ -3871,7 +3871,10 @@
      behind the real footer content — purely ambient, never interactive. */
   .footer-lottie{
     position:absolute;
-    inset-inline-end:-40px;
+    /* physical right in BOTH directions: the left corner is covered by the floating
+       "request a quote" / "inquiries" buttons */
+    right:-40px;
+    left:auto;
     bottom:-30px;
     width:320px;
     max-width:42vw;
@@ -4145,6 +4148,7 @@
     pointer-events:none;
     transform:translate(-50%, -50%);
     opacity:0;
+    will-change:translate, transform;
   }
   .cursor-dot{
     width:22px; height:22px;
@@ -5216,7 +5220,16 @@ html:not([data-theme="dark"]) .support-card::before{
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230000aa' stroke-width='0.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z'/%3E%3C/svg%3E");
 }
 html:not([data-theme="dark"]) .cursor-dot{
-  filter:hue-rotate(207deg) saturate(1.1) drop-shadow(0 2px 6px rgba(10,13,31,0.35));
+  filter:url(#brandBlue) drop-shadow(0 2px 6px rgba(10,13,31,0.35));
+}
+
+/* Light theme: the welder mascot was too dark (0000aa suit + navy outlines).
+   Same hue, lifted to a lighter tint so the figure reads clearly. */
+html:not([data-theme="dark"]) .qa-welder{
+  --orange:#4d5cff;
+  --accent-lo:#3a49e8;
+  --accent-dk1:#2a35c4;
+  --accent-warm:#9aa4ff;
 }
 
 

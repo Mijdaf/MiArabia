@@ -81,6 +81,13 @@
     core.style.top = ay + 'px';
     geo = pills.map(function (p) { var q = posIn(p); return { x: q.x + p.offsetWidth / 2, y: q.y }; });
   }
+  // live position of a pill: layout position + the in-flight shuffle (FLIP) `translate`
+  function livePos(p) {
+    var q = posIn(p), tr = 0, ty2 = 0;
+    var v = getComputedStyle(p).translate;
+    if (v && v !== 'none') { var m = v.split(' '); tr = parseFloat(m[0]) || 0; ty2 = parseFloat(m[1]) || 0; }
+    return { x: q.x + tr + p.offsetWidth / 2, y: q.y + ty2 };
+  }
 
   var rx = 0, ry = 0, tx = 0, ty = 0, t0 = performance.now(), raf = 0;
   function frame(now) {
@@ -90,8 +97,10 @@
     rx += (tx * k + Math.sin(t * 0.55) * 2.2 * sway - rx) * 0.08;
     ry += (ty * k + Math.cos(t * 0.42) * 3.6 * sway - ry) * 0.08;
     stage.style.transform = 'rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg)';
+    var a0 = posIn(anchor); ax = a0.x + anchor.offsetWidth / 2; ay = a0.y + anchor.offsetHeight + 6;
+    core.style.left = ax + 'px'; core.style.top = ay + 'px';
     for (var i = 0; i < pills.length; i++) {
-      var g = geo[i]; if (!g) continue;
+      var g = livePos(pills[i]);
       var bob = reduce ? 0 : Math.sin(t * 1.3 + i * 1.9) * 5;
       pills[i].style.setProperty('--bob', bob.toFixed(2) + 'px');
       var y2 = g.y + bob + 4, dy = y2 - ay;

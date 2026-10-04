@@ -15,20 +15,29 @@
     let ringX = mouseX, ringY = mouseY;
     let started = false;
 
+    // Position via the compositor-only `translate` property (no layout / repaint per move,
+    // so the cursor stays smooth even while the 3D / canvas backgrounds are running).
+    // Falls back to left/top on browsers that don't support it.
+    const useTranslate = !!(window.CSS && CSS.supports && CSS.supports('translate', '1px 1px'));
+    function place(el, x, y){
+      if(useTranslate){ el.style.translate = x + 'px ' + y + 'px'; }
+      else { el.style.left = x + 'px'; el.style.top = y + 'px'; }
+    }
+    place(dot, mouseX, mouseY);
+    place(ring, ringX, ringY);
+
     window.addEventListener('pointermove', (e) => {
       if(e.pointerType !== 'mouse') return;
       mouseX = e.clientX; mouseY = e.clientY;
-      dot.style.left = mouseX + 'px';
-      dot.style.top = mouseY + 'px';
+      place(dot, mouseX, mouseY);
       if(!started){ ringX = mouseX; ringY = mouseY; started = true; }
     }, { passive:true });
 
     // Ring trails the dot with a light spring/lag for a smoother, premium feel
     function tick(){
-      ringX += (mouseX - ringX) * 0.18;
-      ringY += (mouseY - ringY) * 0.18;
-      ring.style.left = ringX + 'px';
-      ring.style.top = ringY + 'px';
+      ringX += (mouseX - ringX) * 0.28;
+      ringY += (mouseY - ringY) * 0.28;
+      place(ring, ringX, ringY);
       requestAnimationFrame(tick);
     }
     requestAnimationFrame(tick);
@@ -1954,9 +1963,9 @@
   const reorder = () => {
     if(document.hidden) return;
 
-    // FIRST: record current positions
+    // FIRST: record current layout positions (offset-based, so 3D tilt/bob transforms don't distort them)
     const first = new Map();
-    pills.forEach(pill => first.set(pill, pill.getBoundingClientRect()));
+    pills.forEach(pill => first.set(pill, { left: pill.offsetLeft, top: pill.offsetTop }));
 
     // Pick a new order guaranteed to differ from the current one
     let newOrder = shuffle(pills);
@@ -1970,23 +1979,23 @@
     newOrder.forEach(pill => container.appendChild(pill));
     pills = newOrder;
 
-    // INVERT + PLAY: animate each pill from its old spot to its new one
+    // INVERT + PLAY via the individual `translate` property, so it composes with
+    // (instead of overwriting) the 3D `transform` used by kicker-3d.js
     newOrder.forEach(pill => {
-      const last = pill.getBoundingClientRect();
       const firstRect = first.get(pill);
-      const dx = firstRect.left - last.left;
-      const dy = firstRect.top - last.top;
+      const dx = firstRect.left - pill.offsetLeft;
+      const dy = firstRect.top - pill.offsetTop;
       if(!dx && !dy) return;
 
       window.clearTimeout(pill._flipTimer);
       pill.style.transition = 'none';
-      pill.style.transform = `translate(${dx}px, ${dy}px)`;
+      pill.style.translate = `${dx}px ${dy}px`;
       void pill.offsetWidth; // force reflow
-      pill.style.transition = 'transform .6s cubic-bezier(.16,.84,.44,1)';
-      pill.style.transform = 'translate(0, 0)';
+      pill.style.transition = 'translate .6s cubic-bezier(.16,.84,.44,1)';
+      pill.style.translate = '0px 0px';
       pill._flipTimer = window.setTimeout(() => {
         pill.style.transition = '';
-        pill.style.transform = '';
+        pill.style.translate = '';
       }, 620);
     });
 

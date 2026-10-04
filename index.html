@@ -25,11 +25,13 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=77">
+<link rel="stylesheet" href="assets/css/style.css?v=80">
 <link rel="stylesheet" href="assets/css/kicker-3d.css?v=7">
 <link rel="stylesheet" href="assets/css/process-3d.css?v=6">
 </head>
 <body>
+<!-- colour filter: re-tints the (orange) cursor mark to brand #0000aa in the light theme -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><filter id="brandBlue" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0.384 0.768 0.128 0 0  0 0 0 1 0"/></filter></svg>
 
 <div id="ambientGlow" aria-hidden="true"></div>
 <canvas id="pipeRackCanvas" aria-hidden="true"></canvas>
@@ -271,27 +273,27 @@
         <div class="about-kicker-sub" data-kicker-sub>
           <span class="spec-pill is-active">
             <span class="spec-pill-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 6h16M4 6a2 2 0 1 0 .01 0zM4 18h16M4 18a2 2 0 1 0 .01 0zM20 6a2 2 0 1 1-.01 0zM20 18a2 2 0 1 1-.01 0zM12 6v12"/></svg>
-            </span>
-            <span class="spec-pill-label" data-en="Piping Works &amp; Installation">أعمال الأنابيب والتركيب</span>
-          </span>
-          <span class="spec-pill is-active">
-            <span class="spec-pill-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg>
             </span>
-            <span class="spec-pill-label" data-en="Welding &amp; Metal Fabrication">اللحام والتصنيع المعدني</span>
+            <span class="spec-pill-label" data-en="Welding">اللحام</span>
           </span>
           <span class="spec-pill is-active">
             <span class="spec-pill-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.1L3 17.7V21h3.3l6.3-6.3a4 4 0 0 0 5.1-5.4l-2.6 2.6-2.4-.6-.6-2.4 2.6-2.6z"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 6h16M4 6a2 2 0 1 0 .01 0zM4 18h16M4 18a2 2 0 1 0 .01 0zM20 6a2 2 0 1 1-.01 0zM20 18a2 2 0 1 1-.01 0zM12 6v12"/></svg>
             </span>
-            <span class="spec-pill-label" data-en="Maintenance Services">خدمات الصيانة</span>
+            <span class="spec-pill-label" data-en="Piping Works">أعمال الأنابيب</span>
+          </span>
+          <span class="spec-pill is-active">
+            <span class="spec-pill-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2 3 7v10l9 5 9-5V7l-9-5zM3 7l9 5 9-5M12 12v10"/></svg>
+            </span>
+            <span class="spec-pill-label" data-en="Fabrication">التلفيق</span>
           </span>
           <span class="spec-pill is-active">
             <span class="spec-pill-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="8" r="3"/><path d="M3 20v-1a5 5 0 0 1 5-5h2a5 5 0 0 1 5 5v1"/><path d="M16 5.2a3 3 0 0 1 0 5.6M18.5 14.4A5 5 0 0 1 21 19v1"/></svg>
             </span>
-            <span class="spec-pill-label" data-en="Manpower Services">خدمات القوى العاملة</span>
+            <span class="spec-pill-label" data-en="Supporting Services">خدمات مساندة</span>
           </span>
         </div>
       </div>
@@ -1423,7 +1425,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="assets/js/supabase-config.js?v=1"></script>
 <script src="assets/js/data-service.js?v=4"></script>
-<script src="assets/js/script.js?v=16"></script>
+<script src="assets/js/script.js?v=18"></script>
 <script src="assets/js/glow-dots-bg.js?v=4"></script>
 <script src="assets/js/sparks-bg.js?v=4"></script>
 <script type="module" src="assets/js/pipe-rack-bg.js?v=4"></script>
@@ -1598,7 +1600,7 @@
   update();
 })();
 </script>
-<script src="assets/js/kicker-3d.js?v=2"></script>
+<script src="assets/js/kicker-3d.js?v=3"></script>
 <script src="assets/js/process-3d.js?v=1"></script>
 </body>
 </html>
