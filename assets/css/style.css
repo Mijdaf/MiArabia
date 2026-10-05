@@ -5411,3 +5411,32 @@ html body .eyebrow::before{ display:none !important; }
     padding-block:11.3px 5.7px !important;
   }
 }
+
+
+/* PHONE ONLY, ENGLISH (LTR) — centre the word inside every eyebrow pill.
+   1) Horizontal: an older rule gave the end side 22px-.16em of padding vs 14px at the start, and the
+      letter-spacing adds a trailing gap after the last letter, so the word sat ~3px left of centre.
+      Start padding = end padding + one letter-space makes the visible letters sit dead centre.
+   2) Vertical (MI ARABIA): this font sits differently from the Arabic one, so it needs a smaller drop. */
+@media (max-width:720px){
+  html[dir="ltr"] body .eyebrow{
+    padding-inline-start:calc(14px + .08em) !important;
+    padding-inline-end:14px !important;
+  }
+  html[dir="ltr"] body .eyebrow.eyebrow-brand{
+    padding-block:9.8px 7.2px !important;
+  }
+}
+
+
+/* IDENTITY ICONS (About Us / Our Vision / Our Mission) — on hover they stay still.
+   They keep floating/rotating while idle; the moment the mouse is over one, its float, rotation,
+   icon pulse and floor shadow pause in place and the mouse-driven 3D tilt is switched off.
+   Moving the mouse away resumes the motion from where it stopped.
+   Mouse devices only (touch has no hover, so nothing changes there). */
+@media (hover:hover){
+  .id-item:hover .id-obj,
+  .id-item:hover .id-icon,
+  .id-item:hover .id-shadow{ animation-play-state:paused; }
+  .id-item:hover .id-tilt{ transform:none; }
+}

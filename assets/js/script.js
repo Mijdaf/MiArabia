@@ -1617,7 +1617,7 @@
     }
   })();
 
-  // Gallery: load from Supabase when connected, otherwise keep the built-in images.
+  // Gallery: load from Supabase when connected (no built-in images; section hides when empty).
   // Then wire up the scroll reveal + lightbox on whichever items end up in the DOM.
   (async function(){
     const grid = document.getElementById('galleryGrid');
@@ -1645,8 +1645,18 @@
           }).join('');
         }
       } catch (e) {
-        console.error('gallery load failed, showing default images', e);
+        console.error('gallery load failed', e);
       }
+    }
+
+    // No built-in images anymore: if nothing was uploaded, hide the empty gallery section and its links.
+    if (grid && !grid.children.length) {
+      const sec = document.getElementById('gallery');
+      if (sec) sec.hidden = true;
+      document.querySelectorAll('a[href="#gallery"]').forEach(a => {
+        const li = a.closest('li');
+        (li || a).hidden = true;
+      });
     }
 
     // Staggered bento reveal on scroll
