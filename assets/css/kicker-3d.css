@@ -136,3 +136,100 @@
   .about .about-kicker.k3d .about-kicker-sub .spec-pill-icon svg{width:14px; height:14px;}
   .about .about-kicker.k3d .about-kicker-sub .spec-pill-label{font-size:12.88px;}
 }
+
+/* =====================================================================
+   LIGHT MODE ONLY — calmer, less saturated blues for:
+   (1) the 3D capability tree (مقاولات عامة) and (2) the identity tiles (تعرّف علينا).
+   Dark mode is untouched (every rule is scoped to html:not([data-theme="dark"])).
+   ===================================================================== */
+html:not([data-theme="dark"]){
+  --calm-hue:231;
+  --calm-hi:#2e4dfe;
+  --calm-base:#2e4dfe;   /* soft orange */
+  --calm-lo:#2e4dfe;
+  --calm-dk1:#2e4dfe;    /* tile depth layers */
+  --calm-dk2:#2e4dfe;
+  --calm-rgb:46,77,254;
+}
+
+/* ---- 1) capability tree ---- */
+html:not([data-theme="dark"]) .k3d-slab{
+  background:var(--calm-base);
+}
+html:not([data-theme="dark"]) .k3d-slab[style*="-4"]{
+  box-shadow:0 20px 28px -12px rgba(var(--calm-rgb),.28);
+}
+html:not([data-theme="dark"]) .k3d .about-kicker-sub .spec-pill.is-active{
+  background:linear-gradient(135deg, var(--calm-base), var(--calm-hi));
+  box-shadow:none; animation:none;
+}
+html:not([data-theme="dark"]) .k3d .spec-pill-icon{
+  background:rgba(255,255,255,.16);
+  box-shadow:0 2px 5px rgba(30,45,130,.18), inset 0 1px 0 rgba(255,255,255,.25);
+}
+html:not([data-theme="dark"]) .k3d .about-kicker-sub .spec-pill-label{ text-shadow:0 1px 2px rgba(30,45,130,.25); }
+html:not([data-theme="dark"]) .k3d .about-kicker-sub .spec-pill.is-active::after{ opacity:.45; }
+html:not([data-theme="dark"]) .k3d-line{
+  stroke:rgba(var(--calm-rgb),.5); stroke-width:1.8;
+  filter:drop-shadow(0 0 2px rgba(var(--calm-rgb),.25));
+}
+html:not([data-theme="dark"]) .k3d-pulse{
+  fill:#c9d1ff; filter:drop-shadow(0 0 3px rgba(var(--calm-rgb),.35));
+}
+html:not([data-theme="dark"]) .k3d-orb{
+  background:radial-gradient(circle at 32% 30%, #c9d1ff, var(--calm-base) 50%, #2e4dfe);
+  box-shadow:0 0 10px 2px rgba(var(--calm-rgb),.35);
+}
+html:not([data-theme="dark"]) .k3d-ring{ border-color:rgba(var(--calm-rgb),.5); }
+html:not([data-theme="dark"]) .k3d-ring.r2{ border-color:rgba(var(--calm-rgb),.35); }
+html:not([data-theme="dark"]) .k3d-ring::after{ box-shadow:0 0 5px 1px rgba(var(--calm-rgb),.45); }
+html:not([data-theme="dark"]) .k3d-dust{
+  background:#2e4dfe; box-shadow:0 0 5px rgba(var(--calm-rgb),.35);
+}
+
+/* ---- 2) "تعرّف علينا" tiles ---- */
+html:not([data-theme="dark"]) .id-tile{
+  background:linear-gradient(145deg, var(--calm-hi), var(--calm-base) 55%, var(--calm-lo));
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.28), inset 0 -10px 18px rgba(30,45,130,.14), 0 8px 22px -8px rgba(var(--calm-rgb),.35);
+}
+html:not([data-theme="dark"]) .id-tile::before{ background:var(--calm-dk1); }
+html:not([data-theme="dark"]) .id-tile::after{ background:var(--calm-dk2); }
+html:not([data-theme="dark"]) .id-icon{ filter:drop-shadow(0 6px 5px rgba(30,45,130,.25)); }
+html:not([data-theme="dark"]) .id-shadow{
+  background:radial-gradient(ellipse at center, rgba(var(--calm-rgb),.28), transparent 70%);
+}
+html:not([data-theme="dark"]) .id-ring{ border-color:rgba(var(--calm-rgb),.35); }
+html:not([data-theme="dark"]) .id-ring::after{
+  background:#c9d1ff; box-shadow:0 0 6px 1px rgba(var(--calm-rgb),.4);
+}
+@media (hover:hover){
+  html:not([data-theme="dark"]) .id-item:hover .id-label,
+  html:not([data-theme="dark"]) .id-item:hover .id-hint{ color:var(--calm-base); }
+  html:not([data-theme="dark"]) .id-item:hover .id-tile{
+    box-shadow:inset 0 2px 0 rgba(255,255,255,.3), inset 0 -10px 18px rgba(30,45,130,.14), 0 10px 28px -8px rgba(var(--calm-rgb),.45);
+  }
+}
+
+/* light mode: welder mascot's trousers follow the soft orange accent */
+html:not([data-theme="dark"]) #wdLegNf{ stroke:#2e4dfe; }
+
+/* =====================================================================
+   LIGHT MODE — flat #2e4dfe: no glows, no gradients, no extra tints
+   ===================================================================== */
+html:not([data-theme="dark"]) .k3d .about-kicker-sub .spec-pill.is-active{ background:#2e4dfe; box-shadow:none; animation:none; }
+html:not([data-theme="dark"]) .k3d-slab,
+html:not([data-theme="dark"]) .k3d-slab[style*="-4"]{ box-shadow:none; }
+html:not([data-theme="dark"]) .k3d-line{ filter:none; }
+html:not([data-theme="dark"]) .k3d-pulse{ filter:none; fill:#2e4dfe; }
+html:not([data-theme="dark"]) .k3d-orb{ background:#2e4dfe; box-shadow:none; }
+html:not([data-theme="dark"]) .k3d-ring::after,
+html:not([data-theme="dark"]) .k3d-dust{ box-shadow:none; }
+html:not([data-theme="dark"]) .k3d-dust{ background:#2e4dfe; }
+html:not([data-theme="dark"]) .k3d .about-kicker-sub .spec-pill-label{ text-shadow:none; }
+html:not([data-theme="dark"]) .id-tile{ background:#2e4dfe; box-shadow:none; }
+html:not([data-theme="dark"]) .id-icon{ filter:none; }
+html:not([data-theme="dark"]) .id-shadow{ background:none; }
+html:not([data-theme="dark"]) .id-ring::after{ background:#2e4dfe; box-shadow:none; }
+@media (hover:hover){
+  html:not([data-theme="dark"]) .id-item:hover .id-tile{ box-shadow:none; }
+}

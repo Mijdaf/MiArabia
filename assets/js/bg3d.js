@@ -94,7 +94,7 @@ whenIdle(function () {
   const ACCENT_MATS = [];
   const _bgRoot = document.documentElement;
   const _applyAccent = () => {
-    ORANGE.set(_bgRoot.getAttribute('data-theme') === 'dark' ? 0xfd572b : 0x0000aa);
+    ORANGE.set(_bgRoot.getAttribute('data-theme') === 'dark' ? 0xfd572b : 0x2e4dfe);
     ACCENT_MATS.forEach((m) => m.color.copy(ORANGE));
   };
   new MutationObserver(_applyAccent).observe(_bgRoot, { attributes: true, attributeFilter: ['data-theme'] });

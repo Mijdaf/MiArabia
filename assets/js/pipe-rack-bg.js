@@ -98,13 +98,13 @@ whenIdle(function () {
     return tex;
   }
   const glowTexOrange = makeGlowTexture(['rgba(255,180,120,0.95)', 'rgba(253,87,43,0.4)', 'rgba(253,87,43,0)']);
-  const glowTexBlue = makeGlowTexture(['rgba(150,150,255,0.95)', 'rgba(0,0,170,0.4)', 'rgba(0,0,170,0)']);
+  const glowTexBlue = makeGlowTexture(['rgba(160,175,255,0.95)', 'rgba(46,77,254,0.4)', 'rgba(46,77,254,0)']);
   let glowTex = glowTexBlue;
   const glowSprites = [];
   const _rackRoot = document.documentElement;
   const _applyRackTheme = () => {
     const dark = _rackRoot.getAttribute('data-theme') === 'dark';
-    ORANGE.set(dark ? 0xfd572b : 0x0000aa);
+    ORANGE.set(dark ? 0xfd572b : 0x2e4dfe);
     glowTex = dark ? glowTexOrange : glowTexBlue;
     jointMat.color.copy(ORANGE);
     glowSprites.forEach((sp) => { sp.material.map = glowTex; sp.material.color.copy(ORANGE); sp.material.needsUpdate = true; });

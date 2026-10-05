@@ -25,26 +25,26 @@
   }
   :root{
     color-scheme:light;
-    --navy:#0000aa;
+    --navy:#2e4dfe;
     --navy-deep:#000032;
     --black:#000000;
-    --steel:#164dcc;
+    --steel:#2e4dfe;
     /* ---- accent palette: LIGHT theme = #0000aa only (dark theme restores the original orange below) ---- */
-    --orange:#0000aa;
-    --orange-rgb:0,0,170;
-    --accent-hi:#0000aa;
-    --accent-lo:#0000aa;
-    --accent-hover:#0000aa;
-    --accent-dk1:#00007a;
-    --accent-dk2:#000052;
-    --accent-tint:#b3b3ff;
-    --accent-tint-2:#d9d9ff;
-    --accent-glow:#4d4dff;
-    --accent-warm:#6666ff;
-    --accent-soft-rgb:120,120,255;
-    --accent-hue:240;
-    --accent-sat-a:100%;
-    --accent-sat-b:100%;
+    --orange:#2e4dfe;
+    --orange-rgb:46,77,254;
+    --accent-hi:#2e4dfe;
+    --accent-lo:#2e4dfe;
+    --accent-hover:#2e4dfe;
+    --accent-dk1:#2e4dfe;
+    --accent-dk2:#2e4dfe;
+    --accent-tint:#bcc6ff;
+    --accent-tint-2:#dde2ff;
+    --accent-glow:#2e4dfe;
+    --accent-warm:#2e4dfe;
+    --accent-soft-rgb:46,77,254;
+    --accent-hue:231;
+    --accent-sat-a:99%;
+    --accent-sat-b:99%;
     --white:#ffffff;
     --tint:#eef1f9;
     --tint-2:#dfe5f6;
@@ -95,6 +95,8 @@
   }
 
   html[data-theme="dark"]{
+    --navy:#0000aa;
+    --steel:#164dcc;
     color-scheme:dark;
     --page-bg:#000032;      /* existing --navy-deep */
     --surface:#04044a;      /* existing shade used in the "why us" cards */
@@ -166,13 +168,13 @@
     opacity:0.5;
     background:
       radial-gradient(680px 520px at 88% 8%, rgba(var(--orange-rgb),0.16), transparent 70%),
-      radial-gradient(720px 560px at 6% 92%, rgba(22,77,204,0.14), transparent 70%);
+      radial-gradient(720px 560px at 6% 92%, rgba(46,77,254,0.14), transparent 70%);
   }
   html[data-theme="dark"] #ambientGlow{
     opacity:0.9;
     background:
       radial-gradient(680px 520px at 88% 8%, rgba(var(--orange-rgb),0.22), transparent 70%),
-      radial-gradient(720px 560px at 6% 92%, rgba(22,77,204,0.2), transparent 70%);
+      radial-gradient(720px 560px at 6% 92%, rgba(46,77,254,0.2), transparent 70%);
   }
   @media (prefers-reduced-motion: reduce){
     #ambientGlow{ opacity:0.4; }
@@ -3422,7 +3424,7 @@
     animation:qaGlowPulse 2.6s ease-in-out infinite;
   }
   .qa-request::before{ background:color-mix(in srgb, var(--orange) calc(var(--w, 1) * 100%), transparent calc((1 - var(--w, 1)) * 100%)); }
-  .qa-inquiry::before{ background:#164dcc; animation-delay:.5s; }
+  .qa-inquiry::before{ background:var(--steel); animation-delay:.5s; }
   @keyframes qaGlowPulse{
     0%, 100%{ opacity:.2; transform:scale(.95); }
     50%{ opacity:.42; transform:scale(1.04); }
@@ -3438,7 +3440,7 @@
     color:var(--white);
   }
   .qa-request .qa-item-icon{ background:rgba(255,255,255,0.22); color:var(--white); }
-  .qa-inquiry{ background:#164dcc; color:var(--white); }
+  .qa-inquiry{ background:var(--steel); color:var(--white); }
   .qa-inquiry .qa-item-icon{ background:rgba(255,255,255,0.22); color:var(--white); }
   .qa-item:hover{ box-shadow:0 18px 36px -12px rgba(10,13,31,0.34); }
   .qa-request:hover{ background:var(--accent-hover); }
@@ -3469,8 +3471,8 @@
     50%{ box-shadow:0 14px 30px -12px rgba(10,13,31,0.28), 0 0 16px 1px rgba(var(--orange-rgb),0.4); }
   }
   @keyframes qaPulseBlue{
-    0%, 100%{ box-shadow:0 14px 30px -12px rgba(10,13,31,0.28), 0 0 8px 0 rgba(22,77,204,0.22); }
-    50%{ box-shadow:0 14px 30px -12px rgba(10,13,31,0.28), 0 0 16px 1px rgba(22,77,204,0.4); }
+    0%, 100%{ box-shadow:0 14px 30px -12px rgba(10,13,31,0.28), 0 0 8px 0 rgba(46,77,254,0.22); }
+    50%{ box-shadow:0 14px 30px -12px rgba(10,13,31,0.28), 0 0 16px 1px rgba(46,77,254,0.4); }
   }
   @media (prefers-reduced-motion: reduce){
     .qa-request, .qa-inquiry{ animation:none; }
@@ -5217,19 +5219,19 @@ html[data-theme="dark"] .cv-card{
    original orange in dark). These few spots can't use variables:
    ===================================================================== */
 html:not([data-theme="dark"]) .support-card::before{
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230000aa' stroke-width='0.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z'/%3E%3C/svg%3E");
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232e4dfe' stroke-width='0.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z'/%3E%3C/svg%3E");
 }
 html:not([data-theme="dark"]) .cursor-dot{
-  filter:url(#brandBlue) drop-shadow(0 2px 6px rgba(10,13,31,0.35));
+  filter:url(#brandBlue) drop-shadow(0 2px 6px rgba(10,13,31,0.3));
 }
 
 /* Light theme: the welder mascot was too dark (0000aa suit + navy outlines).
    Same hue, lifted to a lighter tint so the figure reads clearly. */
 html:not([data-theme="dark"]) .qa-welder{
-  --orange:#4d5cff;
-  --accent-lo:#3a49e8;
-  --accent-dk1:#2a35c4;
-  --accent-warm:#9aa4ff;
+  --orange:#2e4dfe;
+  --accent-lo:#2e4dfe;
+  --accent-dk1:#2e4dfe;
+  --accent-warm:#2e4dfe;
 }
 
 
@@ -5238,11 +5240,11 @@ html:not([data-theme="dark"]) .qa-welder{
 html:not([data-theme="dark"]) .hero,
 html:not([data-theme="dark"]) .ticker,
 html:not([data-theme="dark"]) footer{
-  --orange:#6b6bff;
-  --orange-rgb:107,107,255;
-  --accent-hi:#8a8aff;
-  --accent-lo:#4d4dff;
-  --accent-hover:#8a8aff;
-  --accent-glow:#9999ff;
-  --accent-soft-rgb:160,160,255;
+  --orange:#2e4dfe;
+  --orange-rgb:46,77,254;
+  --accent-hi:#2e4dfe;
+  --accent-lo:#2e4dfe;
+  --accent-hover:#2e4dfe;
+  --accent-glow:#2e4dfe;
+  --accent-soft-rgb:46,77,254;
 }

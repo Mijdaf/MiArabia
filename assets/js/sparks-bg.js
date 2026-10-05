@@ -34,10 +34,10 @@
     { t: 1.00, r: 90,  g: 24,  b: 10 },  // dying ember
   ];
   const STOPS_BLUE = [                    // light theme: same cooling curve in blue
-    { t: 0.00, r: 240, g: 240, b: 255 }, // white-hot
-    { t: 0.35, r: 110, g: 110, b: 255 }, // hot light-blue
-    { t: 0.70, r: 0,   g: 0,   b: 170 }, // brand blue (#0000aa)
-    { t: 1.00, r: 0,   g: 0,   b: 70 },  // dying ember
+    { t: 0.00, r: 235, g: 240, b: 255 }, // white-hot
+    { t: 0.35, r: 120, g: 140, b: 255 }, // soft light orange
+    { t: 0.70, r: 46, g: 77, b: 254 },  // soft orange (#2e4dfe)
+    { t: 1.00, r: 20,  g: 30,  b: 110 },  // dying ember
   ];
   let STOPS = STOPS_BLUE;
   const _sparksRoot = document.documentElement;

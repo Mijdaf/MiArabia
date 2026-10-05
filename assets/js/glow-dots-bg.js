@@ -25,7 +25,7 @@
   const _glowRoot = document.documentElement;
   const _applyGlowTheme = () => {
     const dark = _glowRoot.getAttribute('data-theme') === 'dark';
-    ACCENT.r = dark ? 253 : 0; ACCENT.g = dark ? 87 : 0; ACCENT.b = dark ? 43 : 170;
+    ACCENT.r = dark ? 253 : 46; ACCENT.g = dark ? 87 : 77; ACCENT.b = dark ? 43 : 254;
   };
   _applyGlowTheme();
   new MutationObserver(_applyGlowTheme).observe(_glowRoot, { attributes: true, attributeFilter: ['data-theme'] });
