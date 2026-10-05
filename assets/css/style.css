@@ -5401,3 +5401,13 @@ html body .eyebrow::before{ display:none !important; }
     line-height:1.2;
   }
 }
+
+
+/* PHONE ONLY — "MI ARABIA" eyebrow: the Latin caps sat ~3px above the pill's middle,
+   so the word is lowered by shifting padding from the bottom to the top (pill height unchanged).
+   Arabic eyebrows keep their symmetric padding. */
+@media (max-width:720px){
+  html body .eyebrow.eyebrow-brand{
+    padding-block:11.3px 5.7px !important;
+  }
+}
