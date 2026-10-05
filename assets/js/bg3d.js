@@ -94,7 +94,7 @@ whenIdle(function () {
   const ACCENT_MATS = [];
   const _bgRoot = document.documentElement;
   const _applyAccent = () => {
-    ORANGE.set(_bgRoot.getAttribute('data-theme') === 'dark' ? 0xfd572b : 0x2e4dfe);
+    ORANGE.set(_bgRoot.getAttribute('data-theme') === 'dark' ? 0xfd572b : 0x0000aa);
     ACCENT_MATS.forEach((m) => m.color.copy(ORANGE));
   };
   new MutationObserver(_applyAccent).observe(_bgRoot, { attributes: true, attributeFilter: ['data-theme'] });
@@ -227,7 +227,7 @@ whenIdle(function () {
   /* ---------- theme-aware palette ---------- */
   function applyTheme() {
     const dark = document.documentElement.getAttribute('data-theme') === 'dark';
-    scene.fog.color.set(dark ? 0x05070f : 0xeef1fb);
+    scene.fog.color.set(dark ? 0x05070f : 0xf1f4fc);
     linkMat.opacity = dark ? 0.3 : 0.2;
     dustMat.opacity = dark ? 0.32 : 0.22;
     hemi.intensity = dark ? 1.1 : 0.9;

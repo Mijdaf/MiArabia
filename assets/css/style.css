@@ -25,33 +25,38 @@
   }
   :root{
     color-scheme:light;
-    --navy:#2e4dfe;
+    /* ---- LIGHT THEME PALETTE (brand colour palette) ----
+       #0000aa primary (100%) · #164dcc secondary (75%) · #fd572b accent (50%)
+       #ffffff base (65%) · #000000 text (30%). Dark theme overrides below. */
+    --navy:#0000aa;
     --navy-deep:#000032;
     --black:#000000;
-    --steel:#2e4dfe;
-    /* ---- accent palette: LIGHT theme = #0000aa only (dark theme restores the original orange below) ---- */
-    --orange:#2e4dfe;
-    --orange-rgb:46,77,254;
-    --accent-hi:#2e4dfe;
-    --accent-lo:#2e4dfe;
-    --accent-hover:#2e4dfe;
-    --accent-dk1:#2e4dfe;
-    --accent-dk2:#2e4dfe;
-    --accent-tint:#bcc6ff;
-    --accent-tint-2:#dde2ff;
-    --accent-glow:#2e4dfe;
-    --accent-warm:#2e4dfe;
-    --accent-soft-rgb:46,77,254;
-    --accent-hue:231;
-    --accent-sat-a:99%;
-    --accent-sat-b:99%;
+    --steel:#164dcc;
+    --orange:#0000aa;
+    --orange-rgb:0,0,170;
+    --accent-hi:#164dcc;
+    --accent-lo:#0000aa;
+    --accent-hover:#164dcc;
+    --accent-dk1:#0000aa;
+    --accent-dk2:#0000aa;
+    --accent-tint:#cdd8f2;
+    --accent-tint-2:#e6ecf9;
+    --pop-ink:#d9420f;
+    --accent-glow:#164dcc;
+    --accent-warm:#fd572b;
+    --accent-soft-rgb:22,77,204;
+    --accent-pop:#fd572b;
+    --accent-pop-rgb:253,87,43;
+    --accent-hue:240;
+    --accent-sat-a:100%;
+    --accent-sat-b:100%;
     --white:#ffffff;
-    --tint:#eef1f9;
-    --tint-2:#dfe5f6;
-    --ink:#0a0d1f;
-    --ink-soft:#4d5680;
-    --line:rgba(10,13,31,0.12);
-    --line-strong:rgba(10,13,31,0.28);
+    --tint:#f6f6f9;
+    --tint-2:#e8eaf2;
+    --ink:#000000;
+    --ink-soft:#4b4e5a;
+    --line:rgba(0,0,0,0.12);
+    --line-strong:rgba(0,0,0,0.28);
     --font-display:'Tajawal', sans-serif;
     --font-body:'Tajawal', sans-serif;
     --font-mono:'IBM Plex Mono', monospace;
@@ -67,11 +72,11 @@
     --surface-2:var(--tint);
     --text:var(--ink);
     --text-soft:var(--ink-soft);
-    --heading:var(--navy-deep);
+    --heading:#000000;
     --border:var(--line);
     --border-strong:var(--line-strong);
     --header-bg:rgba(255,255,255,0.72);
-    --qa-item-border:rgba(10,13,31,0.08);
+    --qa-item-border:rgba(0,0,0,0.08);
     --theme-toggle-transition:background .35s var(--ease), color .35s var(--ease), border-color .35s var(--ease);
   }
 
@@ -95,6 +100,16 @@
   }
 
   html[data-theme="dark"]{
+    --tint:#eef1f9;
+    --tint-2:#dfe5f6;
+    --ink:#0a0d1f;
+    --ink-soft:#4d5680;
+    --line:rgba(10,13,31,0.12);
+    --line-strong:rgba(10,13,31,0.28);
+    --accent-pop:#fd572b;
+    --accent-pop-rgb:253,87,43;
+    --pop-ink:#fd572b;
+    --qa-item-border:rgba(255,255,255,0.14);
     --navy:#0000aa;
     --steel:#164dcc;
     color-scheme:dark;
@@ -168,7 +183,7 @@
     opacity:0.5;
     background:
       radial-gradient(680px 520px at 88% 8%, rgba(var(--orange-rgb),0.16), transparent 70%),
-      radial-gradient(720px 560px at 6% 92%, rgba(46,77,254,0.14), transparent 70%);
+      radial-gradient(720px 560px at 6% 92%, rgba(22,77,204,0.14), transparent 70%);
   }
   html[data-theme="dark"] #ambientGlow{
     opacity:0.9;
@@ -2989,11 +3004,7 @@
     .why-typed-out{display:none;}
     .why-row.is-typing .why-row-details > p{opacity:1;}
   }
-  .why-row.is-open .why-icon{
-    background:var(--orange);
-    color:var(--white);
-    box-shadow:0 0 0 8px rgba(var(--orange-rgb),0.14), 0 10px 24px -8px rgba(var(--orange-rgb),0.55);
-  }
+  /* open state no longer recolours the icon — it turns orange on hover only */
   @media (hover:hover) and (pointer:fine){
     .why-icon:hover{background:var(--orange); color:var(--white);}
   }
@@ -3471,8 +3482,8 @@
     50%{ box-shadow:0 14px 30px -12px rgba(10,13,31,0.28), 0 0 16px 1px rgba(var(--orange-rgb),0.4); }
   }
   @keyframes qaPulseBlue{
-    0%, 100%{ box-shadow:0 14px 30px -12px rgba(10,13,31,0.28), 0 0 8px 0 rgba(46,77,254,0.22); }
-    50%{ box-shadow:0 14px 30px -12px rgba(10,13,31,0.28), 0 0 16px 1px rgba(46,77,254,0.4); }
+    0%, 100%{ box-shadow:0 14px 30px -12px rgba(10,13,31,0.28), 0 0 8px 0 rgba(var(--orange-rgb),0.22); }
+    50%{ box-shadow:0 14px 30px -12px rgba(10,13,31,0.28), 0 0 16px 1px rgba(var(--orange-rgb),0.4); }
   }
   @media (prefers-reduced-motion: reduce){
     .qa-request, .qa-inquiry{ animation:none; }
@@ -5219,7 +5230,7 @@ html[data-theme="dark"] .cv-card{
    original orange in dark). These few spots can't use variables:
    ===================================================================== */
 html:not([data-theme="dark"]) .support-card::before{
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232e4dfe' stroke-width='0.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z'/%3E%3C/svg%3E");
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230000aa' stroke-width='0.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z'/%3E%3C/svg%3E");
 }
 html:not([data-theme="dark"]) .cursor-dot{
   filter:url(#brandBlue) drop-shadow(0 2px 6px rgba(10,13,31,0.3));
@@ -5228,23 +5239,120 @@ html:not([data-theme="dark"]) .cursor-dot{
 /* Light theme: the welder mascot was too dark (0000aa suit + navy outlines).
    Same hue, lifted to a lighter tint so the figure reads clearly. */
 html:not([data-theme="dark"]) .qa-welder{
-  --orange:#2e4dfe;
-  --accent-lo:#2e4dfe;
-  --accent-dk1:#2e4dfe;
-  --accent-warm:#2e4dfe;
+  --orange:#164dcc;
+  --accent-lo:#164dcc;
+  --accent-dk1:#164dcc;
+  --accent-warm:#164dcc;
 }
 
 
 /* Light theme: the hero, ticker and footer stay dark navy, where #0000aa would vanish,
-   so there (and only there) the same hue is lifted to a lighter tint for readability. */
+   so there the palette's orange (#fd572b) is used as the accent for contrast. */
 html:not([data-theme="dark"]) .hero,
 html:not([data-theme="dark"]) .ticker,
 html:not([data-theme="dark"]) footer{
-  --orange:#2e4dfe;
-  --orange-rgb:46,77,254;
-  --accent-hi:#2e4dfe;
-  --accent-lo:#2e4dfe;
-  --accent-hover:#2e4dfe;
-  --accent-glow:#2e4dfe;
-  --accent-soft-rgb:46,77,254;
+  --orange:#fd572b;
+  --orange-rgb:253,87,43;
+  --accent-hi:#ff7a52;
+  --accent-lo:#e0421a;
+  --accent-hover:#e04a24;
+  --accent-glow:#ff8a5c;
+  --accent-soft-rgb:255,160,120;
 }
+
+
+/* =====================================================================
+   LIGHT THEME — COLOUR BALANCE (break the "all blue" feel)
+   Roles:  white = base · black = headings/body · #0000aa/#164dcc = structure
+           (nav, icons, cards, tiles) · #fd572b = highlights, CTAs, numbers,
+           eyebrows, underlines, hover states. Dark theme is untouched.
+   ===================================================================== */
+html:not([data-theme="dark"]) .hero,
+html:not([data-theme="dark"]) .ticker,
+html:not([data-theme="dark"]) footer{ --pop-ink:#fd572b; }
+
+/* soft warm + cool wash behind the page */
+html:not([data-theme="dark"]) #ambientGlow{
+  background:
+    radial-gradient(680px 520px at 88% 8%, rgba(var(--accent-pop-rgb),0.13), transparent 70%),
+    radial-gradient(720px 560px at 6% 92%, rgba(22,77,204,0.10), transparent 70%);
+}
+
+/* progress bar: blue -> orange */
+html:not([data-theme="dark"]) .scroll-progress{
+  background:linear-gradient(90deg, #0000aa, #164dcc 55%, #fd572b);
+}
+
+/* primary call-to-action = orange, hover = secondary blue */
+html:not([data-theme="dark"]) .btn-primary{
+  background:var(--accent-pop);
+  box-shadow:0 8px 20px -8px rgba(var(--accent-pop-rgb),0.6);
+}
+html:not([data-theme="dark"]) .btn-primary:hover{
+  background:var(--accent-hi);
+  box-shadow:0 14px 26px -10px rgba(var(--accent-soft-rgb),0.6);
+}
+
+/* eyebrows / labels / numbers / small text accents */
+html:not([data-theme="dark"]) .eyebrow,
+html:not([data-theme="dark"]) .eyebrow-brand,
+html:not([data-theme="dark"]) .service-name,
+html:not([data-theme="dark"]) .service-expand-hint,
+html:not([data-theme="dark"]) .gallery-tag,
+html:not([data-theme="dark"]) .process-step-num,
+html:not([data-theme="dark"]) .process-modal-num,
+html:not([data-theme="dark"]) .cv-title,
+html:not([data-theme="dark"]) .contact-highlight strong,
+html:not([data-theme="dark"]) .contact-highlight svg,
+html:not([data-theme="dark"]) .stat-icon,
+html:not([data-theme="dark"]) .process-flow-arrow{ color:var(--pop-ink); }
+html:not([data-theme="dark"]) .eyebrow::before{ border-color:var(--accent-pop); }
+
+/* underlines, rules, bullets, accent bars */
+html:not([data-theme="dark"]) nav.primary a::after,
+html:not([data-theme="dark"]) .focus-highlight::before,
+html:not([data-theme="dark"]) .spec-view-list li::before,
+html:not([data-theme="dark"]) .service-card-back li::before,
+html:not([data-theme="dark"]) .value-checklist li::before,
+html:not([data-theme="dark"]) .id-modal-body .id-note::before,
+html:not([data-theme="dark"]) .tw-cursor{ background:var(--accent-pop); }
+html:not([data-theme="dark"]) .why-caption,
+html:not([data-theme="dark"]) .id-modal-body .id-note{ border-inline-color:var(--accent-pop); }
+html:not([data-theme="dark"]) .section-head h2::after,
+html:not([data-theme="dark"]) .why-closing::before,
+html:not([data-theme="dark"]) .process-closing::before{
+  background:linear-gradient(90deg, var(--accent-pop), color-mix(in srgb, var(--accent-pop) 30%, transparent));
+}
+html:not([data-theme="dark"]) .service-card-front::before{
+  background:linear-gradient(90deg, #0000aa, #164dcc 55%, #fd572b);
+}
+html:not([data-theme="dark"]) .contact-form::before{
+  background:linear-gradient(90deg, var(--accent-pop), var(--navy) 70%);
+}
+html:not([data-theme="dark"]) .support-card::after,
+html:not([data-theme="dark"]) .cv-card::before{
+  background:linear-gradient(90deg, transparent, var(--accent-pop), transparent);
+}
+html:not([data-theme="dark"]) .process-circle-num{ background:var(--accent-pop); }
+
+/* icon chips stay blue; hover / open state flips to orange */
+html:not([data-theme="dark"]) .service-card:hover .icon,
+html:not([data-theme="dark"]) .cv-card:hover .cv-icon,
+html:not([data-theme="dark"]) .quick-actions.past-hero .qa-fab:hover,
+html:not([data-theme="dark"]) .qa-fab:hover,
+html:not([data-theme="dark"]) .lightbox-close:hover,
+html:not([data-theme="dark"]) .gallery-item:hover .gallery-expand:hover{ background:var(--accent-pop); color:var(--white); }
+@media (hover:hover){
+  html:not([data-theme="dark"]) .why-icon:hover{ background:var(--accent-pop); color:var(--white); }
+}
+html:not([data-theme="dark"]) .contact-list .row:hover span.val,
+html:not([data-theme="dark"]) .contact-list .row:hover .row-arrow,
+html:not([data-theme="dark"]) .id-item:hover .id-label,
+html:not([data-theme="dark"]) .id-item:hover .id-hint,
+html:not([data-theme="dark"]) footer ul a:hover{ color:var(--pop-ink); }
+
+/* Service cards (front face): slightly heavier type — 400 -> 500 */
+.service-card-front .service-name,
+.service-card-front h3.service-subtitle,
+.service-card-front p,
+.service-card-front .service-expand-hint{ font-weight:500; }

@@ -33,11 +33,11 @@
     { t: 0.70, r: 253, g: 87,  b: 43 },  // brand orange (#fd572b)
     { t: 1.00, r: 90,  g: 24,  b: 10 },  // dying ember
   ];
-  const STOPS_BLUE = [                    // light theme: same cooling curve in blue
-    { t: 0.00, r: 235, g: 240, b: 255 }, // white-hot
-    { t: 0.35, r: 120, g: 140, b: 255 }, // soft light orange
-    { t: 0.70, r: 46, g: 77, b: 254 },  // soft orange (#2e4dfe)
-    { t: 1.00, r: 20,  g: 30,  b: 110 },  // dying ember
+  const STOPS_BLUE = [                    // light theme: palette orange on white
+    { t: 0.00, r: 255, g: 205, b: 150 }, // warm core
+    { t: 0.35, r: 253, g: 140, b: 80 },  // hot orange
+    { t: 0.70, r: 253, g: 87,  b: 43 },  // #fd572b
+    { t: 1.00, r: 150, g: 45,  b: 15 },  // ember
   ];
   let STOPS = STOPS_BLUE;
   const _sparksRoot = document.documentElement;

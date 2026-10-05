@@ -143,13 +143,13 @@
    Dark mode is untouched (every rule is scoped to html:not([data-theme="dark"])).
    ===================================================================== */
 html:not([data-theme="dark"]){
-  --calm-hue:231;
-  --calm-hi:#2e4dfe;
-  --calm-base:#2e4dfe;   /* soft orange */
-  --calm-lo:#2e4dfe;
-  --calm-dk1:#2e4dfe;    /* tile depth layers */
-  --calm-dk2:#2e4dfe;
-  --calm-rgb:46,77,254;
+  --calm-hue:240;
+  --calm-hi:#164dcc;
+  --calm-base:#0000aa;
+  --calm-lo:#0000aa;
+  --calm-dk1:#0000aa;    /* tile depth layers */
+  --calm-dk2:#0000aa;
+  --calm-rgb:0,0,170;
 }
 
 /* ---- 1) capability tree ---- */
@@ -174,17 +174,17 @@ html:not([data-theme="dark"]) .k3d-line{
   filter:drop-shadow(0 0 2px rgba(var(--calm-rgb),.25));
 }
 html:not([data-theme="dark"]) .k3d-pulse{
-  fill:#c9d1ff; filter:drop-shadow(0 0 3px rgba(var(--calm-rgb),.35));
+  fill:#cdd8f2; filter:drop-shadow(0 0 3px rgba(var(--calm-rgb),.35));
 }
 html:not([data-theme="dark"]) .k3d-orb{
-  background:radial-gradient(circle at 32% 30%, #c9d1ff, var(--calm-base) 50%, #2e4dfe);
+  background:radial-gradient(circle at 32% 30%, #cdd8f2, var(--calm-base) 50%, #0000aa);
   box-shadow:0 0 10px 2px rgba(var(--calm-rgb),.35);
 }
 html:not([data-theme="dark"]) .k3d-ring{ border-color:rgba(var(--calm-rgb),.5); }
 html:not([data-theme="dark"]) .k3d-ring.r2{ border-color:rgba(var(--calm-rgb),.35); }
 html:not([data-theme="dark"]) .k3d-ring::after{ box-shadow:0 0 5px 1px rgba(var(--calm-rgb),.45); }
 html:not([data-theme="dark"]) .k3d-dust{
-  background:#2e4dfe; box-shadow:0 0 5px rgba(var(--calm-rgb),.35);
+  background:#0000aa; box-shadow:0 0 5px rgba(var(--calm-rgb),.35);
 }
 
 /* ---- 2) "تعرّف علينا" tiles ---- */
@@ -200,7 +200,7 @@ html:not([data-theme="dark"]) .id-shadow{
 }
 html:not([data-theme="dark"]) .id-ring{ border-color:rgba(var(--calm-rgb),.35); }
 html:not([data-theme="dark"]) .id-ring::after{
-  background:#c9d1ff; box-shadow:0 0 6px 1px rgba(var(--calm-rgb),.4);
+  background:#cdd8f2; box-shadow:0 0 6px 1px rgba(var(--calm-rgb),.4);
 }
 @media (hover:hover){
   html:not([data-theme="dark"]) .id-item:hover .id-label,
@@ -211,25 +211,59 @@ html:not([data-theme="dark"]) .id-ring::after{
 }
 
 /* light mode: welder mascot's trousers follow the soft orange accent */
-html:not([data-theme="dark"]) #wdLegNf{ stroke:#2e4dfe; }
+html:not([data-theme="dark"]) #wdLegNf{ stroke:#0000aa; }
 
 /* =====================================================================
-   LIGHT MODE — flat #2e4dfe: no glows, no gradients, no extra tints
+   LIGHT MODE — flat #0000aa: no glows, no gradients, no extra tints
    ===================================================================== */
-html:not([data-theme="dark"]) .k3d .about-kicker-sub .spec-pill.is-active{ background:#2e4dfe; box-shadow:none; animation:none; }
+html:not([data-theme="dark"]) .k3d .about-kicker-sub .spec-pill.is-active{ background:#0000aa; box-shadow:none; animation:none; }
 html:not([data-theme="dark"]) .k3d-slab,
 html:not([data-theme="dark"]) .k3d-slab[style*="-4"]{ box-shadow:none; }
 html:not([data-theme="dark"]) .k3d-line{ filter:none; }
-html:not([data-theme="dark"]) .k3d-pulse{ filter:none; fill:#2e4dfe; }
-html:not([data-theme="dark"]) .k3d-orb{ background:#2e4dfe; box-shadow:none; }
+html:not([data-theme="dark"]) .k3d-pulse{ filter:none; fill:#0000aa; }
+html:not([data-theme="dark"]) .k3d-orb{ background:#0000aa; box-shadow:none; }
 html:not([data-theme="dark"]) .k3d-ring::after,
 html:not([data-theme="dark"]) .k3d-dust{ box-shadow:none; }
-html:not([data-theme="dark"]) .k3d-dust{ background:#2e4dfe; }
+html:not([data-theme="dark"]) .k3d-dust{ background:#0000aa; }
 html:not([data-theme="dark"]) .k3d .about-kicker-sub .spec-pill-label{ text-shadow:none; }
-html:not([data-theme="dark"]) .id-tile{ background:#2e4dfe; box-shadow:none; }
+html:not([data-theme="dark"]) .id-tile{ background:#0000aa; box-shadow:none; }
 html:not([data-theme="dark"]) .id-icon{ filter:none; }
 html:not([data-theme="dark"]) .id-shadow{ background:none; }
-html:not([data-theme="dark"]) .id-ring::after{ background:#2e4dfe; box-shadow:none; }
+html:not([data-theme="dark"]) .id-ring::after{ background:#0000aa; box-shadow:none; }
 @media (hover:hover){
   html:not([data-theme="dark"]) .id-item:hover .id-tile{ box-shadow:none; }
+}
+
+
+/* =====================================================================
+   LIGHT MODE — palette balance for the 3D pieces
+   ===================================================================== */
+/* capability tree: blue slabs, orange energy (pulse + orb + active pill) */
+html:not([data-theme="dark"]) .k3d-pulse{ fill:#fd572b; }
+html:not([data-theme="dark"]) .k3d-orb{ background:#fd572b; }
+html:not([data-theme="dark"]) .k3d .about-kicker-sub .spec-pill.is-active{ background:#fd572b; }
+
+/* identity tiles: all orange */
+html:not([data-theme="dark"]) .id-item{ --calm-dk1:#fd572b; --calm-dk2:#fd572b; --calm-rgb:253,87,43; }
+html:not([data-theme="dark"]) .id-item .id-tile{ background:#fd572b; }
+html:not([data-theme="dark"]) .id-item .id-ring::after{ background:#fd572b; }
+
+/* LIGHT MODE ONLY — remove the blue depth layers under the capability-tree pills.
+   Dark mode is untouched. */
+html:not([data-theme="dark"]) .k3d-slab{ display:none; }
+
+/* LIGHT MODE ONLY — identity tiles (من نحن / رؤيتنا / رسالتنا):
+   on hover the whole tile (face, depth layers, ring) turns blue, not just the text. */
+html:not([data-theme="dark"]) .id-tile,
+html:not([data-theme="dark"]) .id-tile::before,
+html:not([data-theme="dark"]) .id-tile::after,
+html:not([data-theme="dark"]) .id-ring::after{
+  transition:background-color .35s ease, box-shadow .35s ease;
+}
+@media (hover:hover){
+  html:not([data-theme="dark"]) .id-item:hover{
+    --calm-dk1:#0000aa; --calm-dk2:#0000aa; --calm-rgb:0,0,170;
+  }
+  html:not([data-theme="dark"]) .id-item:hover .id-tile,
+  html:not([data-theme="dark"]) .id-item:hover .id-ring::after{ background:#0000aa; }
 }
