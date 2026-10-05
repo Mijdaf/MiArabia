@@ -98,14 +98,14 @@ whenIdle(function () {
     return tex;
   }
   const glowTexOrange = makeGlowTexture(['rgba(255,180,120,0.95)', 'rgba(253,87,43,0.4)', 'rgba(253,87,43,0)']);
-  const glowTexBlue = makeGlowTexture(['rgba(150,170,235,0.95)', 'rgba(22,77,204,0.4)', 'rgba(22,77,204,0)']);
+  const glowTexBlue = makeGlowTexture(['rgba(150,150,255,0.95)', 'rgba(0,0,170,0.4)', 'rgba(0,0,170,0)']);
   let glowTex = glowTexBlue;
   const glowSprites = [];
   const _rackRoot = document.documentElement;
   const _applyRackTheme = () => {
     const dark = _rackRoot.getAttribute('data-theme') === 'dark';
-    ORANGE.set(0xfd572b); /* orange joints in both themes; rack steel stays blue */
-    glowTex = glowTexOrange;
+    ORANGE.set(dark ? 0xfd572b : 0x0000aa);
+    glowTex = dark ? glowTexOrange : glowTexBlue;
     jointMat.color.copy(ORANGE);
     glowSprites.forEach((sp) => { sp.material.map = glowTex; sp.material.color.copy(ORANGE); sp.material.needsUpdate = true; });
   };
@@ -207,7 +207,7 @@ whenIdle(function () {
     /* Extra-faint pass for dark mode on desktop only — the rig reads too
        heavy against the dark hero art at wide viewports. */
     const darkDesktop = dark && !isSmall;
-    fog.color.set(dark ? 0x000032 : 0xdfe6f6);
+    fog.color.set(dark ? 0x000032 : 0xdfe5f6);
     steelMat.opacity = dark ? (darkDesktop ? 0.6 : 0.55) : 0.6;
     pipeMat.opacity = dark ? (darkDesktop ? 0.5 : 0.42) : 0.5;
     jointMat.opacity = dark ? (darkDesktop ? 0.95 : 0.95) : 0.95;

@@ -5356,3 +5356,48 @@ html:not([data-theme="dark"]) footer ul a:hover{ color:var(--pop-ink); }
 .service-card-front h3.service-subtitle,
 .service-card-front p,
 .service-card-front .service-expand-hint{ font-weight:500; }
+
+/* eyebrow tag: PHONE ONLY — the word sat too high inside the pill.
+   Push the text down a few px; the diamond stays on the same line as the word. */
+@media (max-width:720px){
+  html body .eyebrow{ padding-block:11px 6px !important; }
+}
+
+/* eyebrow tags: diamond removed (all screens, both themes) */
+html body .eyebrow::before{ display:none !important; }
+
+
+/* PHONE ONLY — "MI ARABIA" eyebrow: centre the word vertically inside the pill.
+   The diamond is gone, so the old 10px/6px offset only pushed the Latin word low.
+   Equal top/bottom padding puts it dead centre. Desktop and the Arabic eyebrows are untouched. */
+@media (max-width:720px){
+  html body .eyebrow.eyebrow-brand{
+    padding-block:8px !important;
+    line-height:1.2;
+  }
+}
+
+
+/* PHONE ONLY — every eyebrow tag (.eyebrow) is centred across the full width of the page
+   instead of hugging the edge. The hero uses .hero-eyebrow, a different class, so it is untouched.
+   Only the tag moves; headings and paragraphs keep their own alignment. */
+@media (max-width:720px){
+  .eyebrow{
+    display:flex !important;
+    width:fit-content !important;
+    margin-inline:auto !important;
+    align-self:center;
+  }
+}
+
+
+/* PHONE ONLY — vertical centring of the word inside EVERY eyebrow pill (Arabic + English).
+   Earlier rules used uneven padding (11px top / 6px bottom) which pushed the word ~3px low.
+   Equal top/bottom padding puts the word on the pill's middle line. */
+@media (max-width:720px){
+  html body .eyebrow,
+  html body .eyebrow.eyebrow-brand{
+    padding-block:8.5px !important;
+    line-height:1.2;
+  }
+}

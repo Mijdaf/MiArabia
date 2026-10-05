@@ -227,7 +227,7 @@ whenIdle(function () {
   /* ---------- theme-aware palette ---------- */
   function applyTheme() {
     const dark = document.documentElement.getAttribute('data-theme') === 'dark';
-    scene.fog.color.set(dark ? 0x05070f : 0xf1f4fc);
+    scene.fog.color.set(dark ? 0x05070f : 0xeef1fb);
     linkMat.opacity = dark ? 0.3 : 0.2;
     dustMat.opacity = dark ? 0.32 : 0.22;
     hemi.intensity = dark ? 1.1 : 0.9;
