@@ -5122,22 +5122,23 @@ body.identity-focus #why{ opacity:.06; }
 
 
 /* =====================================================================
-   SERVICES cards — slightly larger fonts
+   SERVICES cards — font sizes matched to the rest of the site
+   (process steps h4 ≈ 20.5px, body copy ≈ 15px, small hints ≈ 13px)
    ===================================================================== */
-.service-name-lg{ font-size:26px; }
-.service-card h3.service-subtitle{ font-size:17.5px; }
-.service-card p{ font-size:16.5px; }
-.service-card .service-expand-hint{ font-size:14px; }
-.service-card .service-expand-hint svg{ width:16px; height:16px; }
-.service-card-back h3{ font-size:20px; }
-.service-card-back li{ font-size:15px; }
+.service-name-lg{ font-size:21px; }
+.service-card h3.service-subtitle{ font-size:15px; }
+.service-card p{ font-size:14.5px; }
+.service-card .service-expand-hint{ font-size:12.5px; }
+.service-card .service-expand-hint svg{ width:14px; height:14px; }
+.service-card-back h3{ font-size:18px; }
+.service-card-back li{ font-size:14px; }
 @media (max-width:720px){
-  .service-name-lg{ font-size:24px; }
-  .service-card h3.service-subtitle{ font-size:16.5px; }
-  .service-card p{ font-size:15.5px; }
-  .service-card .service-expand-hint{ font-size:13.5px; }
-  .service-card-back h3{ font-size:19px; }
-  .service-card-back li{ font-size:14.5px; }
+  .service-name-lg{ font-size:19.5px; }
+  .service-card h3.service-subtitle{ font-size:14.5px; }
+  .service-card p{ font-size:14px; }
+  .service-card .service-expand-hint{ font-size:12.5px; }
+  .service-card-back h3{ font-size:17px; }
+  .service-card-back li{ font-size:13.5px; }
 }
 
 
