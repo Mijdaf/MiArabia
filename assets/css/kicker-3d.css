@@ -271,17 +271,19 @@ html:not([data-theme="dark"]) .id-ring::after{
 
 /* =====================================================================
    IDENTITY ICONS (من نحن / رؤيتنا / رسالتنا)
-   Static by default — they only animate while the pointer is over them.
-   The animations stay defined but paused; hover resumes them smoothly,
-   and moving the mouse away freezes them in place.
+   Completely static: no idle float/rotation/pulse, no mouse-driven tilt,
+   no motion on hover. (Hover still changes colour/glow only.)
    ===================================================================== */
-.id-obj, .id-shadow{ animation-delay:-1.5s; }   /* same calm resting pose for all three */
-.id-icon, .id-ring{ animation-delay:0s; }
-.id-obj, .id-icon, .id-ring, .id-shadow{ animation-play-state:paused; }
-.id-item:hover .id-obj,
-.id-item:hover .id-icon,
-.id-item:hover .id-ring,
-.id-item:hover .id-shadow{ animation-play-state:running; }
+.id-obj, .id-icon, .id-ring, .id-shadow,
+.id-item:hover .id-obj, .id-item:hover .id-icon,
+.id-item:hover .id-ring, .id-item:hover .id-shadow{
+  animation:none !important;
+}
+.id-tilt, .id-item:hover .id-tilt{ transform:none !important; transition:none !important; }
+.id-obj{ transform:none !important; }
+.id-icon{ transform:translateZ(38px) !important; }
+.id-ring{ transform:rotateX(68deg) !important; }
+.id-shadow{ transform:none !important; opacity:.9; }
 
 /* Gallery has no built-in images: when nothing is uploaded, JS hides the section and its links. */
 #gallery[hidden], a[href="#gallery"][hidden], li[hidden]{ display:none !important; }
