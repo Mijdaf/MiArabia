@@ -271,19 +271,21 @@ html:not([data-theme="dark"]) .id-ring::after{
 
 /* =====================================================================
    IDENTITY ICONS (من نحن / رؤيتنا / رسالتنا)
-   Completely static: no idle float/rotation/pulse, no mouse-driven tilt,
-   no motion on hover. (Hover still changes colour/glow only.)
+   Still by default. Float / rotation / pulse / ring + mouse tilt run ONLY
+   while the pointer is over the icon. Animations stay defined but paused
+   (same calm resting pose for all three), hover resumes them smoothly.
    ===================================================================== */
-.id-obj, .id-icon, .id-ring, .id-shadow,
-.id-item:hover .id-obj, .id-item:hover .id-icon,
-.id-item:hover .id-ring, .id-item:hover .id-shadow{
-  animation:none !important;
+.id-obj, .id-shadow{ animation-delay:-1.5s !important; }
+.id-icon, .id-ring{ animation-delay:0s !important; }
+.id-obj, .id-icon, .id-ring, .id-shadow{ animation-play-state:paused; }
+.id-tilt{ transform:none; }                        /* no tilt while idle */
+@media (hover:hover){
+  .id-item:hover .id-obj,
+  .id-item:hover .id-icon,
+  .id-item:hover .id-ring,
+  .id-item:hover .id-shadow{ animation-play-state:running; }
+  .id-item:hover .id-tilt{ transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)); }
 }
-.id-tilt, .id-item:hover .id-tilt{ transform:none !important; transition:none !important; }
-.id-obj{ transform:none !important; }
-.id-icon{ transform:translateZ(38px) !important; }
-.id-ring{ transform:rotateX(68deg) !important; }
-.id-shadow{ transform:none !important; opacity:.9; }
 
 /* Gallery has no built-in images: when nothing is uploaded, JS hides the section and its links. */
 #gallery[hidden], a[href="#gallery"][hidden], li[hidden]{ display:none !important; }

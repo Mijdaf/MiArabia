@@ -26,7 +26,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css?v=96">
-<link rel="stylesheet" href="assets/css/kicker-3d.css?v=18">
+<link rel="stylesheet" href="assets/css/kicker-3d.css?v=20">
 <link rel="stylesheet" href="assets/css/process-3d.css?v=6">
 </head>
 <body>
@@ -1391,7 +1391,7 @@
   })();
 </script>
 <script>
-  // Identity section: popup with the content for each icon.
+  // Identity section: 3D tilt on hover + popup with the content for each icon.
   (function () {
     var items = document.querySelectorAll('[data-id-open]');
     var modal = document.getElementById('idModal');
@@ -1404,6 +1404,19 @@
     var lastFocus = null;
 
     items.forEach(function (btn) {
+      var tilt = btn.querySelector('.id-tilt');
+      btn.addEventListener('pointermove', function (e) {
+        if (e.pointerType === 'touch') return;
+        var r = btn.querySelector('.id-scene').getBoundingClientRect();
+        var x = (e.clientX - r.left) / r.width - .5;
+        var y = (e.clientY - r.top) / r.height - .5;
+        tilt.style.setProperty('--ry', (x * 34).toFixed(1) + 'deg');
+        tilt.style.setProperty('--rx', (-y * 30).toFixed(1) + 'deg');
+      });
+      btn.addEventListener('pointerleave', function () {
+        tilt.style.setProperty('--ry', '0deg');
+        tilt.style.setProperty('--rx', '0deg');
+      });
       btn.addEventListener('click', function () { open(btn); });
     });
 
